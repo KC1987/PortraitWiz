@@ -1,0 +1,521 @@
+{
+  "metadata": {
+    "description": "Complete collection of AI portrait generation prompts used in PortraitWiz",
+    "model": "Gemini 2.5 Flash Image Preview",
+    "last_updated": "2025-10-04"
+  },
+  "base_prompts": {
+    "professional_executive_portrait": {
+      "name": "Professional Executive Portrait",
+      "description": "Main base prompt for studio-quality professional business portraits",
+      "usage": "Used in app/page.tsx and components/mobile/ResultsSection.tsx",
+      "prompt": "Transform this person into a studio-quality executive portrait with premium professional-grade lighting. Execute a sophisticated three-point lighting setup: main key light positioned at 45 degrees creating elegant facial modeling and definition, soft fill light eliminating harsh shadows while maintaining contrast, and precision hair/rim light for professional separation and depth. Subject wearing impeccably tailored professional business attire - perfectly fitted suit, crisp blazer, or premium dress shirt. Expression: confident, authoritative yet approachable, direct eye contact with subtle professional smile conveying competence and trustworthiness. Posture: shoulders square, spine straight, head positioned with slight confident tilt, commanding executive presence. Lighting: soft, even professional illumination preserving natural skin tones and texture, no artificial over-processing or heavy retouching. Maintain authentic facial features, natural skin complexion, and individual characteristics from the reference image while enhancing professional presentation. TECHNICAL: 1000x1000px square format, 85mm professional portrait lens perspective, corporate headshot composition from mid-chest up, rule of thirds positioning with eyes in upper third, shallow depth of field with subject in sharp focus. Studio photographer quality with perfectly balanced exposure, professional color grading, and boardroom-ready finish.",
+      "modifications": [
+        "Enhanced with formatBackgroundPrompt() for background integration",
+        "Enhanced with formatOutfitPrompt() for outfit customization"
+      ]
+    },
+    "edit_portrait": {
+      "name": "Edit Portrait Instruction",
+      "description": "Template for editing existing portraits while maintaining identity",
+      "usage": "Used in app/api/image/[id]/edit/route.ts",
+      "prompt_template": "Edit this portrait based on the following instructions: {user_edit_prompt}. Maintain the overall composition and person's identity while applying the requested changes.",
+      "additional_context": "This prompt is enhanced with background and outfit prompts if specified"
+    }
+  },
+  "background_prompts": {
+    "description": "Background-specific prompt additions that enhance the base portrait with environmental context",
+    "tier_system": {
+      "starter": "4 basic backgrounds - accessible to all users including free tier",
+      "value": "14 additional backgrounds - requires Value tier or higher",
+      "professional": "20 additional backgrounds - requires Professional tier"
+    },
+    "starter_tier": {
+      "blank": {
+        "name": "Blank/White",
+        "tier": "starter",
+        "category": "basic",
+        "prompt": "with a pristine, seamless pure white professional studio background. Graduated lighting with no shadows or color cast, crisp subject separation with subtle edge lighting for depth."
+      },
+      "restaurant": {
+        "name": "Restaurant",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in an upscale restaurant setting with warm ambient lighting, elegant table settings and fine dining elements visible in beautifully blurred bokeh background, sophisticated dining atmosphere with professional depth of field."
+      },
+      "gym": {
+        "name": "Gym",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a modern, clean gym environment with fitness equipment visible in artistic bokeh background, bright energetic lighting creating professional athletic portrait atmosphere with dramatic depth separation."
+      },
+      "beach": {
+        "name": "Beach",
+        "tier": "value",
+        "category": "basic",
+        "prompt": "on a beautiful beach with soft-focus ocean backdrop, golden hour natural lighting, gentle waves and coastline visible, relaxed coastal atmosphere."
+      },
+      "office_cubicle": {
+        "name": "Office Cubicle",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a modern office cubicle with computer workstation, office supplies, and corporate workspace elements visible in professional bokeh background, bright office lighting creating focused work atmosphere."
+      },
+      "coffee_shop": {
+        "name": "Coffee Shop",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a stylish coffee shop with warm wood furnishings, café elements, and cozy atmosphere visible in soft-focus background, natural warm lighting creating approachable professional environment."
+      },
+      "home_office": {
+        "name": "Home Office",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a well-organized home office with desk setup, bookshelves, and personal workspace elements visible in tasteful bokeh background, natural lighting creating professional yet comfortable atmosphere."
+      },
+      "park_outdoor": {
+        "name": "Park/Outdoor",
+        "tier": "value",
+        "category": "basic",
+        "prompt": "in a beautiful park setting with lush greenery, trees, and natural outdoor elements visible in soft-focus background, natural daylight creating refreshing professional atmosphere."
+      }
+    },
+    "value_tier": {
+      "art_studio": {
+        "name": "Art Studio",
+        "tier": "value",
+        "category": "creative",
+        "prompt": "in an artistic studio setting with canvases, easels, and art supplies visible in soft-focus background, creative ambient lighting, inspiring artistic atmosphere."
+      },
+      "crafts_studio": {
+        "name": "Crafts Studio",
+        "tier": "value",
+        "category": "creative",
+        "prompt": "in a crafts studio with handmade items, tools, and artistic materials visible in soft-focus background, warm workshop lighting, artisan atmosphere."
+      },
+      "music_studio": {
+        "name": "Music Studio",
+        "tier": "value",
+        "category": "creative",
+        "prompt": "in a professional music studio with instruments, recording equipment, and sound panels visible in soft-focus background, warm studio lighting, musical atmosphere."
+      },
+      "photography_studio": {
+        "name": "Photography Studio",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a professional photography studio with camera equipment, lighting gear, and photo backdrops visible in soft-focus background, professional studio lighting."
+      },
+      "massage_room": {
+        "name": "Massage Room",
+        "tier": "value",
+        "category": "luxury",
+        "prompt": "in a tranquil massage room with spa elements, soft towels, and wellness items visible in soft-focus background, calming ambient lighting, peaceful spa atmosphere."
+      },
+      "classroom": {
+        "name": "Classroom",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a modern classroom with educational materials, whiteboards, and academic elements visible in soft-focus background, bright educational lighting, learning atmosphere."
+      },
+      "university": {
+        "name": "University",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "on a university campus with academic buildings, libraries, or scholarly elements visible in soft-focus background, natural campus lighting, academic atmosphere."
+      },
+      "startup_office": {
+        "name": "Startup Office",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a modern startup office with tech equipment, whiteboards, and innovative workspace elements visible in soft-focus background, bright modern lighting, entrepreneurial atmosphere."
+      },
+      "rose_garden": {
+        "name": "Rose Garden",
+        "tier": "value",
+        "category": "luxury",
+        "prompt": "in a beautiful rose garden with blooming roses and garden elements visible in soft-focus background, natural golden hour lighting, romantic garden atmosphere."
+      },
+      "luxury_hotel_lobby": {
+        "name": "Luxury Hotel Lobby",
+        "tier": "value",
+        "category": "luxury",
+        "prompt": "in a luxury hotel lobby with elegant furniture, chandeliers, and upscale decor visible in soft-focus background, warm sophisticated lighting, luxurious hospitality atmosphere."
+      },
+      "library": {
+        "name": "Library",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a prestigious library with tall bookshelves, reading areas, and scholarly elements visible in sophisticated bokeh background, warm natural lighting creating intellectual professional atmosphere."
+      },
+      "conference_room": {
+        "name": "Conference Room",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a modern conference room with meeting table, presentation screens, and professional meeting elements visible in executive bokeh background, bright corporate lighting creating authoritative business atmosphere."
+      },
+      "coworking_space": {
+        "name": "Coworking Space",
+        "tier": "value",
+        "category": "professional",
+        "prompt": "in a vibrant coworking space with modern furniture, collaborative workstations, and innovative workspace elements visible in dynamic bokeh background, bright contemporary lighting creating entrepreneurial atmosphere."
+      },
+      "rooftop_terrace": {
+        "name": "Rooftop Terrace",
+        "tier": "value",
+        "category": "luxury",
+        "prompt": "on a stylish rooftop terrace with city skyline, outdoor furniture, and urban elements visible in cinematic bokeh background, golden hour lighting creating sophisticated urban professional atmosphere."
+      },
+      "gallery": {
+        "name": "Art Gallery",
+        "tier": "value",
+        "category": "creative",
+        "prompt": "in a modern art gallery with artwork displays, white walls, and artistic elements visible in refined bokeh background, gallery lighting creating cultured professional atmosphere."
+      },
+      "workshop": {
+        "name": "Workshop",
+        "tier": "value",
+        "category": "creative",
+        "prompt": "in a professional workshop with tools, workbenches, and craftsmanship elements visible in artisanal bokeh background, bright work lighting creating skilled professional atmosphere."
+      }
+    },
+    "professional_tier": {
+      "doctors_office": {
+        "name": "Doctor's Office",
+        "tier": "professional",
+        "category": "medical",
+        "prompt": "in a prestigious medical office with professional medical equipment, diplomas, and healthcare elements visible in tasteful bokeh background, clean clinical lighting creating authoritative healthcare professional atmosphere with excellent depth separation."
+      },
+      "court_room": {
+        "name": "Court Room",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a professional courtroom with judicial bench, legal books, and courtroom elements visible in soft-focus background, formal courtroom lighting, legal professional atmosphere."
+      },
+      "server_room": {
+        "name": "Server Room",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a high-tech server room with computer servers, network equipment, and data center elements visible in soft-focus background, cool blue technical lighting, technology professional atmosphere."
+      },
+      "surgery_room": {
+        "name": "Surgery Room",
+        "tier": "professional",
+        "category": "medical",
+        "prompt": "in a professional surgical suite with medical equipment, monitors, and sterile surgical elements visible in soft-focus background, bright clinical lighting, medical professional atmosphere."
+      },
+      "skyscraper_office": {
+        "name": "Skyscraper Office",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a prestigious high-rise executive office with dramatic city skyline views, luxury modern office furniture, and urban elements visible in cinematic bokeh background, sophisticated office lighting creating commanding executive presence with professional depth of field."
+      },
+      "spa_room": {
+        "name": "SPA Room",
+        "tier": "professional",
+        "category": "luxury",
+        "prompt": "in a premium spa room with luxury wellness elements, soft linens, and tranquil spa decor visible in soft-focus background, serene ambient lighting, luxury wellness atmosphere."
+      },
+      "boardroom": {
+        "name": "Boardroom",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a prestigious corporate boardroom with mahogany table, leather chairs, and executive furnishings visible in commanding bokeh background, sophisticated lighting creating powerful business authority atmosphere."
+      },
+      "private_jet": {
+        "name": "Private Jet",
+        "tier": "professional",
+        "category": "luxury",
+        "prompt": "in a luxury private jet with premium leather seating, aircraft windows, and exclusive aviation elements visible in sophisticated bokeh background, ambient cabin lighting creating elite travel atmosphere."
+      },
+      "yacht": {
+        "name": "Yacht",
+        "tier": "professional",
+        "category": "luxury",
+        "prompt": "on a luxury yacht with premium marine furnishings, ocean views, and nautical elements visible in cinematic bokeh background, natural maritime lighting creating exclusive sailing atmosphere."
+      },
+      "penthouse": {
+        "name": "Penthouse",
+        "tier": "professional",
+        "category": "luxury",
+        "prompt": "in a luxury penthouse with floor-to-ceiling windows, designer furniture, and premium residential elements visible in sophisticated bokeh background, natural lighting creating exclusive living atmosphere."
+      },
+      "studio_apartment": {
+        "name": "Studio Apartment",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a modern studio apartment with contemporary design, urban living elements, and stylish furnishings visible in professional bokeh background, natural lighting creating creative professional atmosphere."
+      },
+      "theater": {
+        "name": "Theater",
+        "tier": "professional",
+        "category": "creative",
+        "prompt": "in a prestigious theater with dramatic stage lighting, elegant seating, and theatrical elements visible in artistic bokeh background, stage lighting creating dramatic performance atmosphere."
+      },
+      "concert_hall": {
+        "name": "Concert Hall",
+        "tier": "professional",
+        "category": "creative",
+        "prompt": "in a grand concert hall with orchestral seating, acoustic elements, and musical architecture visible in elegant bokeh background, concert lighting creating prestigious musical atmosphere."
+      },
+      "laboratory": {
+        "name": "Laboratory",
+        "tier": "professional",
+        "category": "medical",
+        "prompt": "in a state-of-the-art laboratory with research equipment, scientific instruments, and laboratory elements visible in professional bokeh background, clean clinical lighting creating advanced research atmosphere."
+      },
+      "operating_room": {
+        "name": "Operating Room",
+        "tier": "professional",
+        "category": "medical",
+        "prompt": "in an advanced operating room with surgical equipment, medical monitors, and sterile surgical elements visible in clinical bokeh background, bright medical lighting creating precision healthcare atmosphere."
+      },
+      "courtroom_premium": {
+        "name": "Premium Courtroom",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a prestigious premium courtroom with ornate judicial furnishings, legal library, and ceremonial elements visible in authoritative bokeh background, formal lighting creating supreme legal authority atmosphere."
+      },
+      "tech_campus": {
+        "name": "Tech Campus",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "on a cutting-edge tech campus with modern architecture, innovation spaces, and technology elements visible in futuristic bokeh background, bright contemporary lighting creating innovation leadership atmosphere."
+      },
+      "innovation_lab": {
+        "name": "Innovation Lab",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in an advanced innovation lab with prototype equipment, development tools, and tech innovation elements visible in cutting-edge bokeh background, bright lab lighting creating technology leadership atmosphere."
+      },
+      "executive_lounge": {
+        "name": "Executive Lounge",
+        "tier": "professional",
+        "category": "luxury",
+        "prompt": "in an exclusive executive lounge with premium furnishings, luxury amenities, and VIP elements visible in sophisticated bokeh background, ambient luxury lighting creating elite business atmosphere."
+      },
+      "luxury_car_interior": {
+        "name": "Luxury Car Interior",
+        "tier": "professional",
+        "category": "luxury",
+        "prompt": "in a luxury car interior with premium leather, executive automotive elements, and high-end vehicle features visible in elegant bokeh background, ambient automotive lighting creating elite mobility atmosphere."
+      },
+      "architecture_firm": {
+        "name": "Architecture Firm",
+        "tier": "professional",
+        "category": "professional",
+        "prompt": "in a prestigious architecture firm with design models, blueprints, and architectural elements visible in creative bokeh background, studio lighting creating design professional atmosphere."
+      }
+    },
+    "integration_note": "Background prompts are inserted into the base prompt using formatBackgroundPrompt() function. The function strategically places the background context after the main subject description but before technical specifications, prefixed with 'Subject positioned' for natural integration."
+  },
+  "outfit_prompts": {
+    "description": "Outfit-specific prompts that replace the generic 'professional business attire' in the base prompt with detailed clothing descriptions",
+    "tier_system": {
+      "starter": "1 outfit option - accessible to free tier users",
+      "value": "9 total outfit options - requires Value tier or higher",
+      "professional": "21 total outfit options - requires Professional tier"
+    },
+    "starter_tier": {
+      "smart_casual": {
+        "name": "Smart Casual",
+        "tier": "starter",
+        "prompt": "wearing smart casual attire - quality polo shirt or casual button-down with professional styling, approachable yet polished appearance"
+      }
+    },
+    "value_tier": {
+      "classic_shirt": {
+        "name": "Classic Shirt",
+        "tier": "value",
+        "prompt": "wearing a classic white or light blue dress shirt with proper collar and professional styling, clean and polished appearance"
+      },
+      "business_suit": {
+        "name": "Business Suit",
+        "tier": "value",
+        "prompt": "wearing a perfectly tailored classic business suit in premium navy or charcoal wool with an elegant silk tie, crisp pressed white cotton dress shirt, impeccable professional styling"
+      },
+      "blazer_shirt": {
+        "name": "Blazer & Shirt",
+        "tier": "value",
+        "prompt": "wearing a precisely tailored blazer in premium wool or cotton blend with an open collar luxury cotton dress shirt, sophisticated smart casual professional appearance"
+      },
+      "dress_shirt": {
+        "name": "Dress Shirt",
+        "tier": "value",
+        "prompt": "wearing a crisp pressed white or light blue premium cotton dress shirt with French cuffs, immaculate professional appearance with perfect collar and fit"
+      },
+      "casual_blazer": {
+        "name": "Casual Blazer",
+        "tier": "value",
+        "prompt": "wearing a modern casual blazer in premium neutral tones - stone, navy, or charcoal - with refined tailoring, approachable yet sophisticated professional styling"
+      },
+      "polo_shirt": {
+        "name": "Polo Shirt",
+        "tier": "value",
+        "prompt": "wearing a premium polo shirt in quality cotton with professional styling, smart casual appearance suitable for modern business environments"
+      },
+      "cardigan": {
+        "name": "Cardigan",
+        "tier": "value",
+        "prompt": "wearing an elegant cardigan in premium wool or cashmere with refined styling, sophisticated layered professional appearance"
+      },
+      "professional_jacket": {
+        "name": "Professional Jacket",
+        "tier": "value",
+        "prompt": "wearing a structured professional jacket in quality fabric with precise tailoring, authoritative business appearance"
+      },
+      "modern_blouse": {
+        "name": "Modern Blouse",
+        "tier": "value",
+        "prompt": "wearing a modern blouse in premium silk or cotton with contemporary styling, elegant professional appearance"
+      }
+    },
+    "professional_tier": {
+      "executive_suit": {
+        "name": "Executive Suit",
+        "tier": "professional",
+        "prompt": "wearing a bespoke executive suit in luxury Italian wool or cashmere with hand-stitched details, platinum cufflinks, silk tie, immaculate Savile Row tailoring with perfect drape and fit"
+      },
+      "formal_dress": {
+        "name": "Formal Dress",
+        "tier": "professional",
+        "prompt": "wearing an elegant executive-level professional dress in premium fabrics - wool crepe, silk, or luxury cotton - with impeccable tailoring, sophisticated boardroom-appropriate styling"
+      },
+      "luxury_blazer": {
+        "name": "Luxury Blazer",
+        "tier": "professional",
+        "prompt": "wearing a luxury designer blazer in premium cashmere, finest wool, or silk blend with hand-finished details, mother-of-pearl buttons, executive-level sophistication and commanding presence"
+      },
+      "designer_shirt": {
+        "name": "Designer Shirt",
+        "tier": "professional",
+        "prompt": "wearing a premium designer shirt in Egyptian cotton or silk with hand-sewn French seams, mother-of-pearl buttons, monogrammed cuffs, refined luxury professional appearance"
+      },
+      "bikini": {
+        "name": "Bikini",
+        "tier": "professional",
+        "prompt": "wearing an elegant designer bikini in premium materials with sophisticated styling, luxury resort vacation aesthetic, confident and stylish high-fashion appearance"
+      },
+      "bath_robe": {
+        "name": "Bath Robe",
+        "tier": "professional",
+        "prompt": "wearing a luxury spa bath robe in premium Egyptian cotton or silk in soft neutral tones - cream, pearl, or sage - wellness and relaxation aesthetic, serene and sophisticated comfort"
+      },
+      "tuxedo": {
+        "name": "Tuxedo",
+        "tier": "professional",
+        "prompt": "wearing a classic black-tie tuxedo with satin lapels, bow tie, and formal accessories, impeccable formal evening wear with sophisticated elegance"
+      },
+      "evening_gown": {
+        "name": "Evening Gown",
+        "tier": "professional",
+        "prompt": "wearing an elegant evening gown in luxury fabric with sophisticated design, formal evening elegance with refined glamour"
+      },
+      "luxury_cashmere": {
+        "name": "Luxury Cashmere",
+        "tier": "professional",
+        "prompt": "wearing luxury cashmere garments in premium quality with exquisite softness and sophisticated styling, ultimate luxury professional appearance"
+      },
+      "bespoke_tailoring": {
+        "name": "Bespoke Tailoring",
+        "tier": "professional",
+        "prompt": "wearing bespoke tailored garments with perfect custom fit, hand-stitched details, and luxury craftsmanship, pinnacle of sartorial excellence"
+      },
+      "high_fashion_dress": {
+        "name": "High Fashion Dress",
+        "tier": "professional",
+        "prompt": "wearing a high-fashion designer dress with avant-garde styling, luxury materials, and contemporary sophistication, fashion-forward elegance"
+      },
+      "designer_coat": {
+        "name": "Designer Coat",
+        "tier": "professional",
+        "prompt": "wearing a luxury designer coat in premium materials with exceptional tailoring and sophisticated styling, ultimate outerwear elegance"
+      }
+    },
+    "integration_note": "Outfit prompts replace the generic 'Subject wearing impeccably tailored professional business attire - perfectly fitted suit, crisp blazer, or premium dress shirt.' phrase in the base prompt using formatOutfitPrompt() function. The replacement maintains the 'Subject' prefix for grammatical consistency."
+  },
+  "prompt_combination_flow": {
+    "description": "How prompts are combined to create the final generation prompt",
+    "steps": [
+      "1. Start with base_prompts.professional_executive_portrait",
+      "2. Apply formatBackgroundPrompt() to inject background context",
+      "3. Apply formatOutfitPrompt() to replace generic attire with specific outfit",
+      "4. Send final enhanced prompt to Gemini 2.5 Flash Image Preview API",
+      "5. For edits: Use base_prompts.edit_portrait template with user's edit instructions"
+    ],
+    "example_generation": {
+      "input": {
+        "base": "professional_executive_portrait",
+        "background": "skyscraper_office",
+        "outfit": "executive_suit"
+      },
+      "output_structure": "Transform this person into a studio-quality executive portrait... [base lighting and technical specs] wearing a bespoke executive suit in luxury Italian wool... [outfit details] Subject positioned in a prestigious high-rise executive office with dramatic city skyline views... [background details] Professional background lighting harmonized with subject lighting... TECHNICAL: 1000x1000px square format..."
+    },
+    "example_edit": {
+      "original_image": "Professional portrait with blank background",
+      "user_instruction": "Change background to modern office and add warmer lighting",
+      "final_prompt": "Edit this portrait based on the following instructions: Change background to modern office and add warmer lighting in a modern office cubicle with computer workstation, office supplies, and corporate workspace elements visible in professional bokeh background, bright office lighting creating focused work atmosphere. Maintain the overall composition and person's identity while applying the requested changes."
+    }
+  },
+  "api_configuration": {
+    "model": "gemini-2.5-flash-image-preview",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent",
+    "generation_config": {
+      "maxOutputTokens": 8192,
+      "temperature": 0.7,
+      "topP": 0.95,
+      "topK": 40
+    },
+    "safety_settings": [
+      {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+      },
+      {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+      }
+    ],
+    "input_format": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "[Enhanced prompt with background and outfit]"
+            },
+            {
+              "inlineData": {
+                "mimeType": "image/jpeg or image/png",
+                "data": "[Base64 encoded reference image]"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "technical_specifications": {
+    "output_format": "1000x1000px square",
+    "lens_perspective": "85mm professional portrait lens",
+    "composition": "Corporate headshot composition from mid-chest up",
+    "rule_of_thirds": "Eyes positioned in upper third",
+    "depth_of_field": "Shallow with subject in sharp focus",
+    "lighting_setup": "Three-point lighting (key, fill, rim)",
+    "color_grading": "Professional boardroom-ready finish",
+    "quality_target": "Studio photographer quality with balanced exposure"
+  },
+  "usage_locations": {
+    "generation": [
+      "app/page.tsx - Desktop generation interface",
+      "components/mobile/ResultsSection.tsx - Mobile generation interface",
+      "app/api/generate-image/route.ts - API endpoint"
+    ],
+    "editing": [
+      "app/image/[id]/page.tsx - Individual image detail and edit page",
+      "app/api/image/[id]/edit/route.ts - Edit API endpoint"
+    ],
+    "formatting_utilities": [
+      "lib/backgrounds.ts - formatBackgroundPrompt() function",
+      "lib/outfits.ts - formatOutfitPrompt() function"
+    ]
+  }
+}
