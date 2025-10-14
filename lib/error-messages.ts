@@ -102,7 +102,7 @@ export function mapGeminiError(errorText: string): FriendlyError {
 /**
  * Maps authentication errors to user-friendly messages
  */
-export function mapAuthError(errorText: string): FriendlyError {
+export function mapAuthError(): FriendlyError {
   return {
     message: "Please sign in to generate portraits.",
     suggestion: "Sign in or create an account to get started.",

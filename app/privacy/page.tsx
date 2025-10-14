@@ -111,7 +111,7 @@ export default function PrivacyPage() {
               <li>Currency and region</li>
             </ul>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              <strong>What we DON'T collect:</strong> We do not store full credit card numbers, CVV codes, or complete payment credentials. These are processed and stored securely by Stripe, our PCI-DSS compliant payment processor.
+              <strong>What we DON&apos;T collect:</strong> We do not store full credit card numbers, CVV codes, or complete payment credentials. These are processed and stored securely by Stripe, our PCI-DSS compliant payment processor.
             </p>
           </section>
 
@@ -218,7 +218,7 @@ export default function PrivacyPage() {
               <li><strong>Purpose:</strong> AI portrait generation processing</li>
               <li><strong>Data shared:</strong> Uploaded photographs, facial images</li>
               <li><strong>Location:</strong> EU data centers (we use EU regional endpoints)</li>
-              <li><strong>Safeguards:</strong> Your photos are NOT used to train Google's AI models (paid tier guarantee)</li>
+              <li><strong>Safeguards:</strong> Your photos are NOT used to train Google&apos;s AI models (paid tier guarantee)</li>
             </ul>
 
             <p className="leading-7 [&:not(:first-child)]:mt-6">
@@ -313,7 +313,7 @@ export default function PrivacyPage() {
             </p>
 
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mt-8 mb-3">
-              10.3 Right to Erasure / "Right to be Forgotten" (Article 17)
+              10.3 Right to Erasure / &ldquo;Right to be Forgotten&rdquo; (Article 17)
             </h3>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               <strong>What it means:</strong> You have the right to request deletion of your personal data in certain circumstances.
@@ -355,7 +355,7 @@ export default function PrivacyPage() {
           {/* Children's Privacy */}
           <section>
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-4">
-              11. Children's Privacy
+              11. Children&apos;s Privacy
             </h2>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               <strong>Minimum Age: 18 years old</strong>

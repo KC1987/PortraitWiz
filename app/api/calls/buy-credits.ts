@@ -1,5 +1,4 @@
 interface PurchaseCreditsParams {
-  userId: string;
   packageId: string;
 }
 

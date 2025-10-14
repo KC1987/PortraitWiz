@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Check, CheckCircle2, CircleX, Loader2, LoaderCircle, XCircle} from "lucide-react";
+import {Check, CircleX, Loader2, LoaderCircle} from "lucide-react";
 
 // Design form schema
 const usernameSchema = z.object({
@@ -132,10 +132,13 @@ export default function EnterPage() {
 
     // Debounce logic
     const timer = setTimeout(() => {
-      form.formState.isValid && checkAvailability(username);
+      if (form.formState.isValid) {
+        checkAvailability(username);
+      }
     }, 800); // 800ms delay
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ username, supabase ]);
 
 
@@ -157,7 +160,7 @@ export default function EnterPage() {
       .insert({
         id: user?.id,
         username: values.username,
-      }).then(({ data, error }) => {
+      }).then(({ error }) => {
           setLoading(false);
           if (error) {
             // setError(error.details);

@@ -2,10 +2,12 @@ import {NextResponse} from 'next/server';
 import Stripe from 'stripe';
 import {createClient} from "@/utils/supabase/server";
 
-// @ts-ignore
+// @ts-expect-error - STRIPE_SECRET_KEY is loaded from environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export async function POST(req) {
+type PackageId = "package-50" | "package-150" | "package-250";
+
+export async function POST(req: Request) {
 
   const supabase = await createClient();
 
@@ -19,11 +21,11 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
-    const { packageId } = body; // Add email and credits
+    const { packageId } = body as { packageId: PackageId };
 
     const origin = req.headers.get('origin') || 'http://localhost:3000';
 
-    const packages = {
+    const packages: Record<PackageId, { price: number; credits: number }> = {
       "package-50": { price: 1999, credits: 50 },
       "package-150": { price: 4499, credits: 150 },
       "package-250": { price: 6999, credits: 250 },
@@ -58,10 +60,11 @@ export async function POST(req) {
     });
 
     return NextResponse.json({url: session.url});
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Stripe error:', error);
+    const message = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json(
-      {error: error.message},
+      {error: message},
       {status: 500}
     );
   }

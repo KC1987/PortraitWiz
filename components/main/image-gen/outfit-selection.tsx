@@ -12,10 +12,15 @@ import {
 } from "@/components/ui/tooltip"
 import { outfits } from "@/lib/outfits"
 import Image from "next/image"
-import { Shirt, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export default function OutfitSelection({ outfit, setOutfit }) {
+interface OutfitSelectionProps {
+  outfit: string;
+  setOutfit: (outfit: string) => void;
+}
+
+export default function OutfitSelection({ outfit, setOutfit }: OutfitSelectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(true)
@@ -80,7 +85,7 @@ export default function OutfitSelection({ outfit, setOutfit }) {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [focusedIndex, setOutfit])
 
-  return (
+return (
     <TooltipProvider delayDuration={300}>
       <Card className="w-full">
         <CardHeader >

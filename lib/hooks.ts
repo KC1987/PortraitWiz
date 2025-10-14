@@ -6,7 +6,7 @@ interface Profile {
   id: string;
   username?: string;
   credits: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const supabase = createClient();

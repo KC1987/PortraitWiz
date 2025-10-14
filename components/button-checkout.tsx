@@ -4,8 +4,12 @@ import {useState} from 'react';
 import {useAtomValue} from "jotai";
 import {authAtom} from "@/lib/atoms";
 
+interface ButtonCheckoutProps {
+  amount: number;
+  credits: number;
+}
 
-export default function ButtonCheckout({ amount, credits }) {
+export default function ButtonCheckout({ amount, credits }: ButtonCheckoutProps) {
   const { user } = useAtomValue(authAtom);
 
   const [isLoading, setIsLoading] = useState(false);

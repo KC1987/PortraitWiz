@@ -20,7 +20,7 @@ export default function PricingCard({ package: pkg }: PricingCardProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handlePurchaseCredits() {
-    if (!user?.id || !user?.email) {
+    if (!user?.id) {
       console.error("User not logged in")
       return
     }
@@ -28,8 +28,6 @@ export default function PricingCard({ package: pkg }: PricingCardProps) {
     setIsLoading(true)
     try {
       const { url } = await purchaseCredits({
-        userId: user.id,
-        email: user.email,
         packageId: pkg.id,
       })
       window.location.href = url

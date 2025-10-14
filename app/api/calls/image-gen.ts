@@ -13,6 +13,19 @@ interface GenerateImageResponse {
   imageBase64: string;
 }
 
+interface GeminiPart {
+  text?: string;
+  inlineData?: {
+    mimeType: string;
+    data: string;
+  };
+}
+
+interface GeminiError extends Error {
+  suggestion?: string;
+  isRetryable?: boolean;
+}
+
 export async function generateImage({
   prompt,
   imageBase64Array,
@@ -22,7 +35,7 @@ export async function generateImage({
   }
 
   // Build contents array
-  const parts: any[] = [{ text: prompt }];
+  const parts: GeminiPart[] = [{ text: prompt }];
 
   // Add optional images for editing/composition (up to 4 reference images)
   if (imageBase64Array && imageBase64Array.length > 0) {
@@ -54,9 +67,9 @@ export async function generateImage({
     const errorText = await resp.text();
     // Map technical error to user-friendly message
     const friendlyError = mapGeminiError(errorText);
-    const error = new Error(friendlyError.message);
-    (error as any).suggestion = friendlyError.suggestion;
-    (error as any).isRetryable = friendlyError.isRetryable;
+    const error: GeminiError = new Error(friendlyError.message);
+    error.suggestion = friendlyError.suggestion;
+    error.isRetryable = friendlyError.isRetryable;
     throw error;
   }
 
@@ -64,14 +77,14 @@ export async function generateImage({
 
   // Extract inline image data from response
   const candidate = data.candidates?.[0];
-  const responseParts = candidate?.content?.parts || [];
-  const inline = responseParts.find((p: any) => p.inlineData);
+  const responseParts: GeminiPart[] = candidate?.content?.parts || [];
+  const inline = responseParts.find((p) => p.inlineData);
 
-  if (!inline) {
+  if (!inline || !inline.inlineData) {
     const friendlyError = mapGeminiError("No image returned from Gemini");
-    const error = new Error(friendlyError.message);
-    (error as any).suggestion = friendlyError.suggestion;
-    (error as any).isRetryable = friendlyError.isRetryable;
+    const error: GeminiError = new Error(friendlyError.message);
+    error.suggestion = friendlyError.suggestion;
+    error.isRetryable = friendlyError.isRetryable;
     throw error;
   }
 

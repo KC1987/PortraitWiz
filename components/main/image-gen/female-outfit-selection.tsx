@@ -15,7 +15,12 @@ import Image from "next/image"
 import { Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export default function FemaleOutfitSelection({ outfit, setOutfit }) {
+interface FemaleOutfitSelectionProps {
+  outfit: string;
+  setOutfit: (outfit: string) => void;
+}
+
+export default function FemaleOutfitSelection({ outfit, setOutfit }: FemaleOutfitSelectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(true)

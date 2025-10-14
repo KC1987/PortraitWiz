@@ -12,10 +12,15 @@ import {
 } from "@/components/ui/tooltip"
 import Image from "next/image"
 import { settings } from "@/lib/settings"
-import { Camera, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export default function SettingSelection({ setting, setSetting }) {
+interface SettingSelectionProps {
+  setting: string;
+  setSetting: (setting: string) => void;
+}
+
+export default function SettingSelection({ setting, setSetting }: SettingSelectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(true)

@@ -80,7 +80,7 @@ function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
 
 export default function Navbar() {
   const supabase = createClient()
-  const { user, profile } = useAtomValue(authAtom)
+  const { profile } = useAtomValue(authAtom)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [creditsDialogOpen, setCreditsDialogOpen] = useState(false)
 

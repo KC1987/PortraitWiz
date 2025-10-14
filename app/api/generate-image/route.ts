@@ -3,6 +3,10 @@ import { generateImage } from "../calls/image-gen";
 import { createClient } from "@/utils/supabase/server";
 import { mapAuthError, mapCreditsError } from "@/lib/error-messages";
 
+interface GeminiError extends Error {
+  suggestion?: string;
+  isRetryable?: boolean;
+}
 
 export async function POST(req: Request) {
 
@@ -24,7 +28,7 @@ export async function POST(req: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      const friendlyError = mapAuthError("Unauthorized");
+      const friendlyError = mapAuthError();
       return NextResponse.json(
         {
           error: friendlyError.message,
@@ -66,7 +70,9 @@ export async function POST(req: Request) {
     if (image_data) {
       const { data: credits_data, error: credits_error } = await supabase.rpc("deduct_credits", { user_id: user.id, amount: "1" });
 
-      credits_error && console.error(credits_error);
+      if (credits_error) {
+        console.error(credits_error);
+      }
 
       return NextResponse.json({ image_data, credits_data });
     }
@@ -74,9 +80,10 @@ export async function POST(req: Request) {
 
     // Error
   } catch (err: unknown) {
+    const geminiError = err as GeminiError;
     const message = err instanceof Error ? err.message : "Something went wrong while creating your portrait.";
-    const suggestion = (err as any)?.suggestion || "Please try again in a moment.";
-    const isRetryable = (err as any)?.isRetryable ?? true;
+    const suggestion = geminiError?.suggestion || "Please try again in a moment.";
+    const isRetryable = geminiError?.isRetryable ?? true;
 
     return NextResponse.json(
       {

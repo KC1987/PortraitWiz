@@ -6,7 +6,7 @@ import { useSetAtom } from "jotai"
 import { useEffect } from "react";
 
 
-export default function AuthProvider({ children }:any) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const setAuthAtom = useSetAtom(authAtom);
   const { user, profile } = useUserData();
 

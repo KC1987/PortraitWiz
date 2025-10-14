@@ -5,7 +5,7 @@ interface Profile {
   id: string;
   username?: string;
   credits: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface AuthState {

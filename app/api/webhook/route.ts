@@ -2,22 +2,32 @@ import {NextResponse} from 'next/server';
 import Stripe from 'stripe';
 import {createClient} from "@/utils/supabase/server";
 
-// @ts-expect-error
+// @ts-expect-error - STRIPE_SECRET_KEY is loaded from environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const body = await req.text();
     const signature = req.headers.get('stripe-signature');
+
+    if (!signature) {
+      return NextResponse.json({error: 'Missing signature'}, {status: 400});
+    }
+
+    if (!webhookSecret) {
+      console.error('STRIPE_WEBHOOK_SECRET is not configured');
+      return NextResponse.json({error: 'Server configuration error'}, {status: 500});
+    }
 
     let event;
 
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } catch (err) {
-      console.error('Webhook signature verification failed:', err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Signature verification failed';
+      console.error('Webhook signature verification failed:', message);
       return NextResponse.json({error: 'Invalid signature'}, {status: 400});
     }
 
@@ -40,18 +50,21 @@ export async function POST(req) {
         userId: metadata?.userId,
         packageId: metadata?.packageId,
         email: customer_email,
-        credits: metadata.credits,
+        credits: metadata?.credits,
       });
 
       // Here you would update your database
       // await allocateTokensToUser(customer_email, metadata.credits);
 
       const supabase = await createClient();
-      const {error} = await supabase.rpc('increment_credits', {
-        user_id: metadata.userId,
-        amount: Number(metadata.credits),
+      const { error: rpcError } = await supabase.rpc('increment_credits', {
+        user_id: metadata?.userId,
+        amount: Number(metadata?.credits),
       });
 
+      if (rpcError) {
+        console.error('Failed to increment credits:', rpcError);
+      }
     }
 
     return NextResponse.json({received: true});

@@ -4,7 +4,7 @@ import { useState, useRef, DragEvent, ChangeEvent } from "react"
 import { useAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
 
-import {Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter} from "@/components/ui/card"
+import {Card, CardContent, CardHeader, CardTitle, CardFooter} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -20,8 +20,6 @@ export default function ImageGen() {
 
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
-  const [uploadedFileNames, setUploadedFileNames] = useState<string[]>([])
-  const [prompt, setPrompt] = useState<string>("")
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -79,9 +77,8 @@ export default function ImageGen() {
     try {
       const base64 = await fileToBase64(file)
       setUploadedImages(prev => [...prev, base64])
-      setUploadedFileNames(prev => [...prev, file.name])
       setError(null)
-    } catch (err) {
+    } catch {
       setError("Failed to process image")
     }
   }
@@ -146,7 +143,6 @@ export default function ImageGen() {
   // Remove uploaded image by index
   const removeUploadedImage = (index: number) => {
     setUploadedImages(prev => prev.filter((_, i) => i !== index))
-    setUploadedFileNames(prev => prev.filter((_, i) => i !== index))
     if (fileInputRef.current && uploadedImages.length === 1) {
       fileInputRef.current.value = ""
     }
