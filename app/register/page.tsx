@@ -50,32 +50,41 @@ export default function RegisterPage() {
     });
 
     // On form submit
-    function onRegisterFormSubmit(values: z.infer<typeof formSchema>) {
+    async function onRegisterFormSubmit(values: z.infer<typeof formSchema>) {
+      if (!supabase) {
+        form.setError("email", {
+          type: "manual",
+          message: "Service unavailable, please try again",
+        });
+        return;
+      }
+
       setLoading(true);
 
-      supabase.auth.signUp({
+      const { data, error } = await supabase!.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
           emailRedirectTo: "http://localhost:3000/enter"
         }
-      }).then(({ data, error }) => {
-        setLoading(false);
+      });
 
-        if (error) {
-          // console.log(error);
-          form.setError("email", {
-            type: "manual",
-            message: error.message,
-          })
-          return
-        }
+      setLoading(false);
 
-        if (data) {
-          // console.log(data);
-          supabase.auth.refreshSession().then(() => setSuccess(true));
-        }
-      })
+      if (error) {
+        // console.log(error);
+        form.setError("email", {
+          type: "manual",
+          message: error.message,
+        })
+        return
+      }
+
+      if (data) {
+        // console.log(data);
+        await supabase!.auth.refreshSession();
+        setSuccess(true);
+      }
     }
 
   return (

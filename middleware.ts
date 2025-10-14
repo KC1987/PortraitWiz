@@ -9,10 +9,16 @@ export async function middleware(request: NextRequest) {
     request,
   });
 
+  // Skip Supabase initialization if env vars aren't available (e.g., during build)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    // During build time, just allow the request through
+    return supabaseResponse;
+  }
+
   // Create Supabase client
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {

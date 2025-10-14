@@ -2,23 +2,27 @@ import {NextResponse} from 'next/server';
 import Stripe from 'stripe';
 import {createClient} from "@/utils/supabase/server";
 
-// @ts-expect-error - STRIPE_SECRET_KEY is loaded from environment variables
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-
 export async function POST(req: Request) {
   try {
+    // Lazy-load Stripe to avoid build-time initialization errors
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('STRIPE_SECRET_KEY is not configured');
+      return NextResponse.json({error: 'Server configuration error'}, {status: 500});
+    }
+
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+      console.error('STRIPE_WEBHOOK_SECRET is not configured');
+      return NextResponse.json({error: 'Server configuration error'}, {status: 500});
+    }
+
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
     const body = await req.text();
     const signature = req.headers.get('stripe-signature');
 
     if (!signature) {
       return NextResponse.json({error: 'Missing signature'}, {status: 400});
-    }
-
-    if (!webhookSecret) {
-      console.error('STRIPE_WEBHOOK_SECRET is not configured');
-      return NextResponse.json({error: 'Server configuration error'}, {status: 500});
     }
 
     let event;

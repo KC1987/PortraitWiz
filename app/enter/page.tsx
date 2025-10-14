@@ -42,7 +42,7 @@ export default function EnterPage() {
   const [loginPassword, setLoginPassword] = useState("");
 
 
-  function onLoginWithEmail(e: FormEvent<HTMLFormElement>) {
+  async function onLoginWithEmail(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     // Clear any previous errors
@@ -54,13 +54,21 @@ export default function EnterPage() {
       return;
     }
 
+    if (!supabase) {
+      setLoginError("Authentication service is not available");
+      return;
+    }
+
     // Optional: Set loading state
     setLoading(true);
 
-    supabase.auth.signInWithPassword({
-      email: loginEmail,
-      password: loginPassword,
-    }).then(({ data, error }) => {
+    try {
+      // Use non-null assertion since we've checked above
+      const { data, error } = await supabase!.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+
       setLoading(false);
 
       if (error) {
@@ -79,12 +87,12 @@ export default function EnterPage() {
         navigation.push("/");
         // console.log("Login successful");
       }
-    }).catch((err: Error) => {
+    } catch (err) {
       // Catch any unexpected errors
       setLoading(false);
       setLoginError("An unexpected error occurred. Please try again.");
       console.error("Login error:", err);
-    });
+    }
   }
   // Define form
   const form = useForm<z.infer<typeof usernameSchema>>({
@@ -110,11 +118,13 @@ export default function EnterPage() {
       // }
 
     const checkAvailability = async (usernameToCheck: string) => {
+      if (!supabase) return;
+
       setChecking(true);
 
       try {
         // console.log("checking...")
-        const { data, error } = await supabase
+        const { data, error } = await supabase!
           .from('profiles')
           .select('username')
           .eq('username', usernameToCheck.toLowerCase().trim())
@@ -143,7 +153,15 @@ export default function EnterPage() {
 
 
   // On form submit
-  function onUsernameFormSubmit(values: z.infer<typeof usernameSchema>) {
+  async function onUsernameFormSubmit(values: z.infer<typeof usernameSchema>) {
+    if (!supabase) {
+      form.setError("username", {
+        type: "manual",
+        message: "Service unavailable, please try again",
+      });
+      return;
+    }
+
     // Error if username is not available
     if (!isAvailable) {
       form.setError("username", {
@@ -155,31 +173,33 @@ export default function EnterPage() {
 
     // Register the username
     setLoading(true);
-    supabase
+    const { error } = await supabase!
       .from('profiles')
       .insert({
         id: user?.id,
         username: values.username,
-      }).then(({ error }) => {
-          setLoading(false);
-          if (error) {
-            // setError(error.details);
-            form.setError("username", {
-              type: "manual",
-              message: error.message,
-            })
-            return
-          } else {
-            console.log("Username set!");
-            supabase.auth.refreshSession();
-            // router.push("/");
-            // window.location.href="/";
-          }
-    })
+      });
+
+    setLoading(false);
+    if (error) {
+      // setError(error.details);
+      form.setError("username", {
+        type: "manual",
+        message: error.message,
+      })
+      return
+    } else {
+      console.log("Username set!");
+      supabase!.auth.refreshSession();
+      // router.push("/");
+      // window.location.href="/";
+    }
   }
 
   async function handleEnterWithGoogle() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    if (!supabase) return;
+
+    const { data, error } = await supabase!.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
@@ -206,8 +226,8 @@ export default function EnterPage() {
           <Button
             className="bg-sky-400"
             onClick={
-              () => supabase.auth.signOut()
-                .then( res => console.log( res.error || "Log Out Successful" ))
+              () => supabase?.auth.signOut()
+                .then( (res: { error: Error | null }) => console.log( res.error || "Log Out Successful" ))
           }>
             Log Out
           </Button>

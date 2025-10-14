@@ -1,69 +1,85 @@
 import { createClient } from "@/utils/supabase/client";
+import type { AuthState, Profile } from "./atoms";
 import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
+import type { User, AuthChangeEvent, Session } from "@supabase/supabase-js";
 
-interface Profile {
-  id: string;
-  username?: string;
-  credits: number;
-  [key: string]: unknown;
-}
-
-const supabase = createClient();
-
-export default function useUserData() {
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
+export default function useUserData(initialAuth?: AuthState) {
+  const [user, setUser] = useState<User | null>(initialAuth?.user ?? null);
+  const [profile, setProfile] = useState<Profile | null>(initialAuth?.profile ?? null);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    // Check for existing session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session.user);
+    let isMounted = true;
 
-        // Fetch profile
-        supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .maybeSingle()
-          .then(({ data: profileData, error }) => {
-            if (error) {
-              console.error("Error fetching profile:", error);
-            }
-            setProfile(profileData);
-          });
+    const supabase = createClient();
+
+    if (!supabase) {
+      setIsInitializing(false);
+      return;
+    }
+
+    const fetchProfile = async (userId: string) => {
+      const { data: profileData, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        return null;
       }
-    });
 
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (isMounted) {
+        setProfile(profileData);
+      }
+
+      return profileData;
+    };
+
+    const applySession = async (session: Session | null) => {
+      if (!isMounted) return;
+
       if (session?.user) {
         setUser(session.user);
-
-        // Fetch profile
-        supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .maybeSingle()
-          .then(({ data: profileData, error }) => {
-            if (error) {
-              console.error("Error fetching profile:", error);
-            }
-            setProfile(profileData);
-          });
+        await fetchProfile(session.user.id);
       } else {
         setUser(null);
         setProfile(null);
       }
+    };
+
+    const initializeAuth = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      await applySession(session);
+
+      if (isMounted) {
+        setIsInitializing(false);
+      }
+    };
+
+    initializeAuth();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
+      await applySession(session);
+
+      if (isMounted) {
+        setIsInitializing(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
-  }, []); // Empty dependency array - only run on mount
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
-  return { user, profile };
+  return { user, profile, isInitializing };
 }
-
 
 

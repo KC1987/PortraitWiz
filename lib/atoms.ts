@@ -1,14 +1,14 @@
 import { atom } from "jotai";
 import type { User } from "@supabase/supabase-js";
 
-interface Profile {
+export interface Profile {
   id: string;
   username?: string;
   credits: number;
   [key: string]: unknown;
 }
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
   profile: Profile | null;
 }

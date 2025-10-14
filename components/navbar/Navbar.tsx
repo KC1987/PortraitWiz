@@ -81,6 +81,12 @@ function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
 export default function Navbar() {
   const supabase = createClient()
   const { profile } = useAtomValue(authAtom)
+
+  const handleSignOut = () => {
+    if (supabase) {
+      supabase.auth.signOut()
+    }
+  }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [creditsDialogOpen, setCreditsDialogOpen] = useState(false)
 
@@ -127,7 +133,7 @@ export default function Navbar() {
                   onClick={handleCreditsClick}
                 >
                   <Coins className="w-3.5 h-3.5" />
-                  {profile.credits}
+                  <span suppressHydrationWarning>{profile.credits}</span>
                 </Badge>
 
                 <DropdownMenu>
@@ -159,7 +165,7 @@ export default function Navbar() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => supabase.auth.signOut()}
+                      onClick={handleSignOut}
                       className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
                     >
                       <LogOut className="w-4 h-4" />
@@ -210,7 +216,7 @@ export default function Navbar() {
                       onClick={handleCreditsClick}
                     >
                       <Coins className="w-3.5 h-3.5" />
-                      {profile.credits}
+                      <span suppressHydrationWarning>{profile.credits}</span>
                     </Badge>
                   )}
 
@@ -262,7 +268,7 @@ export default function Navbar() {
                         <Button
                           variant="destructive"
                           onClick={() => {
-                            supabase.auth.signOut()
+                            handleSignOut()
                             setMobileMenuOpen(false)
                           }}
                           className="justify-start gap-2 hover:scale-[0.98] transition-transform duration-200"

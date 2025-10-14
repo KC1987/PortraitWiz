@@ -2,12 +2,16 @@ import {NextResponse} from 'next/server';
 import Stripe from 'stripe';
 import {createClient} from "@/utils/supabase/server";
 
-// @ts-expect-error - STRIPE_SECRET_KEY is loaded from environment variables
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 type PackageId = "package-50" | "package-150" | "package-250";
 
 export async function POST(req: Request) {
+  // Lazy-load Stripe to avoid build-time initialization errors
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('STRIPE_SECRET_KEY is not configured');
+    return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+  }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   const supabase = await createClient();
 

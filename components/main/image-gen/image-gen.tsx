@@ -1,22 +1,22 @@
 "use client"
 
-import { useState, useRef, DragEvent, ChangeEvent } from "react"
+import { useState, useRef, DragEvent, ChangeEvent, KeyboardEvent as ReactKeyboardEvent } from "react"
 import { useAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
 
-import {Card, CardContent, CardHeader, CardTitle, CardFooter} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, X, Download, ImageIcon, Loader2, AlertCircle } from "lucide-react"
-import { cn } from "@/lib/utils";
-import SettingSelection from "@/components/main/image-gen/setting-selection";
-import OutfitSelection from "@/components/main/image-gen/outfit-selection";
-import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection";
+import { cn } from "@/lib/utils"
+import SettingSelection from "@/components/main/image-gen/setting-selection"
+import OutfitSelection from "@/components/main/image-gen/outfit-selection"
+import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog";
 
 export default function ImageGen() {
-  const [ auth, setAuth ] = useAtom(authAtom)
+  const [auth, setAuth] = useAtom(authAtom)
 
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
@@ -37,6 +37,7 @@ export default function ImageGen() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const outputSectionRef = useRef<HTMLDivElement>(null)
   const maxPromptLength = 500
+  const isNearPromptLimit = instructions.length >= maxPromptLength * 0.9
 
 
 
@@ -140,6 +141,13 @@ export default function ImageGen() {
     }
   }
 
+  const handleDropzoneKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      fileInputRef.current?.click()
+    }
+  }
+
   // Remove uploaded image by index
   const removeUploadedImage = (index: number) => {
     setUploadedImages(prev => prev.filter((_, i) => i !== index))
@@ -238,17 +246,17 @@ export default function ImageGen() {
   }
 
   return (
-    <section className="w-full overflow-x-hidden mx-auto max-w-6xl">
-      <div className="grid gap-3 lg:grid-cols-2">
+    <section className="w-full max-w-6xl mx-auto overflow-x-hidden px-3 sm:px-6 lg:px-8 py-6 lg:py-8">
+      <div className="grid gap-6 lg:grid-cols-2 xl:gap-8">
         {/* Input Section */}
-        <Card className="overflow-hidden">
-          <CardHeader>
+        <Card className="overflow-hidden border border-border/70 bg-background/95 shadow-sm">
+          <CardHeader className="space-y-1 border-b border-border/60 bg-muted/40 px-4 py-4 md:px-6">
             <CardTitle className="text-lg md:text-xl">Create Image</CardTitle>
             {/*<CardDescription>*/}
             {/*  Upload an image to edit or generate from text*/}
             {/*</CardDescription>*/}
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-6 px-4 py-4 md:px-6">
             {/* Drag & Drop Zone */}
             <div>
               {/*<label className="text-sm font-medium mb-2 block">*/}
@@ -260,12 +268,19 @@ export default function ImageGen() {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
+                onKeyDown={handleDropzoneKeyDown}
+                role="button"
+                tabIndex={0}
+                aria-label="Upload reference images"
                 className={cn(
-                  "relative border-2 border-dashed rounded-lg p-3 md:p-6 lg:p-8 text-center cursor-pointer transition-all touch-manipulation active:scale-[0.98] min-h-[120px] md:min-h-[160px]",
+                  "relative flex w-full cursor-pointer rounded-xl border border-dashed border-border/70 bg-background/70 text-center transition-all duration-200 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                  uploadedImages.length > 0
+                    ? "flex-col items-stretch gap-3 p-4 text-left md:p-5"
+                    : "flex-col items-center justify-center gap-3 p-5 md:p-6",
                   isDragging
-                    ? "border-primary bg-primary/5 scale-[1.02]"
-                    : "border-muted-foreground/30 hover:border-primary/50 hover:bg-accent/50",
-                  uploadedImages.length > 0 && "border-primary bg-primary/5"
+                    ? "border-primary bg-primary/10 shadow-inner"
+                    : "hover:border-primary/60 hover:bg-primary/5",
+                  uploadedImages.length >= 4 && "border-primary/50"
                 )}
               >
                 <input
@@ -279,38 +294,51 @@ export default function ImageGen() {
                 />
 
                 {uploadedImages.length === 0 ? (
-                  <div className="space-y-2 md:space-y-3 py-2">
-                    <div className="mx-auto w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/15 flex items-center justify-center">
-                      <Upload className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+                  <div className="flex flex-col items-center gap-3 py-1 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 md:h-14 md:w-14">
+                      <Upload className="h-6 w-6 text-primary md:h-7 md:w-7" />
                     </div>
-                    <div>
-                      <p className="text-sm md:text-base font-medium text-foreground">
-                        <span className="hidden sm:inline">Drop your reference images here, or </span>
-                        <span className="sm:hidden">Tap to upload reference images</span>
-                        <span className="hidden sm:inline">click to browse</span>
+                    <div className="space-y-1">
+                      <p className="text-sm font-semibold text-foreground md:text-base">
+                        Drop reference images or tap to upload
                       </p>
-                      <p className="text-xs md:text-sm text-muted-foreground mt-1.5">
-                        Up to 4 images (PNG, JPG, WEBP up to 5MB each)
+                      <p className="text-xs text-muted-foreground md:text-sm">
+                        PNG, JPG, or WEBP · up to 4 images · 5MB max each
                       </p>
+                    </div>
+                    <div className="text-[11px] text-muted-foreground">
+                      Adding references helps keep your likeness accurate.
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-2 md:space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground">
+                  <div className="flex w-full flex-col gap-3">
+                    <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
                       {uploadedImages.length}/4 reference images
-                    </p>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 md:gap-3">
+                      {uploadedImages.length < 4 && (
+                        <button
+                          type="button"
+                          className="text-foreground underline-offset-4 transition hover:underline"
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            fileInputRef.current?.click()
+                          }}
+                        >
+                          Add more
+                        </button>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
                       {uploadedImages.map((image, index) => (
-                        <div key={index} className="relative group">
+                        <div key={index} className="group relative overflow-hidden rounded-lg border border-border/60 bg-background shadow-sm">
                           <img
                             src={`data:image/png;base64,${image}`}
                             alt={`Reference ${index + 1}`}
-                            className="w-full aspect-square object-cover rounded-lg"
+                            className="aspect-square w-full object-cover transition group-hover:scale-[1.02]"
                           />
                           <Button
                             size="icon"
-                            variant="destructive"
-                            className="absolute -top-1 -right-1 md:-top-2 md:-right-2 rounded-full w-7 h-7 md:w-8 md:h-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity touch-manipulation"
+                            variant="secondary"
+                            className="absolute right-2 top-2 h-7 w-7 rounded-full bg-background/95 text-muted-foreground shadow-sm transition hover:text-destructive focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:opacity-0 md:group-hover:opacity-100"
                             onClick={(e) => {
                               e.stopPropagation()
                               removeUploadedImage(index)
@@ -321,13 +349,11 @@ export default function ImageGen() {
                         </div>
                       ))}
                     </div>
-                    {uploadedImages.length < 4 && (
-                      <p className="text-xs text-muted-foreground text-center">
-                        <span className="hidden sm:inline">Click or drop more images to add </span>
-                        <span className="sm:hidden">Tap to add more </span>
-                        ({4 - uploadedImages.length} remaining)
-                      </p>
-                    )}
+                    <p className="text-xs text-muted-foreground">
+                      {uploadedImages.length < 4
+                        ? `${4 - uploadedImages.length} slot(s) remaining`
+                        : "Maximum reached. Remove an image to add another."}
+                    </p>
                   </div>
                 )}
               </div>
@@ -368,19 +394,21 @@ export default function ImageGen() {
                 rows={4}
                 className="resize-none text-sm md:text-base min-h-[100px]"
               />
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-2">
-                <p className="text-xs text-muted-foreground">
-                  {uploadedImages.length > 0
-                    ? `Gemini will analyze your ${uploadedImages.length} reference image${uploadedImages.length > 1 ? 's' : ''} for better results`
-                    : "Add reference images for more accurate portraits"}
-                </p>
-                <p className="text-xs text-muted-foreground whitespace-nowrap">
+              <div className="mt-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <span className="text-xs text-muted-foreground">
+                  Keep it short—only add details that must override the defaults.
+                </span>
+                <p
+                  className={cn(
+                    "text-xs whitespace-nowrap",
+                    isNearPromptLimit ? "font-medium text-destructive" : "text-muted-foreground"
+                  )}
+                >
                   {instructions.length}/{maxPromptLength}
                 </p>
               </div>
             </div>
 
-             Error Message
             {error && (
               <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
                 <div className="flex gap-3">
@@ -399,7 +427,7 @@ export default function ImageGen() {
             <Button
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="w-full"
+              className="w-full h-12 gap-2 text-base font-semibold"
               size="lg"
             >
               {isGenerating ? (
@@ -422,16 +450,16 @@ export default function ImageGen() {
         </Card>
 
         {/* Output Section */}
-        <Card ref={outputSectionRef} className="overflow-hidden">
-          <CardHeader>
+        <Card ref={outputSectionRef} className="overflow-hidden border border-border/70 bg-background/95 shadow-sm">
+          <CardHeader className="space-y-1 border-b border-border/60 bg-muted/40 px-4 py-4 md:px-6">
             <CardTitle className="text-lg md:text-xl">Generated Image</CardTitle>
             {/*<CardDescription>*/}
             {/*  Your AI-generated result will appear here*/}
             {/*</CardDescription>*/}
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 py-4 md:px-6">
             {!generatedImage && !isGenerating ? (
-              <div className="aspect-[4/3] md:aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 flex flex-col items-center justify-center text-center">
+              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/40 text-center md:aspect-square">
                 <div className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full bg-muted flex items-center justify-center mb-2 md:mb-3">
                   <ImageIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-muted-foreground" />
                 </div>
@@ -440,7 +468,7 @@ export default function ImageGen() {
                 </p>
               </div>
             ) : isGenerating ? (
-              <div className="aspect-[4/3] md:aspect-square rounded-lg border-2 border-dashed border-primary/50 bg-primary/5 flex flex-col items-center justify-center p-4 md:p-6">
+              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-xl border border-dashed border-primary/60 bg-primary/10 p-4 text-center md:aspect-square md:p-6">
                 <Loader2 className="w-10 h-10 md:w-12 md:h-12 text-primary animate-spin mb-2 md:mb-3" />
                 <p className="text-sm md:text-base font-medium text-primary">
                   Creating your portrait...
@@ -451,17 +479,18 @@ export default function ImageGen() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="relative group rounded-lg overflow-hidden border">
+                <div className="group relative overflow-hidden rounded-xl border border-border/70 bg-muted/20">
                   <img
                     src={`data:image/png;base64,${generatedImage}`}
                     alt="Generated result"
                     className="w-full h-auto"
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover:bg-black/60 group-hover:opacity-100">
                     <Button
                       onClick={downloadImage}
                       size="lg"
                       variant="secondary"
+                      className="gap-2"
                     >
                       <Download className="w-4 h-4" />
                       Download
@@ -471,7 +500,7 @@ export default function ImageGen() {
                 <Button
                   onClick={downloadImage}
                   variant="outline"
-                  className="w-full lg:hidden"
+                  className="w-full gap-2 lg:hidden"
                 >
                   <Download className="w-4 h-4" />
                   Download Image
@@ -480,18 +509,19 @@ export default function ImageGen() {
             )}
           </CardContent>
           { generatedImage &&
-            <CardFooter className="flex flex-col sm:flex-row gap-2 p-4 md:p-6" >
+            <CardFooter className="flex flex-col gap-2 px-4 py-4 sm:flex-row md:px-6">
               <Button
-                className="w-full sm:w-1/2 h-11 md:h-12 touch-manipulation"
+                variant="outline"
+                className="h-11 w-full touch-manipulation sm:w-1/2 md:h-12"
                 onClick={handleModifyImage}
               >
                 Modify Image
               </Button>
               <Button
-                className="w-full sm:w-1/2 h-11 md:h-12 touch-manipulation"
+                className="h-11 w-full touch-manipulation gap-2 sm:w-1/2 md:h-12"
                 onClick={downloadImage}
               >
-                <Download className="w-4 h-4 mr-2" />
+                <Download className="h-4 w-4" />
                 Download
               </Button>
             </CardFooter>
