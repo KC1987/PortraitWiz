@@ -24,6 +24,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog"
 
 // NavLink component with active state
 interface NavLinkProps {
@@ -81,6 +82,15 @@ export default function Navbar() {
   const supabase = createClient()
   const { user, profile } = useAtomValue(authAtom)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [creditsDialogOpen, setCreditsDialogOpen] = useState(false)
+
+  const handleCreditsClick = () => {
+    if (profile?.credits === 0) {
+      setCreditsDialogOpen(true)
+    } else {
+      setCreditsDialogOpen(true)
+    }
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-background/95 border-b border-primary/10 shadow-sm">
@@ -113,7 +123,8 @@ export default function Navbar() {
               <div className="flex items-center gap-3 pl-6 border-l border-border">
                 <Badge
                   variant="secondary"
-                  className="bg-primary/10 text-primary hover:bg-primary/15 cursor-default transition-colors duration-200 gap-1.5 px-3 py-1"
+                  className="bg-primary/10 text-primary hover:bg-primary/15 cursor-pointer transition-colors duration-200 gap-1.5 px-3 py-1"
+                  onClick={handleCreditsClick}
                 >
                   <Coins className="w-3.5 h-3.5" />
                   {profile.credits}
@@ -195,7 +206,8 @@ export default function Navbar() {
                   {profile?.username && (
                     <Badge
                       variant="secondary"
-                      className="bg-primary/10 text-primary hover:bg-primary/15 cursor-default w-fit gap-1.5 px-3 py-1.5 transition-colors duration-200"
+                      className="bg-primary/10 text-primary hover:bg-primary/15 cursor-pointer w-fit gap-1.5 px-3 py-1.5 transition-colors duration-200"
+                      onClick={handleCreditsClick}
                     >
                       <Coins className="w-3.5 h-3.5" />
                       {profile.credits}
@@ -276,6 +288,12 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Insufficient Credits Dialog */}
+      <InsufficientCreditsDialog
+        open={creditsDialogOpen}
+        onOpenChange={setCreditsDialogOpen}
+      />
     </nav>
   )
 }

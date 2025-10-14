@@ -83,12 +83,9 @@ export default function OutfitSelection({ outfit, setOutfit }) {
   return (
     <TooltipProvider delayDuration={300}>
       <Card className="w-full">
-        <CardHeader className="pb-2 md:pb-4 p-3 md:p-6">
+        <CardHeader >
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 md:gap-2">
-              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                <Shirt className="w-3 h-3 md:w-4 md:h-4 text-primary" />
-              </div>
               <CardTitle className="text-sm md:text-base">Outfit Style</CardTitle>
             </div>
             {selectedOutfit && (
@@ -103,7 +100,7 @@ export default function OutfitSelection({ outfit, setOutfit }) {
             )}
           </div>
         </CardHeader>
-        <CardContent className="p-3 md:p-4 lg:p-6">
+        <CardContent >
           <div className="relative">
             {/* Left scroll indicator */}
             {showLeftArrow && (
@@ -120,7 +117,7 @@ export default function OutfitSelection({ outfit, setOutfit }) {
             )}
 
             <ScrollArea className="w-full rounded-md whitespace-nowrap" ref={scrollRef}>
-              <div className="flex w-max gap-2 md:gap-3 pb-2 md:pb-3">
+              <div className="flex w-max gap-2 md:gap-2.5 pb-1 md:pb-2">
                 {outfits.map((set, index) => (
                   <Tooltip key={set.name}>
                     <TooltipTrigger asChild>
@@ -139,7 +136,7 @@ export default function OutfitSelection({ outfit, setOutfit }) {
                         aria-label={`Select ${set.label}`}
                         aria-pressed={set.text === outfit}
                       >
-                        <div className="relative w-14 h-14 md:w-20 md:h-20 lg:w-24 lg:h-24">
+                        <div className="relative w-14 h-14 md:w-16 md:h-16 lg:w-18 lg:h-18">
                           <Image
                             className="transition-opacity duration-200 group-hover:opacity-90 w-full h-full object-cover"
                             src="/bg.jpg"
@@ -156,9 +153,9 @@ export default function OutfitSelection({ outfit, setOutfit }) {
                           {/* Selected checkmark with animation */}
                           {set.text === outfit && (
                             <div className="absolute inset-0 bg-primary/20 flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
-                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary flex items-center justify-center">
+                              <div className="w-5 h-5 md:w-5 md:h-5 rounded-full bg-primary flex items-center justify-center">
                                 <svg
-                                  className="w-3 h-3 md:w-4 md:h-4 text-primary-foreground"
+                                  className="w-3 h-3 md:w-3.5 md:h-3.5 text-primary-foreground"
                                   fill="none"
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
@@ -172,7 +169,7 @@ export default function OutfitSelection({ outfit, setOutfit }) {
                             </div>
                           )}
                         </div>
-                        <div className="p-1.5 md:p-2 text-center bg-muted/30">
+                        <div className="p-1 md:p-1.5 text-center bg-muted/30">
                           <p className={cn(
                             "text-[10px] md:text-xs font-medium transition-colors duration-200 line-clamp-1",
                             set.text === outfit ? "text-primary" : "text-foreground"

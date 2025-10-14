@@ -2,7 +2,6 @@ import Link from "next/link"
 import ImageGen from "@/components/main/image-gen/image-gen"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Sparkles, Zap, Shield, CheckCircle2 } from "lucide-react"
 
 export default function Home() {
   return (

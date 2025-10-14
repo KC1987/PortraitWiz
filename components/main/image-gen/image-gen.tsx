@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect, DragEvent, ChangeEvent } from "react"
+import { useState, useRef, DragEvent, ChangeEvent } from "react"
 import { useAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
 
@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import SettingSelection from "@/components/main/image-gen/setting-selection";
 import OutfitSelection from "@/components/main/image-gen/outfit-selection";
 import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection";
+import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog";
 
 export default function ImageGen() {
   const [ auth, setAuth ] = useAtom(authAtom)
@@ -26,6 +27,7 @@ export default function ImageGen() {
   const [error, setError] = useState<string | null>(null)
   const [errorSuggestion, setErrorSuggestion] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState<boolean>(false)
+  const [insufficientCreditsDialogOpen, setInsufficientCreditsDialogOpen] = useState<boolean>(false)
 
   const [setting, setSetting] = useState("Create an ultra-photorealistic professional executive portrait with absolute realism and natural authenticity. LIGHTING: Professional three-point studio setup - key light at 45 degrees (soft, diffused, natural skin rendering), subtle fill light (gentle shadow softening, preserving dimensional form), edge/hair light (natural separation, authentic highlight). SUBJECT: Exact facial features, genuine skin texture with natural pores and subtle imperfections, real hair with individual strand detail, authentic eye reflections and catchlights. Expression: naturally confident with genuine micro-expressions, real eye contact, subtle professional smile with authentic muscle movement. Posture: naturally squared shoulders, organic spine alignment, subtly confident head position. PHOTOGRAPHIC REALISM: Real camera behavior - authentic lens characteristics (85mm equivalent), natural depth of field with realistic bokeh, genuine color science and skin tone accuracy, real-world lighting falloff and ambient occlusion. Authentic fabric texture and clothing wrinkles. Natural environmental interaction - realistic shadows, accurate light bounce, genuine atmospheric perspective. NO artificial smoothing, NO digital painting artifacts, NO uncanny valley effects, NO synthetic perfection. TECHNICAL: 1000x1000px, photographic color grading matching real studio conditions, authentic grain structure, natural contrast ratios, genuine photographic quality indistinguishable from professional camera capture.");
 
@@ -33,32 +35,10 @@ export default function ImageGen() {
   const [femaleOutfit, setFemaleOutfit] = useState("Professional headshot framed from shoulders up. Subject wearing impeccably tailored blazer in charcoal, navy, or black over crisp blouse with structured collar or elegant neckline. Natural fabric texture showing authentic weave in suit material, realistic lapel structure, genuine shoulder fit with proper tailoring, visible blouse detail at neckline. Frame includes upper chest to top of head with professional headroom.");
   const [outfitGender, setOutfitGender] = useState<"male" | "female">("male");
   const [instructions, setInstructions] = useState("");
-  const [showStickyButton, setShowStickyButton] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const outputSectionRef = useRef<HTMLDivElement>(null)
-  const generateButtonRef = useRef<HTMLButtonElement>(null)
   const maxPromptLength = 500
-
-  // Track scroll to show/hide sticky button on mobile
-  useEffect(() => {
-    const handleScroll = () => {
-      if (generateButtonRef.current) {
-        const rect = generateButtonRef.current.getBoundingClientRect()
-        const isButtonVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
-        setShowStickyButton(!isButtonVisible && window.innerWidth < 1024)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    window.addEventListener('resize', handleScroll)
-    handleScroll() // Initial check
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-    }
-  }, [])
 
 
 
@@ -183,6 +163,12 @@ export default function ImageGen() {
       return
     }
 
+    // Check credits, and popup
+    if (auth?.profile && auth.profile.credits < 1) {
+      setInsufficientCreditsDialogOpen(true)
+      return
+    }
+
     setIsGenerating(true)
     setError(null)
     setErrorSuggestion(null)
@@ -256,17 +242,17 @@ export default function ImageGen() {
   }
 
   return (
-    <section className="container mx-auto px-3 sm:px-4 max-w-6xl py-4 md:py-6">
-      <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
+    <section className="w-full overflow-x-hidden mx-auto max-w-6xl">
+      <div className="grid gap-3 lg:grid-cols-2">
         {/* Input Section */}
-        <Card>
-          <CardHeader className="pb-3 md:pb-6">
+        <Card className="overflow-hidden">
+          <CardHeader>
             <CardTitle className="text-lg md:text-xl">Create Image</CardTitle>
             {/*<CardDescription>*/}
             {/*  Upload an image to edit or generate from text*/}
             {/*</CardDescription>*/}
           </CardHeader>
-          <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
+          <CardContent className="space-y-2">
             {/* Drag & Drop Zone */}
             <div>
               {/*<label className="text-sm font-medium mb-2 block">*/}
@@ -398,7 +384,7 @@ export default function ImageGen() {
               </div>
             </div>
 
-            {/* Error Message */}
+             Error Message
             {error && (
               <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
                 <div className="flex gap-3">
@@ -415,7 +401,6 @@ export default function ImageGen() {
 
             {/* Generate Button */}
             <Button
-              ref={generateButtonRef}
               onClick={handleGenerate}
               disabled={isGenerating}
               className="w-full"
@@ -440,45 +425,17 @@ export default function ImageGen() {
           </CardContent>
         </Card>
 
-        {/* Sticky Generate Button for Mobile */}
-        {showStickyButton && (
-          <div className="fixed bottom-0 left-0 right-0 p-2 bg-background/98 backdrop-blur-md border-t border-border/50 shadow-2xl lg:hidden z-50 animate-in slide-in-from-bottom duration-200">
-            <Button
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="w-full max-w-md mx-auto h-10 md:h-11"
-              size="default"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Generating...
-                </>
-              ) : generatedImage ? (
-                <>
-                  Try Again
-                </>
-                ) : (
-                <>
-                  <ImageIcon className="w-4 h-4" />
-                  Generate Image (1 Credit)
-                </>
-              )}
-            </Button>
-          </div>
-        )}
-
         {/* Output Section */}
-        <Card ref={outputSectionRef}>
-          <CardHeader className="pb-3 md:pb-6">
+        <Card ref={outputSectionRef} className="overflow-hidden">
+          <CardHeader>
             <CardTitle className="text-lg md:text-xl">Generated Image</CardTitle>
             {/*<CardDescription>*/}
             {/*  Your AI-generated result will appear here*/}
             {/*</CardDescription>*/}
           </CardHeader>
-          <CardContent className="p-4 md:p-6">
+          <CardContent>
             {!generatedImage && !isGenerating ? (
-              <div className="aspect-[4/3] md:aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 flex flex-col items-center justify-center text-center p-4 md:p-6 lg:p-8">
+              <div className="aspect-[4/3] md:aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 flex flex-col items-center justify-center text-center">
                 <div className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full bg-muted flex items-center justify-center mb-2 md:mb-3">
                   <ImageIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-muted-foreground" />
                 </div>
@@ -530,7 +487,6 @@ export default function ImageGen() {
             <CardFooter className="flex flex-col sm:flex-row gap-2 p-4 md:p-6" >
               <Button
                 className="w-full sm:w-1/2 h-11 md:h-12 touch-manipulation"
-                variant="outline"
                 onClick={handleModifyImage}
               >
                 Modify Image
@@ -546,6 +502,12 @@ export default function ImageGen() {
           }
         </Card>
       </div>
+
+      {/* Insufficient Credits Dialog */}
+      <InsufficientCreditsDialog
+        open={insufficientCreditsDialogOpen}
+        onOpenChange={setInsufficientCreditsDialogOpen}
+      />
     </section>
   )
 }
