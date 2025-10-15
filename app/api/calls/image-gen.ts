@@ -1,12 +1,22 @@
 import { mapGeminiError } from "@/lib/error-messages";
+import { generateOpenAIImage } from "./openai-image";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = "gemini-2.5-flash-image";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
+export const IMAGE_PROVIDERS = ["openai", "gemini"] as const;
+export type ImageProvider = (typeof IMAGE_PROVIDERS)[number];
+
+const DEFAULT_PROVIDER =
+  normalizeProvider(process.env.IMAGE_GENERATION_PROVIDER) ?? "openai";
+
 interface GenerateImageParams {
   prompt: string;
   imageBase64Array?: string[];
+  size?: "256x256" | "512x512" | "1024x1024";
+  quality?: "standard" | "high";
+  provider?: ImageProvider;
 }
 
 interface GenerateImageResponse {
@@ -26,7 +36,7 @@ interface GeminiError extends Error {
   isRetryable?: boolean;
 }
 
-export async function generateImage({
+export async function generateGeminiImage({
   prompt,
   imageBase64Array,
 }: GenerateImageParams): Promise<GenerateImageResponse> {
@@ -34,10 +44,8 @@ export async function generateImage({
     throw new Error("GEMINI_API_KEY environment variable not set");
   }
 
-  // Build contents array
   const parts: GeminiPart[] = [{ text: prompt }];
 
-  // Add optional images for editing/composition (up to 4 reference images)
   if (imageBase64Array && imageBase64Array.length > 0) {
     imageBase64Array.forEach((imageBase64) => {
       parts.push({
@@ -53,7 +61,6 @@ export async function generateImage({
     contents: [{ parts }],
   };
 
-  // Call Gemini API
   const resp = await fetch(GEMINI_ENDPOINT, {
     method: "POST",
     headers: {
@@ -65,7 +72,6 @@ export async function generateImage({
 
   if (!resp.ok) {
     const errorText = await resp.text();
-    // Map technical error to user-friendly message
     const friendlyError = mapGeminiError(errorText);
     const error: GeminiError = new Error(friendlyError.message);
     error.suggestion = friendlyError.suggestion;
@@ -75,7 +81,6 @@ export async function generateImage({
 
   const data = await resp.json();
 
-  // Extract inline image data from response
   const candidate = data.candidates?.[0];
   const responseParts: GeminiPart[] = candidate?.content?.parts || [];
   const inline = responseParts.find((p) => p.inlineData);
@@ -91,4 +96,47 @@ export async function generateImage({
   return {
     imageBase64: inline.inlineData.data,
   };
+}
+
+export async function generateImage(
+  params: GenerateImageParams,
+): Promise<GenerateImageResponse> {
+  const provider = resolveProvider(params.provider, params.imageBase64Array);
+
+  if (provider === "gemini") {
+    return generateGeminiImage(params);
+  }
+
+  return generateOpenAIImage({
+    prompt: params.prompt,
+    size: params.size,
+    quality: params.quality,
+  });
+}
+
+function resolveProvider(
+  requested: ImageProvider | undefined,
+  imageBase64Array: string[] | undefined,
+): ImageProvider {
+  const normalizedRequested = normalizeProvider(requested);
+  const baseProvider = normalizedRequested ?? DEFAULT_PROVIDER;
+
+  if (baseProvider === "openai" && imageBase64Array && imageBase64Array.length) {
+    return "gemini";
+  }
+
+  return baseProvider;
+}
+
+function normalizeProvider(
+  value: string | ImageProvider | undefined,
+): ImageProvider | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const lower = value.toString().toLowerCase();
+  return IMAGE_PROVIDERS.find((provider) => provider === lower) as
+    | ImageProvider
+    | undefined;
 }

@@ -58,15 +58,6 @@ export async function middleware(request: NextRequest) {
   // Define route types
   const isProtectedRoute = pathname.startsWith("/dashboard");
   const isGuestOnlyRoute = pathname === "/enter" || pathname === "/register";
-  const isPublicRoute =
-    pathname === "/" ||
-    pathname.startsWith("/pricing") ||
-    pathname.startsWith("/success") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/auth") ||
-    pathname.startsWith("/_next") ||
-    pathname.includes(".");
-
   // Route protection logic
   if (isProtectedRoute) {
     // Protected routes: require authentication

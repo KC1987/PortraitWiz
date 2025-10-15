@@ -1,15 +1,16 @@
 "use client"
 
 import { useState, useRef, DragEvent, ChangeEvent, KeyboardEvent as ReactKeyboardEvent } from "react"
+import Image from "next/image"
 import { useAtom } from "jotai"
-import { authAtom } from "@/lib/atoms"
+import { Upload, X, Download, ImageIcon, Loader2, AlertCircle } from "lucide-react"
 
+import { authAtom } from "@/lib/atoms"
+import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Upload, X, Download, ImageIcon, Loader2, AlertCircle } from "lucide-react"
-import { cn } from "@/lib/utils"
 import SettingSelection from "@/components/main/image-gen/setting-selection"
 import OutfitSelection from "@/components/main/image-gen/outfit-selection"
 import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection"
@@ -329,11 +330,16 @@ export default function ImageGen() {
                     </div>
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
                       {uploadedImages.map((image, index) => (
-                        <div key={index} className="group relative overflow-hidden rounded-lg border border-border/60 bg-background shadow-sm">
-                          <img
+                        <div
+                          key={index}
+                          className="group relative aspect-square overflow-hidden rounded-lg border border-border/60 bg-background shadow-sm"
+                        >
+                          <Image
                             src={`data:image/png;base64,${image}`}
                             alt={`Reference ${index + 1}`}
-                            className="aspect-square w-full object-cover transition group-hover:scale-[1.02]"
+                            fill
+                            sizes="(min-width: 768px) 33vw, 50vw"
+                            className="object-cover transition group-hover:scale-[1.02]"
                           />
                           <Button
                             size="icon"
@@ -480,10 +486,12 @@ export default function ImageGen() {
             ) : (
               <div className="space-y-4">
                 <div className="group relative overflow-hidden rounded-xl border border-border/70 bg-muted/20">
-                  <img
+                  <Image
                     src={`data:image/png;base64,${generatedImage}`}
                     alt="Generated result"
-                    className="w-full h-auto"
+                    width={1024}
+                    height={1024}
+                    className="h-auto w-full"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover:bg-black/60 group-hover:opacity-100">
                     <Button

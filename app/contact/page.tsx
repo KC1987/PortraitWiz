@@ -45,6 +45,35 @@ export default function ContactPage() {
   })
 
   async function onSubmit(values: ContactFormValues) {
+    if (isSubmitting) {
+      return
+    }
+
+    const trimmedValues = {
+      name: values.name.trim(),
+      email: values.email.trim(),
+      subject: values.subject.trim(),
+      message: values.message.trim(),
+    }
+
+    const hasEmptyField = Object.values(trimmedValues).some((value) => value.length === 0)
+
+    if (hasEmptyField) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please complete all fields before sending your message.",
+      })
+      return
+    }
+
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setSubmitStatus({
+        type: "error",
+        message: "You appear to be offline. Please check your connection and try again.",
+      })
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitStatus({ type: null, message: "" })
 
@@ -54,7 +83,7 @@ export default function ContactPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(trimmedValues),
       })
 
       const data = await response.json()

@@ -257,3 +257,4 @@ export default function FemaleOutfitSelection({ outfit, setOutfit }: FemaleOutfi
       </Card>
     </TooltipProvider>
   )
+}
