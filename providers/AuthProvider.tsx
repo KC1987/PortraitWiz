@@ -1,31 +1,120 @@
 "use client"
 
-import useUserData from "@/lib/hooks";
-import { authAtom, type AuthState } from "@/lib/atoms";
-import { useEffect, useMemo } from "react";
-import { useSetAtom } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
+import { useAtom } from "jotai"
+import { useEffect } from "react"
+import { authAtom } from "@/lib/atoms"
+import { createClient } from "@/utils/supabase/client"
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-  initialAuth?: AuthState;
-}
+// -----------------------------------------------------------------------------
+// AuthProvider: keeps Supabase auth and profile in sync with Jotai state
+// -----------------------------------------------------------------------------
+export default function AuthProvider({ children }) {
+  const supabase = createClient()
+  const [auth, setAuth] = useAtom(authAtom)
 
-export default function AuthProvider({ children, initialAuth }: AuthProviderProps) {
-  const fallbackAuth = useMemo<AuthState>(
-    () => initialAuth ?? { user: null, profile: null },
-    [initialAuth]
-  );
-
-  useHydrateAtoms([[authAtom, fallbackAuth]]);
-
-  const setAuthAtom = useSetAtom(authAtom);
-  const { user, profile, isInitializing } = useUserData(initialAuth);
-
+  // -----------------------------
+  // 1. Hydrate session on mount
+  // -----------------------------
   useEffect(() => {
-    if (isInitializing) return;
-    setAuthAtom({ user, profile });
-  }, [user, profile, isInitializing, setAuthAtom]);
+    let mounted = true
 
-  return <>{children}</>;
+    const initSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session?.user && mounted) {
+          if (process.env.NODE_ENV === "development")
+            console.log("[Auth] Initial session:", session)
+
+          setAuth(prev => ({
+            ...prev,
+            user: session.user,
+            session,
+          }))
+        }
+      } catch (err) {
+        console.error("[Auth] Session init error:", err)
+      }
+    }
+
+    initSession()
+    return () => { mounted = false }
+  }, [supabase, setAuth])
+
+  // -----------------------------------
+  // 2. Subscribe to auth state changes
+  // -----------------------------------
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (process.env.NODE_ENV === "development")
+        console.log("[Auth] Event:", event)
+
+      if (!session?.user) {
+        // Signed out
+        setAuth({ user: null, session: null, profile: null })
+        return
+      }
+
+      // Signed in or token refreshed
+      setAuth(prev => ({
+        ...prev,
+        user: session.user,
+        session,
+      }))
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase, setAuth])
+
+  // -----------------------------------
+  // 3. Fetch user profile when user changes
+  // -----------------------------------
+  useEffect(() => {
+    if (!auth?.user?.id) return
+
+    let cancelled = false
+
+    const getProfile = async () => {
+      // Optional: avoid redundant refetch if profile already loaded
+      if (auth.profile && auth.profile.id === auth.user.id) return
+
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", auth.user.id)
+          .maybeSingle()
+
+        if (cancelled) return
+
+        if (error) {
+          console.error("[Auth] Profile fetch error:", error.message)
+          return
+        }
+
+        if (process.env.NODE_ENV === "development")
+          console.log("[Auth] Profile fetched:", data)
+
+        if (!data) {
+          // Optional: you could auto-create a profile here if desired
+          // await supabase.from("profiles").insert({ id: auth.user.id, ...defaults })
+          console.warn("[Auth] No profile found for user:", auth.user.id)
+        }
+
+        setAuth(prev => ({ ...prev, profile: data || null }))
+      } catch (err) {
+        if (!cancelled)
+          console.error("[Auth] Profile fetch failed:", err)
+      }
+    }
+
+    getProfile()
+    return () => { cancelled = true }
+  }, [auth?.user?.id, supabase, setAuth])
+
+  // -----------------------------------
+  // 4. Render children
+  // -----------------------------------
+  return <>{children}</>
 }

@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
-import AuthProvider from "@/providers/AuthProvider";
+import ThemeProvider from "@/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/footer/footer";
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { createClient } from "@/utils/supabase/server";
-import type { AuthState } from "@/lib/atoms";
+import { cn } from "@/lib/utils";
+import AuthProvider from "@/providers/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,43 +29,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let initialAuth: AuthState = { user: null, profile: null };
 
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error fetching profile in layout:", error);
-        initialAuth = { user, profile: null };
-      } else {
-        initialAuth = { user, profile };
-      }
-    }
-  } catch (error) {
-    console.error("Error initializing auth in layout:", error);
-  }
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={cn(geistSans.variable, geistMono.variable, "antialiased")}
       >
-        <AuthProvider initialAuth={initialAuth}>
-          <Navbar />
-          {children}
-          <Footer />
-          <Toaster />
-          <SpeedInsights />
+        <AuthProvider>
+          <ThemeProvider>
+              <Navbar />
+              {children}
+              <Footer />
+              <Toaster />
+              <SpeedInsights />
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>

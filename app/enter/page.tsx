@@ -1,301 +1,579 @@
 "use client"
 
-import {useEffect, useState} from "react";
-import { FormEvent } from "react";
-
-import {useRouter} from "next/navigation";
-import {useAtomValue} from "jotai";
+import { FormEvent, useEffect, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useAtomValue, useSetAtom } from "jotai"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Check, CircleX, Loader2, LoaderCircle } from "lucide-react"
 
 import { createClient } from "@/utils/supabase/client"
-import {authAtom} from "@/lib/atoms";
-
+import { authAtom } from "@/lib/atoms"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {Input} from "@/components/ui/input";
-import Link from "next/link";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Check, CircleX, Loader2, LoaderCircle} from "lucide-react";
-
-// Design form schema
 const usernameSchema = z.object({
-  username: z.string()
+  username: z
+    .string()
     .min(3, { message: "Username must be at least 3 characters." })
     .max(22, { message: "Username is too long (22 characters)." })
-    .regex(/^[a-z0-9._]+$/, { message: "Username can only contain lowercase letters, numbers, dots, and underscores." })
-    .transform(val => val.toLowerCase().trim())
-});
+    .regex(/^[a-z0-9._]+$/, {
+      message:
+        "Username can only contain lowercase letters, numbers, dots, and underscores.",
+    })
+    .transform((val) => val.toLowerCase().trim()),
+})
 
 export default function EnterPage() {
   const navigation = useRouter()
-  const supabase = createClient();
+  const supabase = createClient()
 
-  const { user, profile } = useAtomValue(authAtom);
+  const { user, profile } = useAtomValue(authAtom)
+  const setAuth = useSetAtom(authAtom)
 
-  const [loginError, setLoginError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [checking, setChecking] = useState(false);
-  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null)
+  const [emailLoading, setEmailLoading] = useState(false)
+  const [usernameSubmitting, setUsernameSubmitting] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
 
+  const [checking, setChecking] = useState(false)
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null)
 
-  async function onLoginWithEmail(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const [loginEmail, setLoginEmail] = useState("")
+  const [loginPassword, setLoginPassword] = useState("")
 
-    // Clear any previous errors
-    setLoginError("");
+  const isAuthenticated = Boolean(user)
+  const hasUsername = Boolean(profile?.username)
 
-    // Basic validation
-    if (!loginEmail || !loginPassword) {
-      setLoginError("Please enter both email and password");
-      return;
-    }
+  const heroBadge = hasUsername
+    ? "Signed in"
+    : isAuthenticated
+      ? "Finish setup"
+      : "Welcome back"
+  const heroHeading = hasUsername
+    ? `Welcome back, ${profile?.username}!`
+    : isAuthenticated
+      ? "Claim your PortraitWiz handle"
+      : "Step back into your AI portrait studio"
+  const heroSubheading = hasUsername
+    ? "Head straight to your dashboard or keep exploring new looks."
+    : isAuthenticated
+      ? "Choose a unique username to personalize your gallery and share your portraits."
+      : "Continue crafting stunning portraits with the tools you already love."
 
-    if (!supabase) {
-      setLoginError("Authentication service is not available");
-      return;
-    }
-
-    // Optional: Set loading state
-    setLoading(true);
-
-    try {
-      // Use non-null assertion since we've checked above
-      const { data, error } = await supabase!.auth.signInWithPassword({
-        email: loginEmail,
-        password: loginPassword,
-      });
-
-      setLoading(false);
-
-      if (error) {
-        // Handle different error types with user-friendly messages
-        if (error.message.includes("Invalid login credentials")) {
-          setLoginError("Invalid email or password");
-        } else if (error.message.includes("Email not confirmed")) {
-          setLoginError("Please verify your email before logging in");
-        } else {
-          setLoginError(error.message);
-        }
-        return; // Important: stop execution if there's an error
-      }
-
-      if (data?.user) {
-        navigation.push("/");
-        // console.log("Login successful");
-      }
-    } catch (err) {
-      // Catch any unexpected errors
-      setLoading(false);
-      setLoginError("An unexpected error occurred. Please try again.");
-      console.error("Login error:", err);
-    }
-  }
-  // Define form
   const form = useForm<z.infer<typeof usernameSchema>>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
       username: "",
-    }
-  });
+    },
+    mode: "onChange",
+  })
 
-  const username = form.watch("username");
+  const username = form.watch("username")
 
   useEffect(() => {
-      // Reset if empty or doesn't pass basic validation
-      // if (!usernameToCheck || usernameToCheck.length < 3) {
-      //   setIsAvailable(null);
-      //   return;
-      // }
+    const trimmed = username?.toLowerCase().trim() ?? ""
 
-      // Check if it passes regex validation (I'm checking zod errors, and don't call the function if errors are found)
-      // if (!/^[a-z0-9._]+$/.test(usernameToCheck)) {
-      //   setIsAvailable(null);
-      //   return;
-      // }
-
-    const checkAvailability = async (usernameToCheck: string) => {
-      if (!supabase) return;
-
-      setChecking(true);
-
-      try {
-        // console.log("checking...")
-        const { data, error } = await supabase!
-          .from('profiles')
-          .select('username')
-          .eq('username', usernameToCheck.toLowerCase().trim())
-          .maybeSingle();
-
-        if (!error) {
-          setIsAvailable(!data); // Available if no data found
-        }
-      } catch (err) {
-        console.error("Error checking username:", err);
-      } finally {
-        setChecking(false);
-      }
-    };
-
-    // Debounce logic
-    const timer = setTimeout(() => {
-      if (form.formState.isValid) {
-        checkAvailability(username);
-      }
-    }, 800); // 800ms delay
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ username, supabase ]);
-
-
-  // On form submit
-  async function onUsernameFormSubmit(values: z.infer<typeof usernameSchema>) {
-    if (!supabase) {
-      form.setError("username", {
-        type: "manual",
-        message: "Service unavailable, please try again",
-      });
-      return;
+    if (!trimmed || trimmed.length < 3) {
+      setIsAvailable(null)
+      setChecking(false)
+      return
     }
 
-    // Error if username is not available
+    if (!form.formState.isValid) {
+      setIsAvailable(null)
+      setChecking(false)
+      return
+    }
+
+    let isActive = true
+    const timer = setTimeout(async () => {
+      const supabaseClient = createClient()
+      if (!supabaseClient || !isActive) {
+        if (isActive) {
+          setChecking(false)
+        }
+        return
+      }
+
+      setChecking(true)
+      try {
+        const { data, error } = await supabaseClient
+          .from("profiles")
+          .select("username")
+          .eq("username", trimmed)
+          .maybeSingle()
+
+        if (!error) {
+          setIsAvailable(!data)
+        }
+      } catch (error) {
+        console.error("Error checking username:", error)
+      } finally {
+        if (isActive) {
+          setChecking(false)
+        }
+      }
+    }, 600)
+
+    return () => {
+      isActive = false
+      clearTimeout(timer)
+    }
+  }, [form.formState.isValid, username])
+
+  async function onLoginWithEmail(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    setAuthError(null)
+
+    if (!loginEmail || !loginPassword) {
+      setAuthError("Please enter both email and password.")
+      return
+    }
+
+    if (!supabase) {
+      setAuthError("Authentication service is not available.")
+      return
+    }
+
+    setEmailLoading(true)
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      })
+
+      if (error) {
+        if (error.message.includes("Invalid login credentials")) {
+          setAuthError("Invalid email or password.")
+        } else if (error.message.includes("Email not confirmed")) {
+          setAuthError("Please verify your email before logging in.")
+        } else {
+          setAuthError(error.message)
+        }
+        return
+      }
+
+      if (data?.user) {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", data.user.id)
+          .maybeSingle()
+
+        setAuth((prev) => ({
+          ...prev,
+          user: data.user ?? prev.user,
+          profile: profileData ?? prev.profile,
+          isInitializing: false,
+        }))
+
+        navigation.refresh()
+        navigation.push(profileData?.username ? "/dashboard" : "/")
+      }
+    } catch (error) {
+      console.error("Login error:", error)
+      setAuthError("An unexpected error occurred. Please try again.")
+    } finally {
+      setEmailLoading(false)
+    }
+  }
+
+  async function onUsernameFormSubmit(values: z.infer<typeof usernameSchema>) {
+    if (!supabase || !user?.id) {
+      form.setError("username", {
+        type: "manual",
+        message: "Service unavailable, please try again.",
+      })
+      return
+    }
+
     if (!isAvailable) {
       form.setError("username", {
         type: "manual",
-        message: "This username is not available",
-      });
-      return;
-    }
-
-    // Register the username
-    setLoading(true);
-    const { error } = await supabase!
-      .from('profiles')
-      .insert({
-        id: user?.id,
-        username: values.username,
-      });
-
-    setLoading(false);
-    if (error) {
-      // setError(error.details);
-      form.setError("username", {
-        type: "manual",
-        message: error.message,
+        message: "This username is not available.",
       })
       return
-    } else {
-      console.log("Username set!");
-      supabase!.auth.refreshSession();
-      // router.push("/");
-      // window.location.href="/";
+    }
+
+    setUsernameSubmitting(true)
+
+    try {
+      const { error } = await supabase.from("profiles").insert({
+        id: user.id,
+        username: values.username,
+      })
+
+      if (error) {
+        form.setError("username", {
+          type: "manual",
+          message: error.message,
+        })
+        return
+      }
+
+      const { data: updatedProfile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle()
+
+      setAuth((prev) => ({
+        ...prev,
+        user: prev.user ?? user,
+        profile:
+          updatedProfile ??
+          prev.profile ?? {
+            id: user.id,
+            username: values.username,
+            credits: 0,
+          },
+        isInitializing: false,
+      }))
+
+      navigation.refresh()
+      navigation.push("/dashboard")
+    } catch (error) {
+      console.error("Username registration error:", error)
+      form.setError("username", {
+        type: "manual",
+        message: "Something went wrong. Please try again.",
+      })
+    } finally {
+      setUsernameSubmitting(false)
     }
   }
 
   async function handleEnterWithGoogle() {
-    if (!supabase) return;
+    if (!supabase || googleLoading) return
 
-    const { data, error } = await supabase!.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          prompt: "consent",
-        }
+    setAuthError(null)
+    setGoogleLoading(true)
+
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            prompt: "consent",
+          },
+        },
+      })
+
+      if (error) {
+        setAuthError("We couldn't connect to Google. Please try again.")
+        setGoogleLoading(false)
+        return
       }
-    })
-    if (data) {
-      console.log(data);
 
-    }
-    if (error) {
-      console.log(error);
+      if (data?.url) {
+        window.location.href = data.url
+      }
+    } catch (error) {
+      console.error("Google sign-in error:", error)
+      setAuthError("We couldn't connect to Google. Please try again.")
+      setGoogleLoading(false)
     }
   }
 
+  async function handleSignOut() {
+    if (!supabase) return
+
+    setSigningOut(true)
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        setAuthError(error.message)
+      } else {
+        setAuth({ user: null, profile: null, isInitializing: false })
+        navigation.refresh()
+      }
+    } catch (error) {
+      console.error("Sign out error:", error)
+      setAuthError("Unable to sign out at the moment. Please try again.")
+    } finally {
+      setSigningOut(false)
+    }
+  }
 
   return (
-    <div className="flex min-h-screen items-center justify-center" >
-      { user && profile ? // User and dashboard exists (user dashboard page)
-        <div>
-          <h1 className="text-4xl" >Hello, {profile?.username}!</h1>
-          <Button
-            className="bg-sky-400"
-            onClick={
-              () => supabase?.auth.signOut()
-                .then( (res: { error: Error | null }) => console.log( res.error || "Log Out Successful" ))
-          }>
-            Log Out
-          </Button>
-        </div>
-        : user ?  // Only user exists (set username page)
-          <Form {...form} >
-            <form className="flex flex-col gap-2 max-w-md" onSubmit={form.handleSubmit(onUsernameFormSubmit)}>
-              <FormField
-                control={form.control}
-                name="username"
-                render={ ({ field }) => (
-                  <FormItem>
-                    <FormLabel>Please choose your username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="username" {...field} />
-                    </FormControl>
-                    {form.formState.isValid && checking ?
-                      // Checking notification
-                      <div className="flex items-center gap-1">
-                        <LoaderCircle className="text-gray-600 w-4 h-4 animate-spin" />
-                        <span className="text-sm text-gray-600">checking...</span>
-                      </div>
-                      : form.formState.isValid && isAvailable ?
-                        // Username is available
-                        <div className="flex items-center gap-1">
-                          <Check className="text-lime-600 w-4 h-4" />
-                          <span className="text-sm text-lime-600">username available</span>
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-background">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background" />
+        <div className="absolute left-1/2 top-[-160px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-primary/20 blur-3xl opacity-70 sm:top-[-220px] sm:h-[620px] sm:w-[620px]" />
+        <div className="absolute bottom-[-140px] right-[-120px] h-[360px] w-[360px] rounded-full bg-sky-400/15 blur-3xl sm:h-[440px] sm:w-[440px]" />
+      </div>
+
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16 sm:px-6">
+        <div className="w-full max-w-xl space-y-10">
+          <div className="space-y-4 text-center">
+            <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              {heroBadge}
+            </span>
+            <h1 className="text-3xl font-semibold text-foreground sm:text-4xl">
+              {heroHeading}
+            </h1>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              {heroSubheading}
+            </p>
+          </div>
+
+          <Card className="border-border/70 bg-background/85 shadow-xl backdrop-blur-md">
+            {hasUsername ? (
+              <>
+                <CardHeader className="space-y-2 text-center">
+                  <CardTitle className="text-2xl font-semibold">
+                    You&apos;re ready to create
+                  </CardTitle>
+                  <CardDescription>
+                    Jump into your dashboard to launch a new session or manage
+                    your portraits.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3 sm:flex-row">
+                  <Button
+                    asChild
+                    className="w-full transition-all duration-200 shadow-md hover:-translate-y-0.5 hover:shadow-lg"
+                  >
+                    <Link href="/dashboard">Go to dashboard</Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full border-border hover:bg-primary/5"
+                    onClick={handleSignOut}
+                    disabled={signingOut}
+                  >
+                    {signingOut ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Signing out...
+                      </>
+                    ) : (
+                      "Sign out"
+                    )}
+                  </Button>
+                </CardContent>
+              </>
+            ) : isAuthenticated ? (
+              <Form {...form}>
+                <form
+                  className="space-y-6 px-6 pb-6 pt-2 sm:px-8 sm:pb-8"
+                  onSubmit={form.handleSubmit(onUsernameFormSubmit)}
+                >
+                  <div className="space-y-2 text-center">
+                    <CardTitle className="text-2xl font-semibold">
+                      Pick a username
+                    </CardTitle>
+                    <CardDescription>
+                      This will appear on shared galleries and in your navbar.
+                    </CardDescription>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="your.handle"
+                            autoComplete="off"
+                            {...field}
+                          />
+                        </FormControl>
+                        <div className="min-h-[20px] pt-2">
+                          {form.formState.isValid && checking ? (
+                            <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <LoaderCircle className="h-4 w-4 animate-spin text-muted-foreground" />
+                              Checking availability...
+                            </span>
+                          ) : form.formState.isValid && isAvailable ? (
+                            <span className="flex items-center gap-2 text-sm text-emerald-500">
+                              <Check className="h-4 w-4" />
+                              Username available
+                            </span>
+                          ) : form.formState.isValid && isAvailable === false ? (
+                            <span className="flex items-center gap-2 text-sm text-destructive">
+                              <CircleX className="h-4 w-4" />
+                              Username is taken
+                            </span>
+                          ) : null}
                         </div>
-                        : form.formState.isValid && isAvailable === false &&
-                          // Username not available
-                          <div className="flex items-center gap-1">
-                            <CircleX className="text-red-500 w-4 h-4" />
-                            <span className="text-sm text-red-500">username is taken</span>
-                          </div>
-                    }
-                    <FormDescription>Username may include lower case letters, numbers, dots and underscores (_)</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        <FormDescription>
+                          Use lowercase letters, numbers, dots, or underscores.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <Button
-                disabled={loading}
-                type="submit"
-              >
-                { loading ?
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Processing...
-                  </>
-                  :
-                  <>Continue</> }
-              </Button>
-            </form>
-          </Form>
-        : // New user signup page
-        <div className="flex flex-col " >
-          <Button className="bg-orange-500 max-w-[150]" onClick={handleEnterWithGoogle} >Enter With Google</Button>
-          <form onSubmit={onLoginWithEmail} >
-            <Input onChange={e => setLoginEmail(e.target.value)} value={loginEmail} placeholder="email" type="email" />
-            <Input onChange={e => setLoginPassword(e.target.value)} value={loginPassword}  placeholder="password" type="password" />
-            <Button type="submit" >Login</Button>
-            <p className="text-red-500 text-sm">{loginError}</p>
-          </form>
-          <Link href="/register">Register with email</Link>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={usernameSubmitting || checking}
+                  >
+                    {usernameSubmitting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      "Continue"
+                    )}
+                  </Button>
+                </form>
+              </Form>
+            ) : (
+              <CardContent className="space-y-8 px-6 pb-8 pt-6 sm:px-8">
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleEnterWithGoogle}
+                    disabled={googleLoading}
+                    variant="outline"
+                    className={cn(
+                      "group relative flex w-full items-center justify-center gap-3 rounded-full border border-slate-200 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-[0_12px_30px_-18px_rgba(15,23,42,0.9)] transition-all duration-200",
+                      "hover:-translate-y-0.5 hover:shadow-[0_18px_35px_-18px_rgba(15,23,42,0.4)] focus-visible:ring-primary/40 dark:border-slate-500 dark:bg-white/10 dark:text-white dark:shadow-[0_18px_35px_-22px_rgba(148,163,184,0.55)] dark:hover:bg-white/15 dark:hover:border-primary/40 dark:hover:shadow-[0_28px_45px_-20px_rgba(56,189,248,0.45)] dark:focus-visible:ring-primary/50"
+                    )}
+                  >
+                    {googleLoading ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        Connecting...
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex size-9 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-slate-200 group-hover:ring-primary/30 dark:bg-white/20 dark:ring-white/30 dark:group-hover:ring-primary/60">
+                          <GoogleIcon />
+                        </span>
+                        Enter with Google
+                      </>
+                    )}
+                  </Button>
+                  {authError && !emailLoading && (
+                    <p className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                      {authError}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  <span className="h-px flex-1 bg-border" />
+                  or continue with email
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+
+                <form className="space-y-5" onSubmit={onLoginWithEmail}>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      value={loginEmail}
+                      onChange={(event) => setLoginEmail(event.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      autoComplete="current-password"
+                      placeholder="••••••••"
+                      value={loginPassword}
+                      onChange={(event) =>
+                        setLoginPassword(event.target.value)
+                      }
+                    />
+                  </div>
+                  {authError && (
+                    <p className="text-sm text-destructive">{authError}</p>
+                  )}
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={emailLoading}
+                  >
+                    {emailLoading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      "Sign in"
+                    )}
+                  </Button>
+                </form>
+
+                <p className="text-center text-sm text-muted-foreground">
+                  New to PortraitWiz?{" "}
+                  <Link
+                    href="/register"
+                    className="font-medium text-primary hover:text-primary/80"
+                  >
+                    Create an account
+                  </Link>
+                </p>
+              </CardContent>
+            )}
+          </Card>
         </div>
-      }
-
+      </div>
     </div>
+  )
+}
+
+function GoogleIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5"
+      viewBox="0 0 24 24"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21.6 12.23c0-.76-.06-1.32-.19-1.9H12v3.44h5.44c-.11.86-.72 2.15-2.06 3.01l-.03.18 2.99 2.32.21.02c1.93-1.78 3.05-4.41 3.05-7.07Z"
+        fill="#4285F4"
+      />
+      <path
+        d="M12 22c2.75 0 5.05-.9 6.73-2.45l-3.2-2.47c-.86.6-2.01 1.02-3.53 1.02-2.7 0-4.99-1.78-5.8-4.24l-.16.01-3.13 2.43-.04.15C5.54 19.98 8.52 22 12 22Z"
+        fill="#34A853"
+      />
+      <path
+        d="M6.2 13.85c-.2-.58-.32-1.2-.32-1.85s.12-1.27.32-1.85l-.01-.19-3.17-2.46-.1.05C2.33 8.73 2 10.33 2 12c0 1.67.33 3.27.92 4.68l3.28-2.53Z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M12 5.5c1.9 0 3.18.82 3.91 1.51l2.86-2.8C17.03 2.58 14.75 1.5 12 1.5 8.52 1.5 5.54 3.52 4.05 6.32l3.28 2.53C8.01 7.28 9.3 5.5 12 5.5Z"
+        fill="#EA4335"
+      />
+    </svg>
   )
 }

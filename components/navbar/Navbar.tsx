@@ -3,10 +3,10 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Button } from "../ui/button"
+import { Button, buttonVariants } from "../ui/button"
 import { Badge } from "../ui/badge"
 import { createClient } from "@/utils/supabase/client"
-import { useAtomValue } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
 import { Sparkles, Menu, User, Settings, LogOut, Coins } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -25,6 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog"
+import ThemeToggle from "@/components/ui/theme-toggle"
 
 // NavLink component with active state
 interface NavLinkProps {
@@ -35,6 +36,7 @@ interface NavLinkProps {
 }
 
 function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
+
   const pathname = usePathname()
   const isActive = pathname === href
 
@@ -81,14 +83,26 @@ function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
 export default function Navbar() {
   const supabase = createClient()
   const { profile } = useAtomValue(authAtom)
+  const setAuth = useSetAtom(authAtom)
 
-  const handleSignOut = () => {
-    if (supabase) {
-      supabase.auth.signOut()
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.log(error)
+        // return
+      }
+      setAuth({ user: null, profile: null, isInitializing: false })
+    } catch (error) {
+      console.log(error)
     }
   }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [creditsDialogOpen, setCreditsDialogOpen] = useState(false)
+
+  const isLoggedIn = Boolean(profile?.username)
+  const userCredits = profile?.credits ?? 0
+  const username = profile?.username ?? ""
 
   const handleCreditsClick = () => {
     if (profile?.credits === 0) {
@@ -99,41 +113,47 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-background/95 border-b border-primary/10 shadow-sm">
+    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-bold group"
+            className="group flex items-center gap-3 rounded-md px-2 py-1 transition-colors duration-200 hover:bg-primary/5"
           >
             <div className="relative">
-              <Sparkles className="w-5 h-5 text-primary transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
-              <Sparkles className="w-5 h-5 text-primary absolute inset-0 blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+              <Sparkles className="h-5 w-5 text-primary transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <Sparkles className="absolute inset-0 h-5 w-5 text-primary opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-50" />
             </div>
-            <span className="bg-gradient-to-r from-foreground to-foreground group-hover:from-primary group-hover:to-primary/60 bg-clip-text text-transparent transition-all duration-300">
-              PortraitWiz
-            </span>
+            <div className="flex flex-col leading-tight">
+              <span className="bg-gradient-to-r from-foreground to-foreground bg-clip-text text-lg font-semibold text-transparent transition-colors duration-200 group-hover:from-primary group-hover:to-primary/60">
+                PortraitWiz
+              </span>
+              <span className="hidden text-[11px] font-medium uppercase tracking-[0.35em] text-muted-foreground transition-colors duration-300 sm:block group-hover:text-primary/70">
+                AI Portrait Studio
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden items-center gap-8 md:flex">
             <div className="flex items-center gap-6">
               <NavLink href="/">Home</NavLink>
               <NavLink href="/pricing">Pricing</NavLink>
               <NavLink href="/contact">Contact</NavLink>
             </div>
 
-            {profile?.username ? (
+            {isLoggedIn ? (
               // User logged in
               <div className="flex items-center gap-3 pl-6 border-l border-border">
+                <ThemeToggle />
                 <Badge
                   variant="secondary"
                   className="bg-primary/10 text-primary hover:bg-primary/15 cursor-pointer transition-colors duration-200 gap-1.5 px-3 py-1"
                   onClick={handleCreditsClick}
                 >
                   <Coins className="w-3.5 h-3.5" />
-                  <span suppressHydrationWarning>{profile.credits}</span>
+                  <span suppressHydrationWarning>{userCredits}</span>
                 </Badge>
 
                 <DropdownMenu>
@@ -143,8 +163,8 @@ export default function Navbar() {
                       size="sm"
                       className="gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
                     >
-                      <User className="w-4 h-4" />
-                      {profile.username}
+                      <User className="h-4 w-4" />
+                      {username}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -176,10 +196,17 @@ export default function Navbar() {
               </div>
             ) : (
               // User logged out
-              <div className="pl-6 border-l border-border">
-                <Button asChild size="sm" className="hover:scale-105 transition-transform duration-200">
-                  <Link href="/enter">Get Started</Link>
-                </Button>
+              <div className="flex items-center gap-3 pl-6 border-l border-border">
+                <ThemeToggle />
+                <Link
+                  href="/enter"
+                  className={cn(
+                    buttonVariants({ size: "sm" }),
+                    "inline-flex bg-primary text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90"
+                  )}
+                >
+                  Get Started
+                </Link>
               </div>
             )}
           </div>
@@ -202,21 +229,21 @@ export default function Navbar() {
               >
                 <SheetHeader className="border-b border-border pb-4">
                   <SheetTitle className="flex items-center gap-2 text-xl">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                    <Sparkles className="h-5 w-5 text-primary" />
                     PortraitWiz
                   </SheetTitle>
                 </SheetHeader>
 
                 <div className="flex flex-col gap-6 mt-6 flex-1">
                   {/* Credits Badge - Only if logged in */}
-                  {profile?.username && (
+                  {isLoggedIn && (
                     <Badge
                       variant="secondary"
                       className="bg-primary/10 text-primary hover:bg-primary/15 cursor-pointer w-fit gap-1.5 px-3 py-1.5 transition-colors duration-200"
                       onClick={handleCreditsClick}
                     >
                       <Coins className="w-3.5 h-3.5" />
-                      <span suppressHydrationWarning>{profile.credits}</span>
+                      <span suppressHydrationWarning>{userCredits}</span>
                     </Badge>
                   )}
 
@@ -233,38 +260,46 @@ export default function Navbar() {
                     </NavLink>
                   </div>
 
+                  <div className="border-t border-border pt-6">
+                    <ThemeToggle
+                      className="w-full"
+                      menuAlign="start"
+                      label="Theme"
+                    />
+                  </div>
+
                   {/* User Section */}
                   <div className="border-t border-border pt-6 mt-auto">
-                    {profile?.username ? (
+                    {isLoggedIn ? (
                       <div className="flex flex-col gap-3">
                         <div className="text-sm text-muted-foreground mb-2">
                           Signed in as{" "}
                           <span className="font-semibold text-foreground">
-                            {profile.username}
+                            {username}
                           </span>
                         </div>
-                        <Button
-                          variant="outline"
-                          asChild
-                          className="justify-start gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
+                        <Link
+                          href="/dashboard/profile"
                           onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "justify-start gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
+                          )}
                         >
-                          <Link href="/dashboard/profile">
-                            <User className="w-4 h-4" />
-                            Profile
-                          </Link>
-                        </Button>
-                        <Button
-                          variant="outline"
-                          asChild
-                          className="justify-start gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
+                          <User className="w-4 h-4" />
+                          Profile
+                        </Link>
+                        <Link
+                          href="/dashboard/settings"
                           onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "justify-start gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
+                          )}
                         >
-                          <Link href="/dashboard/settings">
-                            <Settings className="w-4 h-4" />
-                            Settings
-                          </Link>
-                        </Button>
+                          <Settings className="w-4 h-4" />
+                          Settings
+                        </Link>
                         <Button
                           variant="destructive"
                           onClick={() => {
@@ -278,14 +313,16 @@ export default function Navbar() {
                         </Button>
                       </div>
                     ) : (
-                      <Button
-                        asChild
-                        className="w-full hover:scale-[0.98] transition-transform duration-200"
+                      <Link
+                        href="/enter"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                          buttonVariants(),
+                          "w-full justify-center hover:scale-[0.98] transition-transform duration-200"
+                        )}
                       >
-                        <Link href="/enter" onClick={() => setMobileMenuOpen(false)}>
-                          Get Started
-                        </Link>
-                      </Button>
+                        Get Started
+                      </Link>
                     )}
                   </div>
                 </div>

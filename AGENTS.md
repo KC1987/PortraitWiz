@@ -1,5 +1,7 @@
 # Repository Guidelines
 
+
+
 ## Project Structure & Module Organization
 - `app/` contains Next.js route groups (dashboard, auth, marketing); default to server components, add `use client` for interactive pieces.
 - `components/` hosts reusable React UI; keep shared primitives in `components/ui` and feature-specific widgets in folders like `components/dashboard`.
