@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation";
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button, buttonVariants } from "../ui/button"
@@ -82,6 +83,8 @@ function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
 
 export default function Navbar() {
   const supabase = createClient()
+  const navigation = useRouter();
+
   const { profile } = useAtomValue(authAtom)
   const setAuth = useSetAtom(authAtom)
 
@@ -90,9 +93,12 @@ export default function Navbar() {
       const { error } = await supabase.auth.signOut()
       if (error) {
         console.log(error)
-        // return
+        return
       }
-      setAuth({ user: null, profile: null, isInitializing: false })
+
+      setAuth({ user: null, profile: null })
+      // navigation.push("/");
+
     } catch (error) {
       console.log(error)
     }
