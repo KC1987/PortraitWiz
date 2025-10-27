@@ -49,6 +49,12 @@ export default function Footer() {
             >
               Terms
             </Link>
+            <Link
+              href="/sitemap.xml"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+            >
+              Sitemap
+            </Link>
           </div>
 
           {/* Copyright */}

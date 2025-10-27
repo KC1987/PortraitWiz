@@ -1,48 +1,145 @@
+import type { Metadata } from "next"
+import Link from "next/link"
+
 import PricingCard from "./Card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  pricingBenefits,
+  pricingCta,
+  pricingHero,
+  pricingMetadata,
+  pricingFAQs,
+  buildPricingSchema,
+} from "@/lib/copy/pricing"
 import { pricingPackages } from "@/lib/pricing-data"
+import { getSiteUrl } from "@/lib/seo"
+
+const siteUrl = getSiteUrl()
+const pricingSchema = buildPricingSchema(siteUrl)
+
+export const metadata: Metadata = {
+  title: pricingMetadata.title,
+  description: pricingMetadata.description,
+  keywords: pricingMetadata.keywords,
+  alternates: { canonical: `${siteUrl}/pricing` },
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/pricing`,
+    title: pricingMetadata.ogTitle,
+    description: pricingMetadata.ogDescription,
+    siteName: "PortraitWiz",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pricingMetadata.ogTitle,
+    description: pricingMetadata.ogDescription,
+  },
+}
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-6 md:py-10">
-        <div className="text-center max-w-3xl mx-auto mb-8">
-          {/*<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">*/}
-          {/*  Choose Your Perfect Plan*/}
-          {/*</h1>*/}
-          <p className="text-lg md:text-xl text-muted-foreground">
-            Transform your photos into professional portraits. No subscriptions, no hidden fees.
-            Pay once, use anytime.
-          </p>
-        </div>
+    <div className="bg-gradient-to-b from-background via-background to-muted/20 text-foreground">
+      <main>
+        <section className="border-b border-primary/10 bg-gradient-to-b from-primary/5 via-background to-background">
+          <div className="container mx-auto px-4 py-16 text-center lg:py-20">
+            <h1 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
+              {pricingHero.heading}
+            </h1>
+            <p className="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground md:text-xl">
+              {pricingHero.subheading}
+            </p>
+            <p className="mx-auto mt-3 max-w-2xl text-sm font-medium text-muted-foreground">
+              {pricingHero.lead}
+            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-sm text-muted-foreground">
+              Need procurement support?{" "}
+              <Link href="/contact" className="font-semibold text-primary hover:text-primary/80">
+                Talk to our team
+              </Link>{" "}
+              about invoices, enterprise onboarding, or API integrations.
+            </p>
+          </div>
+        </section>
 
-        {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto items-center">
-          {pricingPackages.map((pkg) => (
-            <div key={pkg.id} className="flex justify-center">
-              <PricingCard package={pkg} />
+        <section className="border-b border-primary/10 bg-background">
+          <div className="container mx-auto max-w-5xl px-4 py-16 md:py-20">
+            <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3 lg:gap-8">
+              {pricingPackages.map((pkg) => (
+                <div key={pkg.id} id={pkg.id} className="flex justify-center">
+                  <PricingCard package={pkg} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-
-        {/* Trust Indicators */}
-        <div className="mt-16 text-center">
-          <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🔒</span>
-              <span>Secure Payment</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">⚡</span>
-              <span>Instant Delivery</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">💯</span>
-              <span>Money-Back Guarantee</span>
+            <div className="mt-12 text-center text-sm text-muted-foreground">
+              Secure Stripe checkout • Instant credit delivery • Credits never expire
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <section className="border-b border-primary/10 bg-muted/20">
+          <div className="container mx-auto max-w-5xl px-4 py-16 md:py-20">
+            <div className="grid gap-6 md:grid-cols-3">
+              {pricingBenefits.map((benefit) => (
+                <Card
+                  key={benefit.title}
+                  className="border border-primary/10 bg-background shadow-sm transition hover:shadow-md"
+                >
+                  <CardContent className="space-y-3 p-6">
+                    <h2 className="text-xl font-semibold text-foreground">{benefit.title}</h2>
+                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-primary/10 bg-background">
+          <div className="container mx-auto max-w-4xl px-4 py-16 md:py-20">
+            <div className="text-center">
+              <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+                Frequently Asked Questions
+              </h2>
+              <p className="mt-3 text-muted-foreground">
+                Answers to the top questions about PortraitWiz credits, billing, and usage.
+              </p>
+            </div>
+            <dl className="mt-10 space-y-6">
+              {pricingFAQs.map((faq) => (
+                <div
+                  key={faq.question}
+                  className="rounded-2xl border border-primary/10 bg-muted/20 p-6 shadow-sm"
+                >
+                  <dt className="text-lg font-semibold text-foreground">{faq.question}</dt>
+                  <dd className="mt-3 text-sm text-muted-foreground">{faq.answer}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        <section className="bg-muted/20">
+          <div className="container mx-auto flex flex-col gap-6 px-4 py-16 text-center md:flex-row md:items-center md:justify-between md:text-left lg:py-20">
+            <div className="max-w-2xl space-y-4">
+              <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+                {pricingCta.heading}
+              </h2>
+              <p className="text-muted-foreground">{pricingCta.description}</p>
+            </div>
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
+              <Button size="lg" asChild>
+                <Link href={pricingCta.primaryCta.href}>{pricingCta.primaryCta.label}</Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href={pricingCta.secondaryCta.href}>{pricingCta.secondaryCta.label}</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pricingSchema }} />
     </div>
   )
 }
