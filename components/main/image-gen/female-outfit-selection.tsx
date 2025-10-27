@@ -13,6 +13,11 @@ import { outfits as femaleOutfits } from "@/lib/female_outfits"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import {
+  SelectionIconToken,
+  outfitCategoryIcons,
+  defaultOutfitIcon,
+} from "./selection-icons"
 
 interface FemaleOutfitSelectionProps {
   outfit: string;
@@ -20,11 +25,11 @@ interface FemaleOutfitSelectionProps {
 }
 
 const categoryGradients: Record<string, string> = {
-  Formal: "from-rose-200/70 via-rose-100 to-pink-200/70",
-  "Business Casual": "from-amber-200/70 via-orange-100 to-rose-200/70",
-  Professional: "from-fuchsia-200/70 via-purple-100 to-indigo-200/70",
-  Creative: "from-emerald-200/70 via-teal-100 to-sky-200/70",
-  Seasonal: "from-sky-200/70 via-blue-100 to-indigo-200/70",
+  Formal: "bg-gradient-to-br from-rose-300/55 via-rose-200/60 to-white/90",
+  "Business Casual": "bg-gradient-to-br from-amber-300/55 via-orange-200/55 to-white/90",
+  Professional: "bg-gradient-to-br from-fuchsia-300/55 via-indigo-200/55 to-white/90",
+  Creative: "bg-gradient-to-br from-emerald-300/55 via-teal-200/55 to-white/90",
+  Seasonal: "bg-gradient-to-br from-sky-300/55 via-blue-200/55 to-white/90",
 }
 
 export default function FemaleOutfitSelection({ outfit, setOutfit }: FemaleOutfitSelectionProps) {
@@ -177,7 +182,11 @@ export default function FemaleOutfitSelection({ outfit, setOutfit }: FemaleOutfi
               >
                 {femaleOutfits.map((set, index) => {
                   const isSelected = set.text === outfit
-                  const gradient = categoryGradients[set.category] || "from-muted/70 via-muted to-muted-foreground/20"
+                  const gradient =
+                    categoryGradients[set.category] ||
+                    "bg-gradient-to-br from-muted/50 via-muted/40 to-background/80"
+                  const IconComponent =
+                    outfitCategoryIcons[set.category] || defaultOutfitIcon
                   return (
                     <Tooltip key={set.name}>
                       <TooltipTrigger asChild>
@@ -188,58 +197,38 @@ export default function FemaleOutfitSelection({ outfit, setOutfit }: FemaleOutfi
                           onFocus={() => setFocusedIndex(index)}
                           onBlur={() => setFocusedIndex(-1)}
                           className={cn(
-                            "group flex w-[110px] flex-col overflow-hidden rounded-xl border bg-background transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:w-[120px]",
+                            "group flex w-[108px] flex-col gap-2 rounded-xl border border-border/60 bg-background/80 px-3 py-3 text-center transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:-translate-y-[1px] md:w-[118px]",
                             isSelected
-                              ? "border-primary/70 shadow-sm"
-                              : "border-border/70 hover:border-primary/40 hover:shadow-sm",
+                              ? "border-primary/70 bg-primary/5 shadow-sm"
+                              : "hover:border-primary/40 hover:shadow-sm",
                             focusedIndex === index && !isSelected && "ring-2 ring-primary/40 ring-offset-2"
                           )}
                           aria-label={`Select ${set.label}`}
                           aria-pressed={isSelected}
                         >
-                          <div
-                            className={cn(
-                              "relative flex h-24 w-full items-center justify-center rounded-t-xl bg-gradient-to-br px-2 text-xs font-medium text-foreground/80 transition-colors md:h-28 md:text-sm",
-                              gradient
-                            )}
-                          >
-                            <span className="text-center leading-tight">
-                              {set.label}
-                            </span>
-                            {isSelected && (
-                              <div className="absolute inset-0 flex items-center justify-center bg-primary/20">
-                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                                  <svg
-                                    className="h-3.5 w-3.5"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    aria-hidden="true"
-                                  >
-                                    <polyline points="20 6 9 17 4 12" />
-                                  </svg>
-                                </div>
-                              </div>
-                            )}
-                            <div className="absolute left-2 top-2">
-                              <Badge variant="secondary" className="bg-background/90 px-1.5 py-0 text-[9px] leading-tight md:text-[10px]">
-                                {set.category}
-                              </Badge>
-                            </div>
+                          <div className="flex justify-center">
+                            <SelectionIconToken
+                              icon={IconComponent}
+                              gradientClass={gradient}
+                              isSelected={isSelected}
+                            />
                           </div>
-                          <div className="border-t border-border/60 bg-muted/40 px-2 py-1.5 text-center">
-                            <p
+                          <div className="flex flex-col items-center gap-1">
+                            <span
                               className={cn(
-                                "text-[11px] font-medium leading-tight text-muted-foreground transition-colors duration-200 md:text-xs line-clamp-2",
+                                "text-xs font-semibold leading-tight text-foreground/80 transition-colors duration-200",
                                 isSelected && "text-foreground"
                               )}
                             >
-                              {set.description}
-                            </p>
+                              {set.label}
+                            </span>
+                            <span className="text-[10px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                              {set.category}
+                            </span>
                           </div>
+                          <p className="text-[11px] leading-snug text-muted-foreground transition-colors duration-200 line-clamp-2 md:text-xs">
+                            {set.description}
+                          </p>
                         </button>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="max-w-xs">

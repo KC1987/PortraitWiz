@@ -48,6 +48,14 @@ export const pricingPackages: PricingPackage[] = [
       "Priority support",
       "Custom outfits",
     ],
+  },{
+    id: "package-test",
+    name: "Test",
+    credits: 100,
+    price: 70,
+    features: [
+      "TEST PACKAGE"
+    ],
   },
 ];
 

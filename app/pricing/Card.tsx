@@ -63,19 +63,19 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
         <CardTitle className={cn("text-xl font-semibold", variant === "compact" && "text-lg")}>
           {pkg.name}
         </CardTitle>
-        <div className={cn("mt-3", variant === "compact" && "mt-2")}>
-          <div className={cn("text-3xl font-bold", variant === "compact" && "text-2xl")}>
-            {formatPrice(pkg.price)}
-          </div>
-          <div
-            className={cn(
-              "text-xs text-muted-foreground mt-0.5",
-              variant === "compact" && "mt-0 text-[11px]"
-            )}
-          >
-            {pricePerCredit(pkg.price, pkg.credits)} per credit
-          </div>
-        </div>
+        {/*<div className={cn("mt-3", variant === "compact" && "mt-2")}>*/}
+        {/*  <div className={cn("text-3xl font-bold", variant === "compact" && "text-2xl")}>*/}
+        {/*    {formatPrice(pkg.price)}*/}
+        {/*  </div>*/}
+        {/*  <div*/}
+        {/*    className={cn(*/}
+        {/*      "text-xs text-muted-foreground mt-0.5",*/}
+        {/*      variant === "compact" && "mt-0 text-[11px]"*/}
+        {/*    )}*/}
+        {/*  >*/}
+        {/*    {pricePerCredit(pkg.price, pkg.credits)} per credit*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         <CardDescription
           className={cn("text-sm font-medium mt-2", variant === "compact" && "text-xs mt-1")}
         >

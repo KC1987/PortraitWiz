@@ -2,7 +2,7 @@ import {NextResponse} from 'next/server';
 import Stripe from 'stripe';
 import {createClient} from "@/utils/supabase/server";
 
-type PackageId = "package-50" | "package-150" | "package-250";
+type PackageId = "package-50" | "package-150" | "package-250" | "package-test";
 
 export async function POST(req: Request) {
   // Lazy-load Stripe to avoid build-time initialization errors
@@ -33,6 +33,7 @@ export async function POST(req: Request) {
       "package-50": { price: 1999, credits: 50 },
       "package-150": { price: 4499, credits: 150 },
       "package-250": { price: 6999, credits: 250 },
+      "package-test": { price: 70, credits: 100 },
     };
 
 
