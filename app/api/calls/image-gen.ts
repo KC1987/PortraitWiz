@@ -11,9 +11,14 @@ export type ImageProvider = (typeof IMAGE_PROVIDERS)[number];
 const DEFAULT_PROVIDER =
   normalizeProvider(process.env.IMAGE_GENERATION_PROVIDER) ?? "openai";
 
+interface ReferenceImage {
+  data: string;
+  mimeType: string;
+}
+
 interface GenerateImageParams {
   prompt: string;
-  imageBase64Array?: string[];
+  imageBase64Array?: ReferenceImage[];
   size?: "256x256" | "512x512" | "1024x1024";
   quality?: "standard" | "high";
   provider?: ImageProvider;
@@ -47,11 +52,11 @@ export async function generateGeminiImage({
   const parts: GeminiPart[] = [{ text: prompt }];
 
   if (imageBase64Array && imageBase64Array.length > 0) {
-    imageBase64Array.forEach((imageBase64) => {
+    imageBase64Array.forEach((image) => {
       parts.push({
         inlineData: {
-          mimeType: "image/png",
-          data: imageBase64,
+          mimeType: image.mimeType,
+          data: image.data,
         },
       });
     });
@@ -111,12 +116,13 @@ export async function generateImage(
     prompt: params.prompt,
     size: params.size,
     quality: params.quality,
+    imageBase64Array: params.imageBase64Array?.map((image) => image.data),
   });
 }
 
 function resolveProvider(
   requested: ImageProvider | undefined,
-  imageBase64Array: string[] | undefined,
+  imageBase64Array: ReferenceImage[] | undefined,
 ): ImageProvider {
   const normalizedRequested = normalizeProvider(requested);
   const baseProvider = normalizedRequested ?? DEFAULT_PROVIDER;

@@ -4,6 +4,7 @@ import { useState, useRef, DragEvent, ChangeEvent, KeyboardEvent as ReactKeyboar
 import Image from "next/image"
 import { useAtom } from "jotai"
 import { Upload, X, Download, ImageIcon, Loader2, AlertCircle } from "lucide-react"
+import imageCompression from "browser-image-compression"
 
 import { authAtom } from "@/lib/atoms"
 import { cn } from "@/lib/utils"
@@ -16,11 +17,44 @@ import OutfitSelection from "@/components/main/image-gen/outfit-selection"
 import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog";
 
+const MAX_REFERENCE_IMAGES = 4
+const MAX_IMAGE_BYTES = 1024 * 1024 // 1MB limit for payload
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024 // 10MB upload allowance
+const MAX_DIMENSION = 2000
+
+type UploadedReferenceImage = {
+  base64: string
+  mimeType: string
+  size: number
+}
+
+const compressImageToTarget = async (file: File): Promise<File> => {
+  if (file.size <= MAX_IMAGE_BYTES) {
+    return file
+  }
+
+  const compressed = await imageCompression(file, {
+    maxSizeMB: MAX_IMAGE_BYTES / (1024 * 1024),
+    maxWidthOrHeight: MAX_DIMENSION,
+    useWebWorker: true,
+    fileType: "image/jpeg",
+    initialQuality: 0.9,
+  })
+
+  if (compressed.size > MAX_IMAGE_BYTES) {
+    throw new Error("Unable to reduce image under 1MB. Please upload a smaller file.")
+  }
+
+  return compressed
+}
+
+const approximateBase64Size = (base64: string) => Math.floor((base64.length * 3) / 4)
+
 export default function ImageGen() {
   const [auth, setAuth] = useAtom(authAtom)
 
 
-  const [uploadedImages, setUploadedImages] = useState<string[]>([])
+  const [uploadedImages, setUploadedImages] = useState<UploadedReferenceImage[]>([])
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,9 +93,8 @@ export default function ImageGen() {
 
   // Handle file upload (supports up to 4 images)
   const handleFileUpload = async (file: File) => {
-    // Check if already at max capacity
-    if (uploadedImages.length >= 4) {
-      setError("Maximum 4 images allowed")
+    if (uploadedImages.length >= MAX_REFERENCE_IMAGES) {
+      setError(`Maximum ${MAX_REFERENCE_IMAGES} images allowed`)
       return
     }
 
@@ -70,18 +103,34 @@ export default function ImageGen() {
       return
     }
 
-    // Max 5MB per image
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Each image must be less than 5MB")
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError("Each image must be 10MB or less before upload")
       return
     }
 
     try {
-      const base64 = await fileToBase64(file)
-      setUploadedImages(prev => [...prev, base64])
+      const compressedFile = await compressImageToTarget(file)
+      const base64 = await fileToBase64(compressedFile)
+      const size = compressedFile.size
+
+      if (size > MAX_IMAGE_BYTES) {
+        setError("Could not reduce image below 1MB. Please choose a smaller image.")
+        return
+      }
+
+      setUploadedImages((prev) => [
+        ...prev,
+        {
+          base64,
+          mimeType: compressedFile.type || "image/jpeg",
+          size,
+        },
+      ])
       setError(null)
-    } catch {
-      setError("Failed to process image")
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to process image. Please try another file."
+      setError(message)
     }
   }
 
@@ -111,7 +160,7 @@ export default function ImageGen() {
     const files = e.dataTransfer.files
     if (files && files.length > 0) {
       // Process multiple files (up to remaining slots)
-      const remainingSlots = 4 - uploadedImages.length
+      const remainingSlots = MAX_REFERENCE_IMAGES - uploadedImages.length
       const filesToProcess = Math.min(files.length, remainingSlots)
 
       for (let i = 0; i < filesToProcess; i++) {
@@ -129,7 +178,7 @@ export default function ImageGen() {
     const files = e.target.files
     if (files && files.length > 0) {
       // Process multiple files (up to remaining slots)
-      const remainingSlots = 4 - uploadedImages.length
+      const remainingSlots = MAX_REFERENCE_IMAGES - uploadedImages.length
       const filesToProcess = Math.min(files.length, remainingSlots)
 
       for (let i = 0; i < filesToProcess; i++) {
@@ -196,7 +245,13 @@ export default function ImageGen() {
         body: JSON.stringify({
           // prompt: setting.concat(" ", instructions),
           prompt: `${selectedOutfit} ${setting} Special instructions (the following instruction (if any) overrides any previous instructions: ${instructions || 'no special instructions'}`,
-          imageBase64Array: uploadedImages.length > 0 ? uploadedImages : undefined,
+          imageBase64Array:
+            uploadedImages.length > 0
+              ? uploadedImages.map(({ base64, mimeType }) => ({
+                  data: base64,
+                  mimeType,
+                }))
+              : undefined,
         }),
       })
 
@@ -239,11 +294,16 @@ export default function ImageGen() {
 
   // Modify Image - add generated image to the reference images
   function handleModifyImage() {
-      if (generatedImage) {
-        setUploadedImages([generatedImage]);
-        // setUploadedFileNames(prev => [...prev, `generated-${Date.now()}.png`]);
-        setGeneratedImage(null);
-      }
+    if (generatedImage) {
+      setUploadedImages([
+        {
+          base64: generatedImage,
+          mimeType: "image/png",
+          size: approximateBase64Size(generatedImage),
+        },
+      ])
+      setGeneratedImage(null)
+    }
   }
 
   return (
@@ -281,7 +341,7 @@ export default function ImageGen() {
                   isDragging
                     ? "border-primary bg-primary/10 shadow-inner"
                     : "hover:border-primary/60 hover:bg-primary/5",
-                  uploadedImages.length >= 4 && "border-primary/50"
+                  uploadedImages.length >= MAX_REFERENCE_IMAGES && "border-primary/50"
                 )}
               >
                 <input
@@ -304,7 +364,7 @@ export default function ImageGen() {
                         Drop reference images or tap to upload
                       </p>
                       <p className="text-xs text-muted-foreground md:text-sm">
-                        PNG, JPG, or WEBP · up to 4 images · 5MB max each
+                        PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
                       </p>
                     </div>
                     <div className="text-[11px] text-muted-foreground">
@@ -314,8 +374,8 @@ export default function ImageGen() {
                 ) : (
                   <div className="flex w-full flex-col gap-3">
                     <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
-                      {uploadedImages.length}/4 reference images
-                      {uploadedImages.length < 4 && (
+                      {uploadedImages.length}/{MAX_REFERENCE_IMAGES} reference images
+                      {uploadedImages.length < MAX_REFERENCE_IMAGES && (
                         <button
                           type="button"
                           className="text-foreground underline-offset-4 transition hover:underline"
@@ -335,7 +395,7 @@ export default function ImageGen() {
                           className="group relative aspect-square overflow-hidden rounded-lg border border-border/60 bg-background shadow-sm"
                         >
                           <Image
-                            src={`data:image/png;base64,${image}`}
+                            src={`data:${image.mimeType};base64,${image.base64}`}
                             alt={`Reference ${index + 1}`}
                             fill
                             sizes="(min-width: 768px) 33vw, 50vw"
@@ -356,8 +416,8 @@ export default function ImageGen() {
                       ))}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {uploadedImages.length < 4
-                        ? `${4 - uploadedImages.length} slot(s) remaining`
+                      {uploadedImages.length < MAX_REFERENCE_IMAGES
+                        ? `${MAX_REFERENCE_IMAGES - uploadedImages.length} slot(s) remaining`
                         : "Maximum reached. Remove an image to add another."}
                     </p>
                   </div>
@@ -448,7 +508,7 @@ export default function ImageGen() {
                 ) : (
                 <>
                   <ImageIcon className="w-4 h-4" />
-                  Generate Image (1 Credit)
+                  Generate Image
                 </>
               )}
             </Button>

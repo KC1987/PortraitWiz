@@ -17,6 +17,13 @@ type ImageQuality = "standard" | "high";
 const ALLOWED_SIZES: ImageSize[] = ["256x256", "512x512", "1024x1024"];
 const ALLOWED_QUALITIES: ImageQuality[] = ["standard", "high"];
 
+type ReferenceImagePayload = {
+  data: string;
+  mimeType?: string;
+};
+
+export const maxRequestBodySize = "16mb";
+
 export async function POST(req: Request) {
   try {
     const {
@@ -47,9 +54,16 @@ export async function POST(req: Request) {
       );
     }
 
-    if (imageBase64Array && imageBase64Array.length > 4) {
+    const referenceImages = Array.isArray(imageBase64Array)
+      ? (imageBase64Array as ReferenceImagePayload[])
+      : undefined;
+
+    if (referenceImages && referenceImages.length > 0) {
       return NextResponse.json(
-        { error: "Maximum 4 reference images allowed" },
+        {
+          error: "Reference images are not supported with the OpenAI generator",
+          suggestion: "Use the default generator with reference images instead.",
+        },
         { status: 400 },
       );
     }

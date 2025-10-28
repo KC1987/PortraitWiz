@@ -12,6 +12,16 @@ interface GeminiError extends Error {
   isRetryable?: boolean;
 }
 
+type ReferenceImagePayload = {
+  data: string;
+  mimeType?: string;
+};
+
+const MAX_REFERENCE_IMAGES = 4;
+const MAX_REFERENCE_BYTES = 1024 * 1024; // 1MB
+
+export const maxRequestBodySize = "16mb";
+
 export async function POST(req: Request) {
 
   try {
@@ -28,8 +38,28 @@ export async function POST(req: Request) {
     }
 
     // Validate image array (max 4 images)
-    if (imageBase64Array && imageBase64Array.length > 4) {
+    const referenceImages = Array.isArray(imageBase64Array)
+      ? (imageBase64Array as ReferenceImagePayload[])
+      : undefined;
+
+    if (referenceImages && referenceImages.length > MAX_REFERENCE_IMAGES) {
       return NextResponse.json({ error: "Maximum 4 reference images allowed" }, { status: 400 });
+    }
+
+    if (referenceImages) {
+      for (const image of referenceImages) {
+        if (!image || typeof image.data !== "string" || image.data.trim().length === 0) {
+          return NextResponse.json({ error: "Invalid image payload supplied" }, { status: 400 });
+        }
+
+        const approxBytes = Math.floor((image.data.length * 3) / 4);
+        if (approxBytes > MAX_REFERENCE_BYTES) {
+          return NextResponse.json(
+            { error: "Each reference image must be under 1MB" },
+            { status: 413 },
+          );
+        }
+      }
     }
 
     let normalizedProvider: ImageProvider | undefined;
@@ -116,7 +146,10 @@ export async function POST(req: Request) {
     // Generate the image
     const image_data = await generateImage({
       prompt,
-      imageBase64Array,
+      imageBase64Array: referenceImages?.map((image) => ({
+        data: image.data,
+        mimeType: image.mimeType ?? "image/jpeg",
+      })),
       provider: normalizedProvider,
       size: sizeOption as (typeof allowedSizes)[number] | undefined,
       quality: qualityOption as (typeof allowedQualities)[number] | undefined,
