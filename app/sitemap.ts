@@ -7,6 +7,7 @@ const baseUrl = getSiteUrl()
 const routes: Array<{ path: string; changeFrequency?: MetadataRoute.Sitemap[number]["changeFrequency"] }> =
   [
     { path: "/", changeFrequency: "weekly" },
+    { path: "/about", changeFrequency: "monthly" },
     { path: "/pricing", changeFrequency: "weekly" },
     { path: "/contact", changeFrequency: "monthly" },
     { path: "/enter", changeFrequency: "monthly" },

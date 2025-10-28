@@ -112,6 +112,20 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@keyframes before-after-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-before-after-marquee {
+  animation: before-after-marquee var(--marquee-duration, 45s) linear infinite;
+  will-change: transform;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

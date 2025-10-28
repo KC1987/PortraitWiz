@@ -32,6 +32,12 @@ export default function Footer() {
               Pricing
             </Link>
             <Link
+              href="/about"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+            >
+              About
+            </Link>
+            <Link
               href="/contact"
               className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
             >
