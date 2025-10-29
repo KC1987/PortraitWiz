@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import PricingCard from "./Card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -14,6 +13,8 @@ import {
 } from "@/lib/copy/pricing"
 import { pricingPackages } from "@/lib/pricing-data"
 import { getSiteUrl } from "@/lib/seo"
+import TrustBadges from "@/components/TrustBadges"
+import PricingCard from "./Card"
 
 const siteUrl = getSiteUrl()
 const pricingSchema = buildPricingSchema(siteUrl)
@@ -71,8 +72,11 @@ export default function PricingPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-12 text-center text-sm text-muted-foreground">
-              Secure Stripe checkout • Instant credit delivery • Credits never expire
+            <div className="mt-12 space-y-4 text-center">
+              <TrustBadges />
+              <p className="text-sm text-muted-foreground">
+                Secure Stripe checkout • Instant credit delivery • Credits never expire
+              </p>
             </div>
           </div>
         </section>

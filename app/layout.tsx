@@ -6,6 +6,7 @@ import ThemeProvider from "@/providers/ThemeProvider"
 import { Toaster } from "@/components/ui/sonner"
 import Footer from "@/components/footer/footer"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 import { cn } from "@/lib/utils"
 import AuthProvider from "@/providers/AuthProvider"
 import { getSiteUrl } from "@/lib/seo"
@@ -96,6 +97,7 @@ export default async function RootLayout({
               {children}
               <Footer />
               <Toaster />
+              <Analytics />
               <SpeedInsights />
           </ThemeProvider>
         </AuthProvider>

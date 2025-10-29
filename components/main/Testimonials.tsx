@@ -47,12 +47,12 @@ export default function Testimonials() {
           </p>
 
           <div className="flex items-center gap-3">
-            <div className="relative h-12 w-12 overflow-hidden rounded-full bg-primary/10 ring-2 ring-primary/20 sm:h-14 sm:w-14">
+            <div className="relative h-16 w-16 overflow-hidden rounded-full bg-primary/10 ring-2 ring-primary/20 sm:h-20 sm:w-20">
               <Image
                 src={activeTestimonial.avatar}
                 alt={`${activeTestimonial.name} avatar`}
-                width={80}
-                height={80}
+                width={120}
+                height={120}
                 className="h-full w-full object-cover"
               />
             </div>

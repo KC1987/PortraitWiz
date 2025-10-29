@@ -12,6 +12,7 @@ import { pricingPackages } from "@/lib/pricing-data"
 import PricingCard from "@/app/pricing/Card"
 import { useAtomValue } from "jotai"
 import { authAtom } from "@/lib/atoms"
+import TrustBadges from "@/components/TrustBadges"
 
 interface InsufficientCreditsDialogProps {
   open: boolean
@@ -53,6 +54,8 @@ export default function InsufficientCreditsDialog({
             </div>
           ))}
         </div>
+
+        <TrustBadges size="compact" className="mt-3" />
 
         {/* Footer with Close Button */}
         <div className="flex justify-center pt-2">
