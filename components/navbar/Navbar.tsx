@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button, buttonVariants } from "../ui/button"
+import { Badge } from "../ui/badge"
 import { createClient } from "@/utils/supabase/client"
 import { useAtomValue, useSetAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
@@ -59,21 +60,21 @@ function NavLink({ href, children, onClick, mobile = false, icon: Icon }: NavLin
         href={href}
         onClick={onClick}
         className={cn(
-          "group flex items-center gap-3 rounded-lg px-2 py-2 text-base font-medium transition-colors duration-200",
+          "flex items-center gap-3 rounded-lg px-2 py-2 text-base font-medium transition-colors",
           isActive
-            ? "text-primary"
-            : "text-foreground hover:text-primary"
+            ? "text-foreground"
+            : "text-muted-foreground hover:text-foreground"
         )}
       >
         {Icon && (
           <Icon
             className={cn(
-              "h-5 w-5 transition-colors duration-200",
-              isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+              "h-5 w-5",
+              isActive ? "text-foreground" : "text-muted-foreground"
             )}
           />
         )}
-        <span className="leading-tight">{children}</span>
+        {children}
       </Link>
     )
   }
@@ -82,17 +83,13 @@ function NavLink({ href, children, onClick, mobile = false, icon: Icon }: NavLin
     <Link
       href={href}
       className={cn(
-        "text-sm font-medium transition-all duration-200 relative group py-1",
+        "text-sm font-medium transition-colors",
         isActive
           ? "text-foreground"
           : "text-muted-foreground hover:text-foreground"
       )}
     >
       {children}
-      <span className={cn(
-        "absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-200",
-        isActive ? "w-full" : "w-0 group-hover:w-full"
-      )} />
     </Link>
   )
 }
@@ -171,20 +168,12 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="group flex items-center gap-3 rounded-md px-2 py-1 transition-colors duration-200 hover:bg-primary/5"
+            className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            <div className="relative">
-              <Sparkles className="h-5 w-5 text-primary transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
-              <Sparkles className="absolute inset-0 h-5 w-5 text-primary opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-50" />
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="bg-gradient-to-r from-foreground to-foreground bg-clip-text text-lg font-semibold text-transparent transition-colors duration-200 group-hover:from-primary group-hover:to-primary/60">
-                PortraitWiz
-              </span>
-              <span className="hidden text-[11px] font-medium uppercase tracking-[0.35em] text-muted-foreground transition-colors duration-300 sm:block group-hover:text-primary/70">
-                AI Portrait Studio
-              </span>
-            </div>
+            <Sparkles className="h-5 w-5 text-primary" />
+            <span className="text-lg font-semibold text-foreground">
+              PortraitWiz
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -201,7 +190,7 @@ export default function Navbar() {
                 <ThemeToggle />
                 <Badge
                   variant="secondary"
-                  className="bg-primary/10 text-primary hover:bg-primary/15 cursor-pointer transition-colors duration-200 gap-1.5 px-3 py-1"
+                  className="cursor-pointer gap-1.5 px-3 py-1"
                   onClick={handleCreditsClick}
                 >
                   <Coins className="w-3.5 h-3.5" />
@@ -213,7 +202,7 @@ export default function Navbar() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
+                      className="gap-2"
                     >
                       <User className="h-4 w-4" />
                       {username}
@@ -252,10 +241,7 @@ export default function Navbar() {
                 <ThemeToggle />
                 <Link
                   href="/enter"
-                  className={cn(
-                    buttonVariants({ size: "sm" }),
-                    "inline-flex bg-primary text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90"
-                  )}
+                  className={cn(buttonVariants({ size: "sm" }))}
                 >
                   Get Started
                 </Link>
@@ -270,7 +256,7 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="px-2 hover:bg-primary/5 transition-colors duration-200"
+                  className="px-2"
                 >
                   <Menu className="w-5 h-5" />
                 </Button>

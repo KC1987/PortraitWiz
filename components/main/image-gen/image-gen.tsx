@@ -354,11 +354,11 @@ export default function ImageGen() {
   }
 
   return (
-    <section className="w-full max-w-6xl mx-auto overflow-x-hidden px-3 sm:px-6 lg:px-8 py-6 lg:py-8">
+    <section className="w-full max-w-6xl mx-auto overflow-x-hidden px-3 sm:px-6 lg:px-8 py-8 lg:py-12">
       <div className="grid gap-6 lg:grid-cols-2 xl:gap-8">
         {/* Input Section */}
-        <Card className="overflow-hidden border border-border/70 bg-background/95 shadow-sm">
-          <CardHeader className="space-y-1 border-b border-border/60 bg-muted/40 px-4 py-4 md:px-6">
+        <Card className="overflow-hidden border border-border">
+          <CardHeader className="space-y-1 border-b border-border bg-muted px-4 py-5 md:px-6">
             <CardTitle className="text-lg md:text-xl">Create Image</CardTitle>
             {/*<CardDescription>*/}
             {/*  Upload an image to edit or generate from text*/}
@@ -381,14 +381,14 @@ export default function ImageGen() {
                 tabIndex={0}
                 aria-label="Upload reference images"
                 className={cn(
-                  "relative flex w-full cursor-pointer rounded-xl border border-dashed border-border/70 bg-background/70 text-center transition-all duration-200 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                  "relative flex w-full cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                   uploadedImages.length > 0
                     ? "flex-col items-stretch gap-3 p-4 text-left md:p-5"
-                    : "flex-col items-center justify-center gap-3 p-5 md:p-6",
+                    : "flex-col items-center justify-center gap-3 p-6 md:p-8",
                   isDragging
-                    ? "border-primary bg-primary/10 shadow-inner"
-                    : "hover:border-primary/60 hover:bg-primary/5",
-                  uploadedImages.length >= MAX_REFERENCE_IMAGES && "border-primary/50"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-foreground/20",
+                  uploadedImages.length >= MAX_REFERENCE_IMAGES && "border-border"
                 )}
               >
                 <input
@@ -409,25 +409,22 @@ export default function ImageGen() {
                 />
 
                 {uploadedImages.length === 0 ? (
-                  <div className="flex flex-col items-center gap-3 py-1 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 md:h-14 md:w-14">
-                      <Upload className="h-6 w-6 text-primary md:h-7 md:w-7" />
+                  <div className="flex flex-col items-center gap-4 py-2 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted md:h-14 md:w-14">
+                      <Upload className="h-6 w-6 text-muted-foreground md:h-7 md:w-7" />
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground md:text-base">
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-foreground md:text-base">
                         Choose reference images from your gallery or capture new ones
                       </p>
                       <p className="text-xs text-muted-foreground md:text-sm">
                         PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
                       </p>
                     </div>
-                    <div className="text-[11px] text-muted-foreground">
-                      Adding references helps keep your likeness accurate.
-                    </div>
                     <Button
                       size="sm"
-                      variant="secondary"
-                      className="mt-1 rounded-full border border-border/60 bg-background/80 px-4 text-xs font-medium text-foreground transition hover:bg-background"
+                      variant="outline"
+                      className="mt-1"
                       onClick={handleCameraSelect}
                     >
                       Use camera instead
@@ -456,23 +453,23 @@ export default function ImageGen() {
                         </div>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                       {uploadedImages.map((image, index) => (
                         <div
                           key={index}
-                          className="group relative aspect-square overflow-hidden rounded-lg border border-border/60 bg-background shadow-sm"
+                          className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
                         >
                           <Image
                             src={`data:${image.mimeType};base64,${image.base64}`}
                             alt={`Reference ${index + 1}`}
                             fill
                             sizes="(min-width: 768px) 33vw, 50vw"
-                            className="object-cover transition group-hover:scale-[1.02]"
+                            className="object-cover"
                           />
                           <Button
                             size="icon"
                             variant="secondary"
-                            className="absolute right-2 top-2 h-7 w-7 rounded-full bg-background/95 text-muted-foreground shadow-sm transition hover:text-destructive focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:opacity-0 md:group-hover:opacity-100"
+                            className="absolute right-2 top-2 h-7 w-7 rounded-full bg-background/90 opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={(e) => {
                               e.stopPropagation()
                               removeUploadedImage(index)
@@ -544,13 +541,13 @@ export default function ImageGen() {
             </div>
 
             {error && (
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+              <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
                 <div className="flex gap-3">
                   <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-2">
+                  <div className="flex-1 space-y-1">
                     <p className="text-sm font-medium text-destructive">{error}</p>
                     {errorSuggestion && (
-                      <p className="text-sm text-destructive/80">{errorSuggestion}</p>
+                      <p className="text-sm text-muted-foreground">{errorSuggestion}</p>
                     )}
                   </div>
                 </div>
@@ -584,8 +581,8 @@ export default function ImageGen() {
         </Card>
 
         {/* Output Section */}
-        <Card ref={outputSectionRef} className="overflow-hidden border border-border/70 bg-background/95 shadow-sm">
-          <CardHeader className="space-y-1 border-b border-border/60 bg-muted/40 px-4 py-4 md:px-6">
+        <Card ref={outputSectionRef} className="overflow-hidden border border-border">
+          <CardHeader className="space-y-1 border-b border-border bg-muted px-4 py-5 md:px-6">
             <CardTitle className="text-lg md:text-xl">Generated Image</CardTitle>
             {/*<CardDescription>*/}
             {/*  Your AI-generated result will appear here*/}
@@ -593,27 +590,27 @@ export default function ImageGen() {
           </CardHeader>
           <CardContent className="px-4 py-4 md:px-6">
             {!generatedImage && !isGenerating ? (
-              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/40 text-center md:aspect-square">
-                <div className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full bg-muted flex items-center justify-center mb-2 md:mb-3">
-                  <ImageIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-muted-foreground" />
+              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted text-center md:aspect-square">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-background flex items-center justify-center mb-3">
+                  <ImageIcon className="w-6 h-6 md:w-7 md:h-7 text-muted-foreground" />
                 </div>
-                <p className="text-[11px] md:text-xs lg:text-sm text-muted-foreground px-4">
+                <p className="text-xs md:text-sm text-muted-foreground px-4">
                   Configure settings and generate
                 </p>
               </div>
             ) : isGenerating ? (
-              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-xl border border-dashed border-primary/60 bg-primary/10 p-4 text-center md:aspect-square md:p-6">
-                <Loader2 className="w-10 h-10 md:w-12 md:h-12 text-primary animate-spin mb-2 md:mb-3" />
-                <p className="text-sm md:text-base font-medium text-primary">
+              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary bg-primary/5 p-4 text-center md:aspect-square md:p-6">
+                <Loader2 className="w-10 h-10 md:w-12 md:h-12 text-primary animate-spin mb-3" />
+                <p className="text-sm md:text-base font-medium text-foreground">
                   Creating your portrait...
                 </p>
-                <p className="text-[11px] md:text-xs lg:text-sm text-muted-foreground mt-1 px-4">
+                <p className="text-xs md:text-sm text-muted-foreground mt-2 px-4">
                   This may take a moment
                 </p>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="group relative overflow-hidden rounded-xl border border-border/70 bg-muted/20">
+                <div className="group relative overflow-hidden rounded-lg border border-border">
                   <Image
                     src={`data:image/png;base64,${generatedImage}`}
                     alt="Generated result"
@@ -621,11 +618,10 @@ export default function ImageGen() {
                     height={1024}
                     className="h-auto w-full"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover:bg-black/60 group-hover:opacity-100">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-opacity group-hover:bg-black/60 group-hover:opacity-100">
                     <Button
                       onClick={downloadImage}
                       size="lg"
-                      variant="secondary"
                       className="gap-2"
                     >
                       <Download className="w-4 h-4" />

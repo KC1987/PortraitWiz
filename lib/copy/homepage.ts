@@ -1,7 +1,7 @@
 export const homepageMetadata = {
   title: "PortraitWiz | AI Professional Headshots in Minutes",
   description:
-    "Generate polished AI professional headshots, LinkedIn photos, and corporate portraits in under 60 seconds. PortraitWiz delivers studio lighting, premium backgrounds, and privacy-first processing for teams and individuals.",
+    "Transform your photos into professional headshots with AI. Studio-quality results in under 60 seconds.",
   keywords: [
     "AI headshot generator",
     "AI professional portraits",
@@ -11,13 +11,13 @@ export const homepageMetadata = {
   ],
   ogTitle: "PortraitWiz — AI Professional Headshots in Minutes",
   ogDescription:
-    "Transform casual selfies into studio-quality headshots with AI. Upload up to 4 reference images and receive polished portraits instantly.",
+    "Transform your photos into studio-quality headshots with AI. Upload up to 4 images and get professional results instantly.",
 }
 
 export const heroContent = {
   heading: "AI Professional Headshots in Minutes",
   subheading:
-    "Create brand-ready portraits without booking a photographer. PortraitWiz transforms your reference photos into polished, studio-quality headshots that impress hiring managers, clients, and investors.",
+    "Transform your photos into studio-quality headshots. No photographer needed.",
   primaryCta: { label: "Start Generating", href: "#generator" },
   secondaryCta: { label: "See Pricing", href: "/pricing" },
   trustSignals: {
@@ -27,96 +27,91 @@ export const heroContent = {
 }
 
 export const socialProofContent = {
-  title: "Trusted by Modern Professionals",
+  title: "Trusted by Professionals Worldwide",
   description:
-    "Founders, remote teams, and job seekers rely on PortraitWiz to refresh their brand across LinkedIn, résumés, and pitch decks.",
-  logos: ["Atlas HR", "LaunchPad VC", "RemoteWave", "CloudStride", "Northline Tech"],
+    "Used by founders, teams, and job seekers to create polished headshots for LinkedIn, résumés, and presentations.",
+  logos: [],
   testimonial: {
     quote:
-      "“PortraitWiz gave our entire leadership team professional LinkedIn headshots in under an hour. The lighting and wardrobe presets look like a studio session.”",
-    name: "Morgan Shaw",
-    title: "Chief People Officer, Atlas HR",
+      "PortraitWiz gave our team professional headshots in under an hour. The quality looks like a real photo studio.",
+    name: "Morgan S.",
+    title: "HR Leader",
   },
 }
 
 export const howItWorksContent = {
-  title: "Create Studio-Quality Portraits in Three Steps",
+  title: "How It Works",
   steps: [
     {
-      title: "Upload your references",
+      title: "Upload Photos",
       description:
-        "Drag and drop up to four high-resolution photos. We support PNG and JPEG files up to 5MB each and never save them to disk.",
+        "Upload up to 4 reference photos. PNG or JPEG, up to 10MB each. We never save them.",
     },
     {
-      title: "Pick the perfect look",
+      title: "Choose Style",
       description:
-        "Choose curated outfits, lighting presets, and background settings crafted for corporate, creative, and speaking engagements.",
+        "Select from curated outfit, lighting, and background options.",
     },
     {
-      title: "Generate and download",
+      title: "Download",
       description:
-        "Our AI renders a polished portrait in less than a minute and gives you a ready-to-share PNG sized for LinkedIn and applicant tracking systems.",
+        "Get your professional headshot in under a minute, ready for LinkedIn and more.",
     },
   ],
 }
 
 export const featureHighlights = {
-  title: "Why PortraitWiz Outperforms DIY Photo Shoots",
+  title: "Professional Results, Instantly",
   items: [
     {
-      title: "Studio Lighting Presets",
+      title: "Studio-Quality Lighting",
       description:
-        "Every portrait is tuned with directional key lighting, depth-enhancing shadows, and color grading that flatters a variety of skin tones.",
+        "Professional lighting and color grading optimized for headshots.",
     },
     {
-      title: "Privacy-First Processing",
+      title: "Privacy First",
       description:
-        "Reference images are encrypted in transit, processed instantly, and discarded. PortraitWiz never trains models on your likeness.",
+        "Your photos are processed instantly and immediately deleted. Never stored or used for training.",
     },
     {
-      title: "Corporate-Ready Formats",
+      title: "Ready to Use",
       description:
-        "Download portrait-ready PNG files that meet LinkedIn, corporate directory, and investor deck specifications without extra editing.",
+        "High-quality PNG files optimized for LinkedIn, websites, and presentations.",
     },
   ],
 }
 
 export const pricingPreviewContent = {
-  title: "Flexible Credit Packs for Every Team",
+  title: "Simple Credit-Based Pricing",
   description:
-    "Purchase credits only when you need them. Credits never expire and can be used across individuals, teams, or department-wide refreshes.",
+    "Buy credits as you need them. No subscriptions. Credits never expire.",
   highlight: {
-    name: "Professional Pack",
-    price: "$19",
-    details: "Includes 10 credits — enough for polished portraits across platforms.",
+    name: "Popular",
+    price: "$44.99",
+    details: "150 credits • Best value",
   },
-  cta: { label: "Explore Pricing", href: "/pricing" },
+  cta: { label: "View All Plans", href: "/pricing" },
 }
 
 export const useCasesContent = {
-  title: "Tailored for Founders, Teams, and Job Seekers",
+  title: "Perfect for Any Professional",
   description:
-    "PortraitWiz supports professionals across industries with presets designed for LinkedIn, sales decks, speaking engagements, and corporate directories.",
+    "Create professional headshots for LinkedIn, websites, presentations, and more.",
   cases: [
-    {
-      title: "Tech Founders",
-      description:
-        "Land investor meetings with confident, on-brand portraits for pitch decks and PR features.",
-    },
-    {
-      title: "People & HR Teams",
-      description:
-        "Refresh employee directories and onboarding portals with consistent headshots for hybrid and remote teams.",
-    },
     {
       title: "Job Seekers",
       description:
-        "Stand out on LinkedIn and résumé portals with crisp portraits optimized for recruiters’ ATS previews.",
+        "Stand out with professional headshots for LinkedIn and résumés.",
     },
     {
-      title: "Sales & Customer Success",
+      title: "Teams & Companies",
       description:
-        "Upgrade your client-facing presence with approachable, trustworthy photos for email signatures and slide decks.",
+        "Create consistent headshots for your entire team quickly and affordably.",
+    },
+    {
+      title: "Entrepreneurs",
+      description:
+        "Professional portraits for pitch decks, websites, and media.",
     },
   ],
 }
@@ -125,29 +120,29 @@ export const faqContent = {
   title: "Frequently Asked Questions",
   items: [
     {
-      question: "How long does it take to generate a portrait?",
+      question: "How long does it take?",
       answer:
-        "Most AI portraits are ready in 30–60 seconds thanks to our optimized OpenAI and Gemini pipelines. High-volume queues may take slightly longer during peak demand.",
+        "Most portraits are ready in 30-60 seconds.",
     },
     {
-      question: "Do you store or reuse my reference photos?",
+      question: "Do you store my photos?",
       answer:
-        "No. PortraitWiz processes your images securely, never trains on them, and deletes references immediately after generation completes.",
+        "No. Your photos are processed instantly and deleted immediately. We never store or train on your images.",
     },
     {
-      question: "What file types and sizes are supported?",
+      question: "What file types are supported?",
       answer:
-        "Upload PNG or JPEG files up to 5MB each. We recommend clear, well-lit photos captured at eye level for the best results.",
+        "PNG or JPEG files up to 10MB each. For best results, use clear, well-lit photos.",
     },
     {
-      question: "Can I use these portraits commercially?",
+      question: "Can I use these commercially?",
       answer:
-        "Yes, you retain full commercial usage rights for marketing, advertising, and corporate materials generated through PortraitWiz.",
+        "Yes, you have full commercial rights to all generated portraits.",
     },
     {
-      question: "What happens if I’m not satisfied?",
+      question: "What if I'm not satisfied?",
       answer:
-        "If a generation misses the mark, regenerate with different settings or contact support within 7 days for a credit review.",
+        "Try generating again with different settings, or contact support for assistance.",
     },
   ],
 }
