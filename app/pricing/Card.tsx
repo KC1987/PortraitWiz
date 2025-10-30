@@ -10,6 +10,7 @@ import { authAtom } from "@/lib/atoms"
 import { CheckCircle2, Sparkles } from "lucide-react"
 import { formatPrice, pricePerCredit, type PricingPackage } from "@/lib/pricing-data"
 import { cn } from "@/lib/utils"
+import SignInRequiredDialog from "@/components/main/image-gen/sign-in-required-dialog"
 
 interface PricingCardProps {
   package: PricingPackage
@@ -19,10 +20,11 @@ interface PricingCardProps {
 export default function PricingCard({ package: pkg, variant = "default" }: PricingCardProps) {
   const { user } = useAtomValue(authAtom)
   const [isLoading, setIsLoading] = useState(false)
+  const [signInDialogOpen, setSignInDialogOpen] = useState(false)
 
   async function handlePurchaseCredits() {
     if (!user?.id) {
-      console.error("User not logged in")
+      setSignInDialogOpen(true)
       return
     }
 
@@ -39,16 +41,17 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
   }
 
   return (
-    <Card
-      className={cn(
-        "w-full max-w-sm relative transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5",
-        pkg.popular &&
-          (variant === "compact"
-            ? "border-primary border shadow-md"
-            : "border-primary border-2 shadow-md scale-105"),
-        variant === "compact" && "max-w-xs sm:max-w-sm hover:-translate-y-0"
-      )}
-    >
+    <>
+      <Card
+        className={cn(
+          "w-full max-w-sm relative transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5",
+          pkg.popular &&
+            (variant === "compact"
+              ? "border-primary border shadow-md"
+              : "border-primary border-2 shadow-md scale-105"),
+          variant === "compact" && "max-w-xs sm:max-w-sm hover:-translate-y-0"
+        )}
+      >
       {/* Popular Badge */}
       {pkg.badge && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -125,6 +128,13 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
           100% Money-Back Guarantee
         </p>
       </CardFooter>
-    </Card>
+      </Card>
+      <SignInRequiredDialog
+        open={signInDialogOpen}
+        onOpenChange={setSignInDialogOpen}
+        title="Sign in to purchase credits"
+        description="Create a free account to securely checkout and start generating portraits."
+      />
+    </>
   )
 }

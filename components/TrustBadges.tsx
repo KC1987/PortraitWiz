@@ -33,8 +33,8 @@ export default function TrustBadges({ size = "default", className }: TrustBadges
   const containerGaps = size === "compact" ? "gap-3 sm:gap-4" : "gap-4 sm:gap-6"
   const badgeSizing =
     size === "compact"
-      ? "h-8 px-3 sm:h-9 sm:px-3.5"
-      : "h-9 px-3.5 sm:h-10 sm:px-4"
+      ? "h-6 px-2 sm:h-7 sm:px-2.5"
+      : "h-7 px-2.5 sm:h-8 sm:px-3"
 
   return (
     <div
@@ -55,8 +55,8 @@ export default function TrustBadges({ size = "default", className }: TrustBadges
           <Image
             src={badge.src}
             alt={badge.alt}
-            width={140}
-            height={50}
+            width={105}
+            height={38}
             className="h-full w-auto object-contain"
             style={
               badge.scale

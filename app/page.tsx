@@ -60,14 +60,14 @@ export default function Home() {
           id="generator"
           className="border-b border-primary/10 bg-gradient-to-b from-primary/5 via-background to-background"
         >
-          <div className="container mx-auto px-4 pt-6 md:pt-8 lg:pt-10">
+          <div className="container mx-auto px-4">
+            {/*<div className="rounded-3xl border border-primary/10 bg-background p-4 shadow-xl sm:p-6 lg:p-8">*/}
+              <ImageGen />
+            {/*</div>*/}
             <BeforeAfterCarousel />
             <div className="space-y-8 lg:space-y-10">
-              <div className="rounded-3xl border border-primary/10 bg-background p-4 shadow-xl sm:p-6 lg:p-8">
-                <ImageGen />
-              </div>
               <header className="space-y-6 text-center lg:text-left">
-                <Testimonials />
+                {/*<Testimonials />*/}
                 {/*<Badge className="bg-primary/10 text-primary hover:bg-primary/10">*/}
                 {/*  {heroContent.trustSignals.rating}*/}
                 {/*</Badge>*/}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, DragEvent, ChangeEvent, KeyboardEvent as ReactKeyboardEvent } from "react"
+import { useState, useRef, DragEvent, ChangeEvent, MouseEvent, KeyboardEvent as ReactKeyboardEvent } from "react"
 import Image from "next/image"
 import { useAtom } from "jotai"
 import { Upload, X, Download, ImageIcon, Loader2, AlertCircle } from "lucide-react"
@@ -16,6 +16,7 @@ import SettingSelection from "@/components/main/image-gen/setting-selection"
 import OutfitSelection from "@/components/main/image-gen/outfit-selection"
 import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog";
+import SignInRequiredDialog from "@/components/main/image-gen/sign-in-required-dialog"
 
 const MAX_REFERENCE_IMAGES = 4
 const MAX_IMAGE_BYTES = 1024 * 1024 // 1MB limit for payload
@@ -61,6 +62,7 @@ export default function ImageGen() {
   const [errorSuggestion, setErrorSuggestion] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [insufficientCreditsDialogOpen, setInsufficientCreditsDialogOpen] = useState<boolean>(false)
+  const [signInDialogOpen, setSignInDialogOpen] = useState<boolean>(false)
 
   const [setting, setSetting] = useState("Create an ultra-photorealistic professional executive portrait with absolute realism and natural authenticity. LIGHTING: Professional three-point studio setup - key light at 45 degrees (soft, diffused, natural skin rendering), subtle fill light (gentle shadow softening, preserving dimensional form), edge/hair light (natural separation, authentic highlight). SUBJECT: Exact facial features, genuine skin texture with natural pores and subtle imperfections, real hair with individual strand detail, authentic eye reflections and catchlights. Expression: naturally confident with genuine micro-expressions, real eye contact, subtle professional smile with authentic muscle movement. Posture: naturally squared shoulders, organic spine alignment, subtly confident head position. PHOTOGRAPHIC REALISM: Real camera behavior - authentic lens characteristics (85mm equivalent), natural depth of field with realistic bokeh, genuine color science and skin tone accuracy, real-world lighting falloff and ambient occlusion. Authentic fabric texture and clothing wrinkles. Natural environmental interaction - realistic shadows, accurate light bounce, genuine atmospheric perspective. NO artificial smoothing, NO digital painting artifacts, NO uncanny valley effects, NO synthetic perfection. TECHNICAL: 1000x1000px, photographic color grading matching real studio conditions, authentic grain structure, natural contrast ratios, genuine photographic quality indistinguishable from professional camera capture.");
 
@@ -70,6 +72,7 @@ export default function ImageGen() {
   const [instructions, setInstructions] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
   const outputSectionRef = useRef<HTMLDivElement>(null)
   const maxPromptLength = 500
   const isNearPromptLimit = instructions.length >= maxPromptLength * 0.9
@@ -91,8 +94,20 @@ export default function ImageGen() {
     })
   }
 
+  const requireAuthForUpload = () => {
+    if (!auth?.user) {
+      setSignInDialogOpen(true)
+      return false
+    }
+    return true
+  }
+
   // Handle file upload (supports up to 4 images)
   const handleFileUpload = async (file: File) => {
+    if (!requireAuthForUpload()) {
+      return
+    }
+
     if (uploadedImages.length >= MAX_REFERENCE_IMAGES) {
       setError(`Maximum ${MAX_REFERENCE_IMAGES} images allowed`)
       return
@@ -157,6 +172,10 @@ export default function ImageGen() {
     e.stopPropagation()
     setIsDragging(false)
 
+    if (!requireAuthForUpload()) {
+      return
+    }
+
     const files = e.dataTransfer.files
     if (files && files.length > 0) {
       // Process multiple files (up to remaining slots)
@@ -175,6 +194,11 @@ export default function ImageGen() {
 
   // File input change (support multiple files)
   const handleFileInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!requireAuthForUpload()) {
+      e.target.value = ""
+      return
+    }
+
     const files = e.target.files
     if (files && files.length > 0) {
       // Process multiple files (up to remaining slots)
@@ -194,8 +218,31 @@ export default function ImageGen() {
   const handleDropzoneKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
+      if (!requireAuthForUpload()) {
+        return
+      }
       fileInputRef.current?.click()
     }
+  }
+
+  const handleGallerySelect = (event?: MouseEvent<HTMLElement>) => {
+    if (event) {
+      event.stopPropagation()
+    }
+    if (!requireAuthForUpload()) {
+      return
+    }
+    fileInputRef.current?.click()
+  }
+
+  const handleCameraSelect = (event?: MouseEvent<HTMLElement>) => {
+    if (event) {
+      event.stopPropagation()
+    }
+    if (!requireAuthForUpload()) {
+      return
+    }
+    cameraInputRef.current?.click()
   }
 
   // Remove uploaded image by index
@@ -328,7 +375,7 @@ export default function ImageGen() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
+                onClick={handleGallerySelect}
                 onKeyDown={handleDropzoneKeyDown}
                 role="button"
                 tabIndex={0}
@@ -348,8 +395,15 @@ export default function ImageGen() {
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
-                  capture="environment"
                   multiple
+                  onChange={handleFileInputChange}
+                  className="hidden"
+                />
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
                   onChange={handleFileInputChange}
                   className="hidden"
                 />
@@ -361,7 +415,7 @@ export default function ImageGen() {
                     </div>
                     <div className="space-y-1">
                       <p className="text-sm font-semibold text-foreground md:text-base">
-                        Drop reference images or tap to upload
+                        Choose reference images from your gallery or capture new ones
                       </p>
                       <p className="text-xs text-muted-foreground md:text-sm">
                         PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
@@ -370,22 +424,36 @@ export default function ImageGen() {
                     <div className="text-[11px] text-muted-foreground">
                       Adding references helps keep your likeness accurate.
                     </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="mt-1 rounded-full border border-border/60 bg-background/80 px-4 text-xs font-medium text-foreground transition hover:bg-background"
+                      onClick={handleCameraSelect}
+                    >
+                      Use camera instead
+                    </Button>
                   </div>
                 ) : (
                   <div className="flex w-full flex-col gap-3">
                     <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
                       {uploadedImages.length}/{MAX_REFERENCE_IMAGES} reference images
                       {uploadedImages.length < MAX_REFERENCE_IMAGES && (
-                        <button
-                          type="button"
-                          className="text-foreground underline-offset-4 transition hover:underline"
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            fileInputRef.current?.click()
-                          }}
-                        >
-                          Add more
-                        </button>
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            className="text-foreground underline-offset-4 transition hover:underline"
+                            onClick={handleGallerySelect}
+                          >
+                            Add from gallery
+                          </button>
+                          <button
+                            type="button"
+                            className="text-foreground underline-offset-4 transition hover:underline"
+                            onClick={handleCameraSelect}
+                          >
+                            Add from camera
+                          </button>
+                        </div>
                       )}
                     </div>
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
@@ -602,6 +670,7 @@ export default function ImageGen() {
         open={insufficientCreditsDialogOpen}
         onOpenChange={setInsufficientCreditsDialogOpen}
       />
+      <SignInRequiredDialog open={signInDialogOpen} onOpenChange={setSignInDialogOpen} />
     </section>
   )
 }

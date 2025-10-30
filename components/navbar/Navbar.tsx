@@ -1,15 +1,25 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation";
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button, buttonVariants } from "../ui/button"
-import { Badge } from "../ui/badge"
 import { createClient } from "@/utils/supabase/client"
 import { useAtomValue, useSetAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
-import { Sparkles, Menu, User, Settings, LogOut, Coins } from "lucide-react"
+import {
+  Sparkles,
+  Menu,
+  User,
+  Settings,
+  LogOut,
+  Coins,
+  Home,
+  Tag,
+  Mail,
+  LayoutDashboard,
+} from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   DropdownMenu,
@@ -24,6 +34,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog"
 import ThemeToggle from "@/components/ui/theme-toggle"
@@ -34,9 +45,10 @@ interface NavLinkProps {
   children: React.ReactNode
   onClick?: () => void
   mobile?: boolean
+  icon?: LucideIcon
 }
 
-function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
+function NavLink({ href, children, onClick, mobile = false, icon: Icon }: NavLinkProps) {
 
   const pathname = usePathname()
   const isActive = pathname === href
@@ -47,17 +59,21 @@ function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
         href={href}
         onClick={onClick}
         className={cn(
-          "text-lg font-medium transition-all duration-200 relative group",
+          "group flex items-center gap-3 rounded-lg px-2 py-2 text-base font-medium transition-colors duration-200",
           isActive
             ? "text-primary"
             : "text-foreground hover:text-primary"
         )}
       >
-        {children}
-        <span className={cn(
-          "absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-200",
-          isActive ? "w-full" : "w-0 group-hover:w-full"
-        )} />
+        {Icon && (
+          <Icon
+            className={cn(
+              "h-5 w-5 transition-colors duration-200",
+              isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+            )}
+          />
+        )}
+        <span className="leading-tight">{children}</span>
       </Link>
     )
   }
@@ -81,9 +97,39 @@ function NavLink({ href, children, onClick, mobile = false }: NavLinkProps) {
   )
 }
 
+const MOBILE_LINKS: Array<{ href: string; label: string; icon: LucideIcon }> = [
+  {
+    href: "/",
+    label: "Home",
+    icon: Home,
+  },
+  {
+    href: "/pricing",
+    label: "Pricing",
+    icon: Tag,
+  },
+  {
+    href: "/contact",
+    label: "Contact",
+    icon: Mail,
+  },
+]
+
+const AUTH_LINKS: Array<{ href: string; label: string; icon: LucideIcon }> = [
+  {
+    href: "/dashboard/profile",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    href: "/dashboard/settings",
+    label: "Settings",
+    icon: Settings,
+  },
+]
+
 export default function Navbar() {
   const supabase = createClient()
-  const navigation = useRouter();
 
   const { profile } = useAtomValue(authAtom)
   const setAuth = useSetAtom(authAtom)
@@ -229,107 +275,107 @@ export default function Navbar() {
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[300px] sm:w-[350px] flex flex-col"
-              >
-                <SheetHeader className="border-b border-border pb-4">
-                  <SheetTitle className="flex items-center gap-2 text-xl">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                    PortraitWiz
-                  </SheetTitle>
-                </SheetHeader>
+              <SheetContent side="right" className="flex h-full w-[90vw] max-w-[340px] flex-col px-0 sm:max-w-[360px]">
+                <div className="flex h-full flex-col">
+                  <SheetHeader className="px-6 pb-2">
+                    <SheetTitle className="flex items-center gap-2 text-xl">
+                      <Sparkles className="h-5 w-5 text-primary" />
+                      PortraitWiz
+                    </SheetTitle>
+                  </SheetHeader>
 
-                <div className="flex flex-col gap-6 mt-6 flex-1">
-                  {/* Credits Badge - Only if logged in */}
-                  {isLoggedIn && (
-                    <Badge
-                      variant="secondary"
-                      className="bg-primary/10 text-primary hover:bg-primary/15 cursor-pointer w-fit gap-1.5 px-3 py-1.5 transition-colors duration-200"
-                      onClick={handleCreditsClick}
-                    >
-                      <Coins className="w-3.5 h-3.5" />
-                      <span suppressHydrationWarning>{userCredits}</span>
-                    </Badge>
-                  )}
-
-                  {/* Navigation Links */}
-                  <div className="flex flex-col gap-4">
-                    <NavLink href="/" onClick={() => setMobileMenuOpen(false)} mobile>
-                      Home
-                    </NavLink>
-                    <NavLink href="/pricing" onClick={() => setMobileMenuOpen(false)} mobile>
-                      Pricing
-                    </NavLink>
-                    <NavLink href="/contact" onClick={() => setMobileMenuOpen(false)} mobile>
-                      Contact
-                    </NavLink>
-                  </div>
-
-                  <div className="border-t border-border pt-6">
-                    <ThemeToggle
-                      className="w-full"
-                      menuAlign="start"
-                      label="Theme"
-                    />
-                  </div>
-
-                  {/* User Section */}
-                  <div className="border-t border-border pt-6 mt-auto">
+                  <div className="flex-1 overflow-y-auto px-6 py-4">
                     {isLoggedIn ? (
-                      <div className="flex flex-col gap-3">
-                        <div className="text-sm text-muted-foreground mb-2">
-                          Signed in as{" "}
-                          <span className="font-semibold text-foreground">
-                            {username}
-                          </span>
-                        </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium text-foreground">{username}</span>
+                        <button
+                          type="button"
+                          onClick={handleCreditsClick}
+                          className="flex items-center gap-1 text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                        >
+                          <Coins className="h-4 w-4" />
+                          <span suppressHydrationWarning>{userCredits}</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <SheetClose asChild>
                         <Link
-                          href="/dashboard/profile"
+                          href="/enter"
                           onClick={() => setMobileMenuOpen(false)}
                           className={cn(
-                            buttonVariants({ variant: "outline" }),
-                            "justify-start gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
+                            buttonVariants({ size: "sm" }),
+                            "w-full justify-center bg-primary text-primary-foreground"
                           )}
                         >
-                          <User className="w-4 h-4" />
-                          Profile
+                          Get Started
                         </Link>
-                        <Link
-                          href="/dashboard/settings"
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={cn(
-                            buttonVariants({ variant: "outline" }),
-                            "justify-start gap-2 hover:bg-primary/5 hover:border-primary/20 transition-all duration-200"
-                          )}
-                        >
-                          <Settings className="w-4 h-4" />
-                          Settings
-                        </Link>
+                      </SheetClose>
+                    )}
+
+                    <nav className="mt-6 space-y-1">
+                      {MOBILE_LINKS.map((link) => (
+                        <SheetClose asChild key={link.href}>
+                          <NavLink
+                            href={link.href}
+                            mobile
+                            icon={link.icon}
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {link.label}
+                          </NavLink>
+                        </SheetClose>
+                      ))}
+                      {isLoggedIn &&
+                        AUTH_LINKS.map((link) => (
+                          <SheetClose asChild key={link.href}>
+                            <NavLink
+                              href={link.href}
+                              mobile
+                              icon={link.icon}
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {link.label}
+                            </NavLink>
+                          </SheetClose>
+                        ))}
+                    </nav>
+                  </div>
+
+                  <div className="px-6 pb-6">
+                    <div className="flex flex-col gap-3">
+                      <ThemeToggle
+                        className="w-full justify-between border-0 bg-transparent px-2 hover:bg-muted/30"
+                        menuAlign="start"
+                        label="Theme"
+                      />
+                      {isLoggedIn ? (
                         <Button
-                          variant="destructive"
+                          variant="ghost"
                           onClick={() => {
                             handleSignOut()
                             setMobileMenuOpen(false)
                           }}
-                          className="justify-start gap-2 hover:scale-[0.98] transition-transform duration-200"
+                          className="justify-start gap-2 px-2 text-sm font-medium hover:bg-muted/30"
                         >
-                          <LogOut className="w-4 h-4" />
+                          <LogOut className="h-4 w-4" />
                           Logout
                         </Button>
-                      </div>
-                    ) : (
-                      <Link
-                        href="/enter"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={cn(
-                          buttonVariants(),
-                          "w-full justify-center hover:scale-[0.98] transition-transform duration-200"
-                        )}
-                      >
-                        Get Started
-                      </Link>
-                    )}
+                      ) : (
+                        <SheetClose asChild>
+                          <Link
+                            href="/pricing"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={cn(
+                              buttonVariants({ variant: "ghost", size: "sm" }),
+                              "w-full justify-start gap-2 px-2 text-sm font-medium hover:bg-muted/30"
+                            )}
+                          >
+                            <Tag className="h-4 w-4" />
+                            View Pricing
+                          </Link>
+                        </SheetClose>
+                      )}
+                    </div>
                   </div>
                 </div>
               </SheetContent>
