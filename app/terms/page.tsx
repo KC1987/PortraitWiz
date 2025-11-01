@@ -427,8 +427,8 @@ export default function TermsPage() {
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
               <li><strong>Customer Support:</strong> support@portraitwiz.com</li>
-              <li><strong>Data Protection:</strong> privacy@portraitwiz.com</li>
-              <li><strong>Legal Inquiries:</strong> legal@portraitwiz.com</li>
+              <li><strong>Data Protection:</strong> support@portraitwiz.com</li>
+              <li><strong>Legal Inquiries:</strong> support@portraitwiz.com</li>
             </ul>
 
             <p className="leading-7 [&:not(:first-child)]:mt-6">

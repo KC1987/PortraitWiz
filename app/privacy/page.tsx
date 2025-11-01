@@ -434,9 +434,9 @@ export default function PrivacyPage() {
               For privacy questions, data subject rights requests, or security concerns, please contact us:
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
-              <li><strong>General Privacy Inquiries:</strong> privacy@portraitwiz.com</li>
-              <li><strong>Data Subject Rights:</strong> privacy@portraitwiz.com</li>
-              <li><strong>Security Concerns:</strong> security@portraitwiz.com</li>
+              <li><strong>General Privacy Inquiries:</strong> support@portraitwiz.com</li>
+              <li><strong>Data Subject Rights:</strong> support@portraitwiz.com</li>
+              <li><strong>Security Concerns:</strong> support@portraitwiz.com</li>
             </ul>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               <strong>Response time:</strong> Within 1 month for data subject rights requests, within 5 business days for general inquiries.

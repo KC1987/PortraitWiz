@@ -9,7 +9,6 @@ import { createClient } from "@/utils/supabase/client"
 import { useAtomValue, useSetAtom } from "jotai"
 import { authAtom } from "@/lib/atoms"
 import {
-  Sparkles,
   Menu,
   User,
   Settings,
@@ -39,6 +38,7 @@ import {
 } from "@/components/ui/sheet"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog"
 import ThemeToggle from "@/components/ui/theme-toggle"
+import Logo from "@/components/ui/logo"
 
 // NavLink component with active state
 interface NavLinkProps {
@@ -169,16 +169,15 @@ export default function Navbar() {
           <Link
             href="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
+            aria-label="PortraitWiz home"
           >
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-lg font-semibold text-foreground">
-              PortraitWiz
-            </span>
+            <Logo priority />
+            <span className="text-lg font-semibold text-foreground">PortraitWiz</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center gap-8 md:flex">
-            <div className="flex items-center gap-6">
+          {/*<div className="hidden items-center gap-8 md:flex">*/}
+            <div className="flex items-center gap-6 md:block max-sm:hidden">
               <NavLink href="/">Home</NavLink>
               <NavLink href="/pricing">Pricing</NavLink>
               <NavLink href="/contact">Contact</NavLink>
@@ -247,7 +246,7 @@ export default function Navbar() {
                 </Link>
               </div>
             )}
-          </div>
+          {/*</div>*/}
 
           {/* Mobile Menu */}
           <div className="md:hidden">
@@ -265,8 +264,8 @@ export default function Navbar() {
                 <div className="flex h-full flex-col">
                   <SheetHeader className="px-6 pb-2">
                     <SheetTitle className="flex items-center gap-2 text-xl">
-                      <Sparkles className="h-5 w-5 text-primary" />
-                      PortraitWiz
+                      <Logo className="h-6 w-auto" />
+                      <span className="font-semibold text-foreground">PortraitWiz</span>
                     </SheetTitle>
                   </SheetHeader>
 

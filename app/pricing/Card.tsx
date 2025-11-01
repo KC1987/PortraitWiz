@@ -8,7 +8,7 @@ import { purchaseCredits } from "@/app/api/calls/buy-credits"
 import { useAtomValue } from "jotai"
 import { authAtom } from "@/lib/atoms"
 import { CheckCircle2, Sparkles } from "lucide-react"
-import { formatPrice, pricePerCredit, type PricingPackage } from "@/lib/pricing-data"
+import { formatPrice, type PricingPackage } from "@/lib/pricing-data"
 import { cn } from "@/lib/utils"
 import SignInRequiredDialog from "@/components/main/image-gen/sign-in-required-dialog"
 
@@ -66,19 +66,11 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
         <CardTitle className={cn("text-xl font-semibold", variant === "compact" && "text-lg")}>
           {pkg.name}
         </CardTitle>
-        {/*<div className={cn("mt-3", variant === "compact" && "mt-2")}>*/}
-        {/*  <div className={cn("text-3xl font-bold", variant === "compact" && "text-2xl")}>*/}
-        {/*    {formatPrice(pkg.price)}*/}
-        {/*  </div>*/}
-        {/*  <div*/}
-        {/*    className={cn(*/}
-        {/*      "text-xs text-muted-foreground mt-0.5",*/}
-        {/*      variant === "compact" && "mt-0 text-[11px]"*/}
-        {/*    )}*/}
-        {/*  >*/}
-        {/*    {pricePerCredit(pkg.price, pkg.credits)} per credit*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+        <div className={cn("mt-3", variant === "compact" && "mt-2")}>
+          <div className={cn("text-3xl font-bold text-foreground", variant === "compact" && "text-2xl")}>
+            {formatPrice(pkg.price)}
+          </div>
+        </div>
         <CardDescription
           className={cn("text-sm font-medium mt-2", variant === "compact" && "text-xs mt-1")}
         >

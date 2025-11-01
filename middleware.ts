@@ -1,8 +1,21 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const BLOCKED_COUNTRIES = new Set(["RU", "PK", "IN", "KP"]);
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  const mockedCountry = process.env.MOCK_GEO_COUNTRY?.trim().toUpperCase();
+  const detectedCountry = request.geo?.country?.toUpperCase();
+  const country = mockedCountry || detectedCountry;
+
+  if (country && BLOCKED_COUNTRIES.has(country)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/not-found";
+    url.search = "";
+    return NextResponse.rewrite(url, { status: 404 });
+  }
 
   // Create response
   let supabaseResponse = NextResponse.next({

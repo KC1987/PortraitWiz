@@ -58,12 +58,13 @@ export default function Home() {
       <main>
         <section
           id="generator"
-          className="border-b border-border"
+          // className="border-b border-border"
         >
-          <div className="container mx-auto px-4">
-            {/*<div className="rounded-3xl border border-primary/10 bg-background p-4 shadow-xl sm:p-6 lg:p-8">*/}
+          {/*<div className="container mx-auto px-4">*/}
+            <div className="flex justify-center items-center py-5 " >
+              <h1 className="text-xl font-bold text-center">Generate professional looking portraits in 30 seconds</h1>
+            </div>
               <ImageGen />
-            {/*</div>*/}
             <BeforeAfterCarousel />
             <div className="space-y-8 lg:space-y-10">
               <header className="space-y-6 text-center lg:text-left">
@@ -90,7 +91,7 @@ export default function Home() {
                 </p>
               </header>
             </div>
-          </div>
+          {/*</div>*/}
         </section>
 
         <section className="border-b border-border">
@@ -253,7 +254,7 @@ export default function Home() {
               Ready to get started?
             </h2>
             <p className="text-sm text-muted-foreground">
-              Create professional headshots in minutes.
+              Create professional headshots in Seconds.
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 sm:flex-row">

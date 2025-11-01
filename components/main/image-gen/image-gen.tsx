@@ -2,13 +2,13 @@
 
 import { useState, useRef, DragEvent, ChangeEvent, MouseEvent, KeyboardEvent as ReactKeyboardEvent } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useAtom } from "jotai"
 import { Upload, X, Download, ImageIcon, Loader2, AlertCircle } from "lucide-react"
 import imageCompression from "browser-image-compression"
 
 import { authAtom } from "@/lib/atoms"
 import { cn } from "@/lib/utils"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -354,17 +354,14 @@ export default function ImageGen() {
   }
 
   return (
-    <section className="w-full max-w-6xl mx-auto overflow-x-hidden px-3 sm:px-6 lg:px-8 py-8 lg:py-12">
-      <div className="grid gap-6 lg:grid-cols-2 xl:gap-8">
+    <section className="w-full max-w-5xl mx-auto overflow-x-hidden px-3 sm:px-5 lg:px-6">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-8">
         {/* Input Section */}
-        <Card className="overflow-hidden border border-border">
-          <CardHeader className="space-y-1 border-b border-border bg-muted px-4 py-5 md:px-6">
-            <CardTitle className="text-lg md:text-xl">Create Image</CardTitle>
-            {/*<CardDescription>*/}
-            {/*  Upload an image to edit or generate from text*/}
-            {/*</CardDescription>*/}
-          </CardHeader>
-          <CardContent className="space-y-6 px-4 py-4 md:px-6">
+        <div className="min-w-0 rounded-2xl bg-background/90 p-4 shadow-sm ring-1 ring-border/50 backdrop-blur lg:p-6">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-lg font-semibold text-foreground sm:text-xl">Create Image</h2>
+          </div>
+          <div className="space-y-6">
             {/* Drag & Drop Zone */}
             <div>
               {/*<label className="text-sm font-medium mb-2 block">*/}
@@ -375,20 +372,21 @@ export default function ImageGen() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={handleGallerySelect}
-                onKeyDown={handleDropzoneKeyDown}
-                role="button"
-                tabIndex={0}
+                onClick={auth?.user ? handleGallerySelect : undefined}
+                onKeyDown={auth?.user ? handleDropzoneKeyDown : undefined}
+                role={auth?.user ? "button" : undefined}
+                tabIndex={auth?.user ? 0 : undefined}
                 aria-label="Upload reference images"
                 className={cn(
-                  "relative flex w-full cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                  "relative flex w-full rounded-xl border border-dashed border-border/50 bg-background/80 text-center transition-colors touch-manipulation",
+                  auth?.user && "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2",
                   uploadedImages.length > 0
                     ? "flex-col items-stretch gap-3 p-4 text-left md:p-5"
                     : "flex-col items-center justify-center gap-3 p-6 md:p-8",
-                  isDragging
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-foreground/20",
-                  uploadedImages.length >= MAX_REFERENCE_IMAGES && "border-border"
+                  isDragging && auth?.user
+                    ? "border-primary/70 bg-primary/10"
+                    : auth?.user && "hover:border-foreground/20",
+                  uploadedImages.length >= MAX_REFERENCE_IMAGES && "border-border/60"
                 )}
               >
                 <input
@@ -408,28 +406,87 @@ export default function ImageGen() {
                   className="hidden"
                 />
 
-                {uploadedImages.length === 0 ? (
-                  <div className="flex flex-col items-center gap-4 py-2 text-center">
+                {!auth?.user ? (
+                  <div className="flex flex-col items-center gap-4 py-4 text-center">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted md:h-14 md:w-14">
                       <Upload className="h-6 w-6 text-muted-foreground md:h-7 md:w-7" />
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-foreground md:text-base">
-                        Choose reference images from your gallery or capture new ones
+                        Sign in to upload reference images
                       </p>
                       <p className="text-xs text-muted-foreground md:text-sm">
-                        PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
+                        Upload photos of yourself to generate personalized portraits
                       </p>
                     </div>
                     <Button
+                      type="button"
                       size="sm"
-                      variant="outline"
-                      className="mt-1"
-                      onClick={handleCameraSelect}
+                      asChild
                     >
-                      Use camera instead
+                      <Link href="/enter">
+                        Sign In to Upload
+                      </Link>
                     </Button>
                   </div>
+                ) : uploadedImages.length === 0 ? (
+                  <>
+                    <div className="hidden flex-col items-center gap-4 py-2 text-center sm:flex">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted md:h-14 md:w-14">
+                        <Upload className="h-6 w-6 text-muted-foreground md:h-7 md:w-7" />
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-foreground md:text-base">
+                          Choose reference images from your gallery or capture new ones
+                        </p>
+                        <p className="text-xs text-muted-foreground md:text-sm">
+                          PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="mt-1"
+                        onClick={handleCameraSelect}
+                      >
+                        Use camera instead
+                      </Button>
+                    </div>
+                    <div className="flex w-full flex-col gap-3 py-2 text-center sm:hidden">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                          <Upload className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <p className="text-sm font-medium text-foreground">
+                          Tap to add reference images or capture new ones
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="w-full"
+                          onClick={handleGallerySelect}
+                        >
+                          Choose from gallery
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="w-full"
+                          onClick={handleCameraSelect}
+                        >
+                          Use camera instead
+                        </Button>
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <div className="flex w-full flex-col gap-3">
                     <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
@@ -457,7 +514,7 @@ export default function ImageGen() {
                       {uploadedImages.map((image, index) => (
                         <div
                           key={index}
-                          className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
+                          className="group relative aspect-square overflow-hidden rounded-lg bg-muted/60 ring-1 ring-border/40"
                         >
                           <Image
                             src={`data:${image.mimeType};base64,${image.base64}`}
@@ -577,29 +634,29 @@ export default function ImageGen() {
                 </>
               )}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Output Section */}
-        <Card ref={outputSectionRef} className="overflow-hidden border border-border">
-          <CardHeader className="space-y-1 border-b border-border bg-muted px-4 py-5 md:px-6">
-            <CardTitle className="text-lg md:text-xl">Generated Image</CardTitle>
-            {/*<CardDescription>*/}
-            {/*  Your AI-generated result will appear here*/}
-            {/*</CardDescription>*/}
-          </CardHeader>
-          <CardContent className="px-4 py-4 md:px-6">
+        <div
+          ref={outputSectionRef}
+          className="min-w-0 rounded-2xl bg-background/90 p-4 shadow-sm ring-1 ring-border/50 backdrop-blur lg:p-6"
+        >
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-foreground sm:text-xl">Generated Image</h2>
+          </div>
+          <div>
             {!generatedImage && !isGenerating ? (
-              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted text-center md:aspect-square">
+              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/60 text-center md:aspect-square">
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-background flex items-center justify-center mb-3">
                   <ImageIcon className="w-6 h-6 md:w-7 md:h-7 text-muted-foreground" />
                 </div>
                 <p className="text-xs md:text-sm text-muted-foreground px-4">
-                  Configure settings and generate
+                  Your generated image will appear here
                 </p>
               </div>
             ) : isGenerating ? (
-              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary bg-primary/5 p-4 text-center md:aspect-square md:p-6">
+              <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-xl border border-dashed border-primary/60 bg-primary/10 p-4 text-center md:aspect-square md:p-6">
                 <Loader2 className="w-10 h-10 md:w-12 md:h-12 text-primary animate-spin mb-3" />
                 <p className="text-sm md:text-base font-medium text-foreground">
                   Creating your portrait...
@@ -610,7 +667,7 @@ export default function ImageGen() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="group relative overflow-hidden rounded-lg border border-border">
+                <div className="group relative overflow-hidden rounded-xl bg-muted/40">
                   <Image
                     src={`data:image/png;base64,${generatedImage}`}
                     alt="Generated result"
@@ -639,9 +696,9 @@ export default function ImageGen() {
                 </Button>
               </div>
             )}
-          </CardContent>
+          </div>
           { generatedImage &&
-            <CardFooter className="flex flex-col gap-2 px-4 py-4 sm:flex-row md:px-6">
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <Button
                 variant="outline"
                 className="h-11 w-full touch-manipulation sm:w-1/2 md:h-12"
@@ -656,9 +713,9 @@ export default function ImageGen() {
                 <Download className="h-4 w-4" />
                 Download
               </Button>
-            </CardFooter>
+            </div>
           }
-        </Card>
+        </div>
       </div>
 
       {/* Insufficient Credits Dialog */}

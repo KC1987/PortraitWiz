@@ -1,15 +1,12 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { settings } from "@/lib/settings"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -40,11 +37,6 @@ export default function SettingSelection({ setting, setSetting }: SettingSelecti
   const [focusedIndex, setFocusedIndex] = useState(-1)
 
   const selectedSetting = settings.find((s) => s.text === setting)
-  const selectedIndex = useMemo(
-    () => settings.findIndex((s) => s.text === setting),
-    [setting]
-  )
-
   const updateScrollState = useCallback(() => {
     const el = scrollContainerRef.current
     if (!el) return
@@ -118,130 +110,111 @@ export default function SettingSelection({ setting, setSetting }: SettingSelecti
 
   return (
     <TooltipProvider delayDuration={300}>
-      <Card className="w-full border-border/70 shadow-sm">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 md:gap-2">
-              <CardTitle className="text-sm md:text-base">Background Setting</CardTitle>
-            </div>
-            {selectedSetting && (
-              <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
-                <Badge variant="outline" className="text-[10px] md:text-xs">
-                  {selectedSetting.category}
-                </Badge>
-                <span className="hidden text-[10px] text-muted-foreground md:text-xs sm:inline-flex">
-                  {selectedIndex + 1} of {settings.length}
-                </span>
-              </div>
+      <div className="rounded-2xl bg-muted/30 p-4 shadow-sm ring-1 ring-border/60 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-sm font-semibold text-foreground sm:text-base">Background Setting</h3>
+          {selectedSetting && (
+            <span className="text-xs font-medium text-muted-foreground sm:text-[13px]">
+              {selectedSetting.category}
+            </span>
+          )}
+        </div>
+        <div className="relative mt-3">
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-y-1 left-0 w-8 bg-gradient-to-r from-muted/40 via-muted/10 to-transparent transition-opacity sm:w-10",
+              showLeftArrow ? "opacity-100" : "opacity-0"
             )}
+          />
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-y-1 right-0 w-8 bg-gradient-to-l from-muted/40 via-muted/10 to-transparent transition-opacity sm:w-10",
+              showRightArrow ? "opacity-100" : "opacity-0"
+            )}
+          />
+
+          {showLeftArrow && (
+            <button
+              type="button"
+              onClick={() => handleScrollBy("left")}
+              className="absolute left-0.5 top-1/2 z-10 flex -translate-y-1/2 rounded-full bg-background/95 p-1 text-muted-foreground shadow-md ring-1 ring-border/50 transition hover:text-foreground active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 sm:left-1 sm:p-1.5"
+              aria-label="Scroll settings left"
+            >
+              <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
+            </button>
+          )}
+
+          {showRightArrow && (
+            <button
+              type="button"
+              onClick={() => handleScrollBy("right")}
+              className="absolute right-0.5 top-1/2 z-10 flex -translate-y-1/2 rounded-full bg-background/95 p-1 text-muted-foreground shadow-md ring-1 ring-border/50 transition hover:text-foreground active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 sm:right-1 sm:p-1.5"
+              aria-label="Scroll settings right"
+            >
+              <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
+            </button>
+          )}
+
+          <div
+            ref={scrollContainerRef}
+            className="flex snap-x gap-2.5 overflow-x-auto pb-1 pt-1 px-1 scroll-smooth sm:gap-3 sm:px-2 sm:-mx-2 w-full"
+          >
+            {settings.map((set, index) => {
+              const isSelected = set.text === setting
+              const gradient =
+                categoryGradients[set.category] ||
+                "bg-gradient-to-br from-muted/50 via-muted/40 to-background/80"
+              const IconComponent =
+                settingCategoryIcons[set.category] || defaultSettingIcon
+              return (
+                <Tooltip key={set.name}>
+                  <TooltipTrigger asChild>
+                    <button
+                      data-setting-option
+                      type="button"
+                      onClick={() => setSetting(set.text)}
+                      onFocus={() => setFocusedIndex(index)}
+                      onBlur={() => setFocusedIndex(-1)}
+                      className={cn(
+                        "group flex w-[100px] min-w-[100px] snap-start flex-col items-center gap-2 rounded-xl bg-background/90 px-2.5 py-3 text-center text-foreground shadow-sm ring-1 ring-border/50 transition-all duration-200 touch-manipulation active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:w-[124px] sm:min-w-[124px] sm:px-3",
+                        isSelected
+                          ? "ring-primary/60 bg-primary/5 text-foreground"
+                          : "hover:ring-primary/40 hover:bg-background",
+                        focusedIndex === index && !isSelected && "ring-primary/40"
+                      )}
+                      aria-label={`Select ${set.label}`}
+                      aria-pressed={isSelected}
+                    >
+                      <div className="flex justify-center">
+                        <SelectionIconToken
+                          icon={IconComponent}
+                          gradientClass={gradient}
+                          isSelected={isSelected}
+                        />
+                      </div>
+                      <span
+                        className={cn(
+                          "text-[11px] font-semibold leading-tight text-foreground/85 transition-colors duration-200 sm:text-xs",
+                          isSelected && "text-foreground"
+                        )}
+                      >
+                        {set.label}
+                      </span>
+                      <span className="text-[9px] font-medium uppercase tracking-[0.08em] text-muted-foreground sm:text-[10px]">
+                        {set.category}
+                      </span>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs hidden sm:block">
+                    <p className="font-semibold">{set.label}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{set.description}</p>
+                  </TooltipContent>
+                </Tooltip>
+              )
+            })}
           </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="relative">
-            <div
-              className={cn(
-                "pointer-events-none absolute inset-y-2 left-0 w-8 bg-gradient-to-r from-background via-background/80 to-transparent transition-opacity hidden sm:block",
-                showLeftArrow ? "opacity-100" : "opacity-0"
-              )}
-            />
-            <div
-              className={cn(
-                "pointer-events-none absolute inset-y-2 right-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent transition-opacity hidden sm:block",
-                showRightArrow ? "opacity-100" : "opacity-0"
-              )}
-            />
-
-            {showLeftArrow && (
-              <button
-                type="button"
-                onClick={() => handleScrollBy("left")}
-                className="absolute left-1 top-1/2 hidden -translate-y-1/2 rounded-full border border-border/60 bg-background/95 p-1 text-muted-foreground shadow-sm transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:flex"
-                aria-label="Scroll settings left"
-              >
-                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              </button>
-            )}
-
-            {showRightArrow && (
-              <button
-                type="button"
-                onClick={() => handleScrollBy("right")}
-                className="absolute right-1 top-1/2 hidden -translate-y-1/2 rounded-full border border-border/60 bg-background/95 p-1 text-muted-foreground shadow-sm transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:flex"
-                aria-label="Scroll settings right"
-              >
-                <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              </button>
-            )}
-
-            <ScrollArea className="w-full rounded-lg">
-              <div
-                ref={scrollContainerRef}
-                className="flex w-max gap-3 overflow-x-auto px-1 pb-2 pt-1 md:gap-3.5 md:px-2 md:pb-3 scroll-smooth"
-              >
-                {settings.map((set, index) => {
-                  const isSelected = set.text === setting
-                  const gradient =
-                    categoryGradients[set.category] ||
-                    "bg-gradient-to-br from-muted/50 via-muted/40 to-background/80"
-                  const IconComponent =
-                    settingCategoryIcons[set.category] || defaultSettingIcon
-                  return (
-                    <Tooltip key={set.name}>
-                      <TooltipTrigger asChild>
-                        <button
-                          data-setting-option
-                          type="button"
-                          onClick={() => setSetting(set.text)}
-                          onFocus={() => setFocusedIndex(index)}
-                          onBlur={() => setFocusedIndex(-1)}
-                          className={cn(
-                            "group flex w-[108px] flex-col gap-2 rounded-xl border border-border/60 bg-background/80 px-3 py-3 text-center transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:-translate-y-[1px] md:w-[118px]",
-                            isSelected
-                              ? "border-primary/70 bg-primary/5 shadow-sm"
-                              : "hover:border-primary/40 hover:shadow-sm",
-                            focusedIndex === index && !isSelected && "ring-2 ring-primary/40 ring-offset-2"
-                          )}
-                          aria-label={`Select ${set.label}`}
-                          aria-pressed={isSelected}
-                        >
-                          <div className="flex justify-center">
-                            <SelectionIconToken
-                              icon={IconComponent}
-                              gradientClass={gradient}
-                              isSelected={isSelected}
-                            />
-                          </div>
-                          <div className="flex flex-col items-center gap-1">
-                            <span
-                              className={cn(
-                                "text-xs font-semibold leading-tight text-foreground/80 transition-colors duration-200",
-                                isSelected && "text-foreground"
-                              )}
-                            >
-                              {set.label}
-                            </span>
-                            <span className="text-[10px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
-                              {set.category}
-                            </span>
-                          </div>
-                          <p className="text-[11px] leading-snug text-muted-foreground transition-colors duration-200 line-clamp-2 md:text-xs">
-                            {set.description}
-                          </p>
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="max-w-xs">
-                        <p className="font-semibold">{set.label}</p>
-                        <p className="mt-1 text-xs text-muted-foreground">{set.description}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )
-                })}
-              </div>
-              <ScrollBar orientation="horizontal" className="mt-1" />
-            </ScrollArea>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </TooltipProvider>
   )
 }

@@ -30,9 +30,9 @@ export default function InsufficientCreditsDialog({
       <DialogContent className="max-w-[92vw] sm:max-w-5xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader className="space-y-0.5 pb-0 sm:pb-1">
           <DialogTitle className="text-lg sm:text-xl">Get More Credits</DialogTitle>
-          <DialogDescription className="text-xs sm:text-sm">
-            You need at least 1 credit to generate an image. Choose a package below.
-          </DialogDescription>
+          {/*<DialogDescription className="text-xs sm:text-sm">*/}
+          {/*  You need at least 1 credit to generate an image. Choose a package below.*/}
+          {/*</DialogDescription>*/}
         </DialogHeader>
 
         {/* Current Balance */}

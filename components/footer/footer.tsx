@@ -1,6 +1,6 @@
-
 import Link from "next/link"
-import { Sparkles } from "lucide-react"
+
+import Logo from "@/components/ui/logo"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -10,12 +10,10 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-foreground">
-              PortraitWiz
-            </span>
-          </div>
+          <Link href="/" className="flex items-center gap-2" aria-label="PortraitWiz home">
+            <Logo className="h-7 w-auto" variant="onDark" />
+            <span className="text-sm font-semibold text-foreground">PortraitWiz</span>
+          </Link>
 
           {/* Navigation Links */}
           <div className="flex flex-wrap items-center justify-center gap-6">

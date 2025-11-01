@@ -279,7 +279,7 @@ export default function EnterPage() {
         options: {
           redirectTo: `${window?.location?.origin}/auth/callback`,
           queryParams: {
-            prompt: "consent",
+            // prompt: "consent",
           },
         },
       })
@@ -328,19 +328,19 @@ export default function EnterPage() {
         <div className="absolute bottom-[-140px] right-[-120px] h-[360px] w-[360px] rounded-full bg-sky-400/15 blur-3xl sm:h-[440px] sm:w-[440px]" />
       </div>
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16 sm:px-6">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 sm:px-6">
         <div className="w-full max-w-xl space-y-10">
-          <div className="space-y-4 text-center">
-            <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-              {heroBadge}
-            </span>
-            <h1 className="text-3xl font-semibold text-foreground sm:text-4xl">
-              {heroHeading}
-            </h1>
-            <p className="text-sm text-muted-foreground sm:text-base">
-              {heroSubheading}
-            </p>
-          </div>
+          {/*<div className="space-y-4 text-center">*/}
+          {/*  <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary">*/}
+          {/*    {heroBadge}*/}
+          {/*  </span>*/}
+          {/*  <h1 className="text-3xl font-semibold text-foreground sm:text-4xl">*/}
+          {/*    {heroHeading}*/}
+          {/*  </h1>*/}
+          {/*  <p className="text-sm text-muted-foreground sm:text-base">*/}
+          {/*    {heroSubheading}*/}
+          {/*  </p>*/}
+          {/*</div>*/}
 
           <Card className="border-border/70 bg-background/85 shadow-xl backdrop-blur-md">
             {hasUsername ? (
@@ -450,30 +450,36 @@ export default function EnterPage() {
               </Form>
             ) : (
               <CardContent className="space-y-8 px-6 pb-8 pt-6 sm:px-8">
-                <div className="space-y-3">
-                  <Button
-                    onClick={handleEnterWithGoogle}
-                    disabled={googleLoading}
-                    variant="outline"
-                    className={cn(
-                      "group relative flex w-full items-center justify-center gap-3 rounded-full border border-slate-200 bg-white px-6 py-3 text-base font-medium text-slate-900 shadow-[0_12px_30px_-18px_rgba(15,23,42,0.9)] transition-all duration-200",
-                      "hover:-translate-y-0.5 hover:shadow-[0_18px_35px_-18px_rgba(15,23,42,0.4)] focus-visible:ring-primary/40 dark:border-slate-500 dark:bg-white/10 dark:text-white dark:shadow-[0_18px_35px_-22px_rgba(148,163,184,0.55)] dark:hover:bg-white/15 dark:hover:border-primary/40 dark:hover:shadow-[0_28px_45px_-20px_rgba(56,189,248,0.45)] dark:focus-visible:ring-primary/50"
-                    )}
-                  >
-                    {googleLoading ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                        Connecting...
-                      </>
-                    ) : (
-                      <>
-                        <span className="flex size-9 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-slate-200 group-hover:ring-primary/30 dark:bg-white/20 dark:ring-white/30 dark:group-hover:ring-primary/60">
-                          <GoogleIcon />
-                        </span>
-                        Enter with Google
-                      </>
-                    )}
-                  </Button>
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-primary/15 bg-white/80 p-4 shadow-[0_18px_45px_-22px_rgba(14,116,144,0.45)] ring-1 ring-primary/10 backdrop-blur-md transition-all duration-200 dark:border-slate-600/40 dark:bg-slate-900/65 dark:ring-primary/25">
+                    <Button
+                      onClick={handleEnterWithGoogle}
+                      disabled={googleLoading}
+                      className={cn(
+                        "group relative flex h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-primary via-blue-500 to-sky-500 px-6 text-base font-semibold text-white shadow-[0_18px_40px_-18px_rgba(14,116,144,0.65)] transition-all duration-200",
+                        "hover:-translate-y-0.5 hover:shadow-[0_22px_55px_-18px_rgba(14,165,233,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed dark:from-sky-500 dark:via-indigo-500 dark:to-blue-500"
+                      )}
+                    >
+                      {googleLoading ? (
+                        <>
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex size-10 items-center justify-center rounded-full bg-white text-slate-900 shadow-sm shadow-sky-900/20 ring-2 ring-white/80 transition-all duration-200 group-hover:scale-105 group-hover:ring-primary/40">
+                            <GoogleIcon />
+                          </span>
+                          <span className="flex flex-col items-start text-left leading-tight">
+                            <span>Continue with Google</span>
+                            <span className="text-xs font-normal text-white/80">
+                              One-tap secure sign-in
+                            </span>
+                          </span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
                   {authError && !emailLoading && (
                     <p className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                       {authError}
