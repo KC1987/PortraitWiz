@@ -357,7 +357,7 @@ export default function ImageGen() {
     <section className="w-full max-w-5xl mx-auto overflow-x-hidden px-3 sm:px-5 lg:px-6">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-8">
         {/* Input Section */}
-        <div className="min-w-0 rounded-2xl bg-background/90 p-4 shadow-sm ring-1 ring-border/50 backdrop-blur lg:p-6">
+        <div className="min-w-0">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-semibold text-foreground sm:text-xl">Create Image</h2>
           </div>
@@ -640,7 +640,7 @@ export default function ImageGen() {
         {/* Output Section */}
         <div
           ref={outputSectionRef}
-          className="min-w-0 rounded-2xl bg-background/90 p-4 shadow-sm ring-1 ring-border/50 backdrop-blur lg:p-6"
+          className="min-w-0"
         >
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-foreground sm:text-xl">Generated Image</h2>

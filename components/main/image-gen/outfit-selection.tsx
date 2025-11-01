@@ -114,8 +114,8 @@ export default function OutfitSelection({ outfit, setOutfit }: OutfitSelectionPr
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="rounded-2xl bg-muted/30 p-4 shadow-sm ring-1 ring-border/60 sm:p-5">
-        <div className="flex items-center justify-between gap-3">
+      <div>
+        <div className="flex items-center justify-between gap-3 mb-3">
           <h3 className="text-sm font-semibold text-foreground sm:text-base">Outfit Style</h3>
           {selectedOutfit && (
             <span className="text-xs font-medium text-muted-foreground sm:text-[13px]">
@@ -126,7 +126,7 @@ export default function OutfitSelection({ outfit, setOutfit }: OutfitSelectionPr
             </span>
           )}
         </div>
-        <div className="relative mt-3">
+        <div className="relative">
           <div
             className={cn(
               "pointer-events-none absolute inset-y-1 left-0 w-8 bg-gradient-to-r from-muted/40 via-muted/10 to-transparent transition-opacity sm:w-10",
