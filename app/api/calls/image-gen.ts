@@ -1,15 +1,8 @@
 import { mapGeminiError } from "@/lib/error-messages";
-import { generateOpenAIImage } from "./openai-image";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = "gemini-2.5-flash-image";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-
-export const IMAGE_PROVIDERS = ["openai", "gemini"] as const;
-export type ImageProvider = (typeof IMAGE_PROVIDERS)[number];
-
-const DEFAULT_PROVIDER =
-  normalizeProvider(process.env.IMAGE_GENERATION_PROVIDER) ?? "openai";
 
 interface ReferenceImage {
   data: string;
@@ -19,9 +12,6 @@ interface ReferenceImage {
 interface GenerateImageParams {
   prompt: string;
   imageBase64Array?: ReferenceImage[];
-  size?: "256x256" | "512x512" | "1024x1024";
-  quality?: "standard" | "high";
-  provider?: ImageProvider;
 }
 
 interface GenerateImageResponse {
@@ -41,7 +31,7 @@ interface GeminiError extends Error {
   isRetryable?: boolean;
 }
 
-export async function generateGeminiImage({
+export async function generateImage({
   prompt,
   imageBase64Array,
 }: GenerateImageParams): Promise<GenerateImageResponse> {
@@ -101,48 +91,4 @@ export async function generateGeminiImage({
   return {
     imageBase64: inline.inlineData.data,
   };
-}
-
-export async function generateImage(
-  params: GenerateImageParams,
-): Promise<GenerateImageResponse> {
-  const provider = resolveProvider(params.provider, params.imageBase64Array);
-
-  if (provider === "gemini") {
-    return generateGeminiImage(params);
-  }
-
-  return generateOpenAIImage({
-    prompt: params.prompt,
-    size: params.size,
-    quality: params.quality,
-    imageBase64Array: params.imageBase64Array?.map((image) => image.data),
-  });
-}
-
-function resolveProvider(
-  requested: ImageProvider | undefined,
-  imageBase64Array: ReferenceImage[] | undefined,
-): ImageProvider {
-  const normalizedRequested = normalizeProvider(requested);
-  const baseProvider = normalizedRequested ?? DEFAULT_PROVIDER;
-
-  if (baseProvider === "openai" && imageBase64Array && imageBase64Array.length) {
-    return "gemini";
-  }
-
-  return baseProvider;
-}
-
-function normalizeProvider(
-  value: string | ImageProvider | undefined,
-): ImageProvider | undefined {
-  if (!value) {
-    return undefined;
-  }
-
-  const lower = value.toString().toLowerCase();
-  return IMAGE_PROVIDERS.find((provider) => provider === lower) as
-    | ImageProvider
-    | undefined;
 }

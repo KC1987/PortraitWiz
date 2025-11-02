@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PortraitWiz is a Next.js 15 AI portrait generation app using Gemini 2.5 Flash Image Preview. It features a credit-based payment system with Stripe for payments and Supabase for authentication and database. The app uses Turbopack for fast development and builds.
+PortraitWiz is a Next.js 15 AI portrait generation app using Google's Gemini 2.5 Flash image generation model exclusively. It features a credit-based payment system with Stripe for payments and Supabase for authentication and database. The app uses Turbopack for fast development and builds.
+
+## Image Generation Engine
+
+The app uses **Google Gemini 2.5 Flash** as the sole image generation provider. This model excels at multi-image reference processing and photorealistic portrait generation.
 
 ## Development Commands
 

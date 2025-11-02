@@ -58,23 +58,26 @@ export default function Home() {
       <main>
         <section
           id="generator"
-          // className="border-b border-border"
+          className="border-b border-border"
         >
-          {/*<div className="container mx-auto px-4">*/}
-            <div className="flex justify-center items-center py-5 " >
-              <h1 className="text-xl font-bold text-center">Generate professional looking portraits in 30 seconds</h1>
+          <div className="container mx-auto px-4 py-12 md:py-16">
+            <div className="flex justify-center items-center mb-10 md:mb-12">
+              <h1 className="text-2xl md:text-3xl font-bold text-center">
+                Generate professional looking portraits in 30 seconds
+              </h1>
             </div>
-              <ImageGen />
-            <BeforeAfterCarousel />
-            <div className="space-y-8 lg:space-y-10">
+
+            <ImageGen />
+
+            <div className="mt-16 md:mt-20">
+              <BeforeAfterCarousel />
+            </div>
+
+            <div className="mt-16 md:mt-24 space-y-8 lg:space-y-10">
               <header className="space-y-6 text-center lg:text-left">
-                {/*<Testimonials />*/}
-                {/*<Badge className="bg-primary/10 text-primary hover:bg-primary/10">*/}
-                {/*  {heroContent.trustSignals.rating}*/}
-                {/*</Badge>*/}
-                <h1 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
+                <h2 className="text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
                   {heroContent.heading}
-                </h1>
+                </h2>
                 <p className="mx-auto max-w-3xl text-lg text-muted-foreground md:text-xl lg:mx-0">
                   {heroContent.subheading}
                 </p>
@@ -91,23 +94,23 @@ export default function Home() {
                 </p>
               </header>
             </div>
-          {/*</div>*/}
+          </div>
         </section>
 
         <section className="border-b border-border">
-          <div className="container mx-auto px-4 py-16 md:py-20">
-            <div className="mx-auto grid max-w-3xl gap-6 text-center">
-              <div className="space-y-3">
+          <div className="container mx-auto px-4 py-20 md:py-24">
+            <div className="mx-auto grid max-w-3xl gap-8 text-center">
+              <div className="space-y-4">
                 <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
                   {socialProofContent.title}
                 </h2>
-                <p className="text-muted-foreground">{socialProofContent.description}</p>
+                <p className="text-lg text-muted-foreground">{socialProofContent.description}</p>
               </div>
-              <blockquote className="mx-auto max-w-2xl rounded-lg border border-border bg-muted p-6 text-left sm:p-8">
+              <blockquote className="mx-auto max-w-2xl rounded-lg border border-border bg-muted p-8 text-left sm:p-10">
                 <p className="text-lg font-medium leading-relaxed text-foreground">
                   {socialProofContent.testimonial.quote}
                 </p>
-                <footer className="mt-4 text-sm font-semibold text-muted-foreground">
+                <footer className="mt-6 text-sm font-semibold text-muted-foreground">
                   {socialProofContent.testimonial.name} ·{" "}
                   {socialProofContent.testimonial.title}
                 </footer>
@@ -117,22 +120,22 @@ export default function Home() {
         </section>
 
         <section className="border-b border-border bg-muted">
-          <div className="container mx-auto max-w-5xl px-4 py-16 md:py-20">
-            <div className="space-y-8 text-center">
+          <div className="container mx-auto max-w-5xl px-4 py-20 md:py-24">
+            <div className="space-y-12 text-center">
               <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
                 {howItWorksContent.title}
               </h2>
-              <ol className="grid gap-6 text-left sm:grid-cols-3">
+              <ol className="grid gap-6 text-left sm:grid-cols-3 md:gap-8">
                 {howItWorksContent.steps.map((step, index) => (
                   <li
                     key={step.title}
-                    className="rounded-lg border border-border bg-background p-6"
+                    className="rounded-lg border border-border bg-background p-8"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold text-lg">
                       {index + 1}
                     </span>
-                    <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
+                    <h3 className="mt-6 text-xl font-semibold">{step.title}</h3>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                   </li>
                 ))}
               </ol>
@@ -141,22 +144,22 @@ export default function Home() {
         </section>
 
         <section className="border-b border-border">
-          <div className="container mx-auto px-4 py-16 md:py-20">
-            <div className="mx-auto max-w-5xl space-y-8">
+          <div className="container mx-auto px-4 py-20 md:py-24">
+            <div className="mx-auto max-w-5xl space-y-12">
               <header className="text-center">
                 <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
                   {featureHighlights.title}
                 </h2>
               </header>
-              <div className="grid gap-6 md:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-3 md:gap-8">
                 {featureHighlights.items.map((item) => (
                   <Card
                     key={item.title}
                     className="border border-border"
                   >
-                    <CardContent className="space-y-4 p-6">
+                    <CardContent className="space-y-4 p-8">
                       <h3 className="text-xl font-semibold text-foreground">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -166,21 +169,21 @@ export default function Home() {
         </section>
 
         <section className="border-b border-border bg-muted">
-          <div className="container mx-auto max-w-5xl px-4 py-16 md:py-20">
-            <div className="grid gap-10 md:grid-cols-5 md:items-center">
-              <div className="space-y-4 md:col-span-3">
+          <div className="container mx-auto max-w-5xl px-4 py-20 md:py-24">
+            <div className="grid gap-12 md:grid-cols-5 md:items-center md:gap-16">
+              <div className="space-y-6 md:col-span-3">
                 <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
                   {pricingPreviewContent.title}
                 </h2>
-                <p className="text-muted-foreground">{pricingPreviewContent.description}</p>
-                <Button size="lg" asChild>
+                <p className="text-lg text-muted-foreground leading-relaxed">{pricingPreviewContent.description}</p>
+                <Button size="lg" asChild className="mt-2">
                   <Link href={pricingPreviewContent.cta.href}>
                     {pricingPreviewContent.cta.label}
                   </Link>
                 </Button>
               </div>
               <Card className="md:col-span-2 border border-border bg-background">
-                <CardContent className="space-y-2 p-6 text-center">
+                <CardContent className="space-y-3 p-8 text-center">
                   <p className="text-sm font-semibold uppercase tracking-wide text-primary">
                     Best Seller
                   </p>
@@ -200,22 +203,22 @@ export default function Home() {
         </section>
 
         <section className="border-b border-border">
-          <div className="container mx-auto max-w-6xl px-4 py-16 md:py-20">
+          <div className="container mx-auto max-w-6xl px-4 py-20 md:py-24">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
                 {useCasesContent.title}
               </h2>
-              <p className="mt-3 text-muted-foreground">{useCasesContent.description}</p>
+              <p className="mt-4 text-lg text-muted-foreground">{useCasesContent.description}</p>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="mt-12 grid gap-6 md:grid-cols-2 md:gap-8">
               {useCasesContent.cases.map((useCase) => (
                 <Card
                   key={useCase.title}
                   className="border border-border"
                 >
-                  <CardContent className="space-y-3 p-6">
+                  <CardContent className="space-y-4 p-8">
                     <h3 className="text-xl font-semibold text-foreground">{useCase.title}</h3>
-                    <p className="text-sm text-muted-foreground">{useCase.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{useCase.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -224,21 +227,21 @@ export default function Home() {
         </section>
 
         <section className="border-b border-border bg-muted">
-          <div className="container mx-auto max-w-5xl px-4 py-16 md:py-20">
-            <div className="space-y-8">
+          <div className="container mx-auto max-w-5xl px-4 py-20 md:py-24">
+            <div className="space-y-12">
               <div className="text-center">
                 <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
                   {faqContent.title}
                 </h2>
               </div>
-              <dl className="space-y-4">
+              <dl className="space-y-6">
                 {faqContent.items.map((faq) => (
                   <div
                     key={faq.question}
-                    className="rounded-lg border border-border bg-background p-6"
+                    className="rounded-lg border border-border bg-background p-8"
                   >
                     <dt className="text-lg font-semibold text-foreground">{faq.question}</dt>
-                    <dd className="mt-3 text-sm text-muted-foreground">{faq.answer}</dd>
+                    <dd className="mt-4 text-sm text-muted-foreground leading-relaxed">{faq.answer}</dd>
                   </div>
                 ))}
               </dl>
@@ -248,12 +251,12 @@ export default function Home() {
       </main>
 
       <footer className="bg-background">
-        <div className="container mx-auto flex flex-col gap-6 px-4 py-16 text-center md:flex-row md:items-center md:justify-between">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-foreground">
+        <div className="container mx-auto flex flex-col gap-8 px-4 py-20 text-center md:flex-row md:items-center md:justify-between md:py-24">
+          <div className="space-y-3">
+            <h2 className="text-2xl font-semibold text-foreground md:text-3xl">
               Ready to get started?
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Create professional headshots in Seconds.
             </p>
           </div>

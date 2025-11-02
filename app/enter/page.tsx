@@ -451,7 +451,7 @@ export default function EnterPage() {
             ) : (
               <CardContent className="space-y-8 px-6 pb-8 pt-6 sm:px-8">
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-primary/15 bg-white/80 p-4 shadow-[0_18px_45px_-22px_rgba(14,116,144,0.45)] ring-1 ring-primary/10 backdrop-blur-md transition-all duration-200 dark:border-slate-600/40 dark:bg-slate-900/65 dark:ring-primary/25">
+                  {/*<div className="rounded-2xl border border-primary/15 bg-white/80 p-4 shadow-[0_18px_45px_-22px_rgba(14,116,144,0.45)] ring-1 ring-primary/10 backdrop-blur-md transition-all duration-200 dark:border-slate-600/40 dark:bg-slate-900/65 dark:ring-primary/25">*/}
                     <Button
                       onClick={handleEnterWithGoogle}
                       disabled={googleLoading}
@@ -479,7 +479,7 @@ export default function EnterPage() {
                         </>
                       )}
                     </Button>
-                  </div>
+                  {/*</div>*/}
                   {authError && !emailLoading && (
                     <p className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                       {authError}

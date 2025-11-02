@@ -11,11 +11,12 @@ export interface PricingPackage {
 export const pricingPackages: PricingPackage[] = [
   {
     id: "package-50",
-    name: "Starter",
+    name: "Essential",
     credits: 50,
     price: 1999,
     features: [
       "50 portrait credits",
+      "Image editing",
       "Instant delivery",
       "Premium backgrounds",
       "HD resolution",
@@ -23,13 +24,14 @@ export const pricingPackages: PricingPackage[] = [
   },
   {
     id: "package-150",
-    name: "Popular",
+    name: "Value",
     credits: 150,
     price: 4499,
     popular: true,
     badge: "Best Value",
     features: [
       "150 portrait credits",
+      "Image editing",
       "Instant delivery",
       "Premium backgrounds",
       "HD resolution",
@@ -43,6 +45,7 @@ export const pricingPackages: PricingPackage[] = [
     price: 6999,
     features: [
       "250 portrait credits",
+      "Image editing",
       "Instant delivery",
       "Premium backgrounds",
       "HD resolution",

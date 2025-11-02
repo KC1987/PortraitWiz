@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  generateImage,
-  IMAGE_PROVIDERS,
-  type ImageProvider,
-} from "../calls/image-gen";
+import { generateImage } from "../calls/image-gen";
 import { createClient } from "@/utils/supabase/server";
 import { mapAuthError, mapCreditsError } from "@/lib/error-messages";
 
@@ -28,9 +24,6 @@ export async function POST(req: Request) {
     const {
       prompt,
       imageBase64Array,
-      provider,
-      size,
-      quality,
     } = await req.json();
 
     if (!prompt) {
@@ -60,47 +53,6 @@ export async function POST(req: Request) {
           );
         }
       }
-    }
-
-    let normalizedProvider: ImageProvider | undefined;
-
-    if (provider !== undefined) {
-      const providerString = provider.toString().toLowerCase();
-      if (IMAGE_PROVIDERS.includes(providerString as ImageProvider)) {
-        normalizedProvider = providerString as ImageProvider;
-      } else {
-        return NextResponse.json(
-          { error: "Invalid provider option supplied" },
-          { status: 400 },
-        );
-      }
-    }
-
-    const sizeOption = typeof size === "string" ? size : undefined;
-    const qualityOption = typeof quality === "string" ? quality : undefined;
-    const allowedSizes = ["256x256", "512x512", "1024x1024"] as const;
-    const allowedQualities = ["standard", "high"] as const;
-
-    if (
-      sizeOption &&
-      !allowedSizes.includes(sizeOption as (typeof allowedSizes)[number])
-    ) {
-      return NextResponse.json(
-        { error: "Invalid size option supplied" },
-        { status: 400 },
-      );
-    }
-
-    if (
-      qualityOption &&
-      !allowedQualities.includes(
-        qualityOption as (typeof allowedQualities)[number],
-      )
-    ) {
-      return NextResponse.json(
-        { error: "Invalid quality option supplied" },
-        { status: 400 },
-      );
     }
 
     const supabase = await createClient();
@@ -150,9 +102,6 @@ export async function POST(req: Request) {
         data: image.data,
         mimeType: image.mimeType ?? "image/jpeg",
       })),
-      provider: normalizedProvider,
-      size: sizeOption as (typeof allowedSizes)[number] | undefined,
-      quality: qualityOption as (typeof allowedQualities)[number] | undefined,
     });
 
 

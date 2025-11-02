@@ -4,8 +4,11 @@ import Image from "next/image";
 
 const SLIDES = [
   "/before-after/ba1.jpg",
+  "/before-after/g1.jpg",
   "/before-after/ba2.jpg",
+  "/before-after/g2.jpg",
   "/before-after/ba3.jpg",
+  "/before-after/g3.jpg",
   "/before-after/ba4.jpg",
 ];
 const MARQUEE_SLIDES = [...SLIDES, ...SLIDES];

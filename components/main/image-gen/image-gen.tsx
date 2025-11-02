@@ -557,7 +557,7 @@ export default function ImageGen() {
               </label>
               <Tabs value={outfitGender} onValueChange={(value) => setOutfitGender(value as "male" | "female")} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 h-10 md:h-11">
-                  <TabsTrigger value="male" className="text-sm md:text-base">Male / General</TabsTrigger>
+                  <TabsTrigger value="male" className="text-sm md:text-base">Male </TabsTrigger>
                   <TabsTrigger value="female" className="text-sm md:text-base">Female</TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -675,7 +675,7 @@ export default function ImageGen() {
                     height={1024}
                     className="h-auto w-full"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-opacity group-hover:bg-black/60 group-hover:opacity-100">
+                  <div className="absolute inset-0 hidden items-center justify-center bg-black/0 opacity-0 transition-opacity group-hover:bg-black/60 group-hover:opacity-100 lg:flex">
                     <Button
                       onClick={downloadImage}
                       size="lg"
@@ -686,14 +686,6 @@ export default function ImageGen() {
                     </Button>
                   </div>
                 </div>
-                <Button
-                  onClick={downloadImage}
-                  variant="outline"
-                  className="w-full gap-2 lg:hidden"
-                >
-                  <Download className="w-4 h-4" />
-                  Download Image
-                </Button>
               </div>
             )}
           </div>

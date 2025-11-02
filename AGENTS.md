@@ -3,7 +3,7 @@
 ## Project Snapshot
 - PortraitWiz is a Next.js 15 / React 19 application that generates AI-powered professional portraits.
 - Users authenticate with Supabase, purchase credits through Stripe, and spend credits to run image generations.
-- Image generation supports OpenAI `gpt-image-1` by default with automatic Gemini 2.5 Flash fallback when reference images are supplied.
+- Image generation uses Google's Gemini 2.5 Flash exclusively, supporting up to 4 reference images for accurate portrait rendering.
 - The UI is built with Tailwind CSS, shadcn/ui components, Lucide icons, and Jotai for lightweight global state.
 
 ## Tech Stack & Key Dependencies
@@ -12,7 +12,7 @@
 - Stripe SDK for checkout sessions and webhooks that increment credits via Postgres RPC.
 - Jotai (`lib/atoms.ts`) to store `{ user, profile, session }` client-side.
 - shadcn/ui primitives, Tailwind CSS v4, sonner toasts, lucide-react icon set, next-themes for dark mode.
-- Optional image providers: OpenAI Images API and Google Gemini 2.5 Flash Image Preview.
+- Google Gemini 2.5 Flash Image Preview for all AI portrait generation.
 
 ## Repository Layout Highlights
 - `app/` route groups: landing (`page.tsx`), pricing, contact, auth, dashboard, API routes (`app/api/**`), legal pages, and Stripe success screen.
@@ -52,24 +52,22 @@
    - Reuse generated images as new references or download the PNG.
 2. The component checks auth/credits, opens the "insufficient credits" dialog if needed, and POSTs to `/api/generate-image`.
 3. `app/api/generate-image/route.ts`:
-   - validates payload, provider overrides, optional size (`256|512|1024`) and quality (`standard|high`),
+   - validates payload and reference images (max 4 images, 1MB each),
    - fetches the authenticated user and credits via Supabase server client,
    - fails with friendly messages from `lib/error-messages.ts` for auth or credit issues,
    - dispatches to `generateImage` helper (`app/api/calls/image-gen.ts`).
-4. `generateImage` selects a provider:
-   - defaults to env `IMAGE_GENERATION_PROVIDER` or `openai`,
-   - forces Gemini when reference images are included, because OpenAI rejects them,
-   - delegates to `generateOpenAIImage` (OpenAI fetch wrapper with extra logging and error mapping) or `generateGeminiImage` (Google REST call using `GEMINI_API_KEY`).
+4. `generateImage` calls Gemini 2.5 Flash:
+   - sends prompt and optional reference images (base64 + mimeType) to Gemini API,
+   - processes all reference images together in a single API call for accurate facial feature extraction,
+   - returns `{ imageBase64 }` on success or throws user-friendly errors.
 5. On success the route calls Supabase `deduct_credits` RPC, returns `{ image_data, credits_data }`, and the client updates the global atom to reflect the new balance.
-6. Dedicated `/api/openai-image` mirrors the same guardrails but only targets OpenAI; it still blocks reference-image payloads.
 
 ## Contact & Support
 - The contact page (`app/contact/page.tsx`) uses react-hook-form with Zod validation and posts to `/api/contact`.
 - `/api/contact/route.ts` re-validates input and stores submissions in the `contact_messages` table (see `utils/supabase/migrations.md` for schema and RLS guidance).
 
 ## API Surface (routes under `app/api`)
-- `POST /api/generate-image` — core generation endpoint with automatic provider selection and credit deduction.
-- `POST /api/openai-image` — OpenAI-only generation variant.
+- `POST /api/generate-image` — core Gemini-powered generation endpoint with credit deduction.
 - `POST /api/checkout` — create Stripe checkout session.
 - `POST /api/webhook` — Stripe webhook; requires `STRIPE_WEBHOOK_SECRET` and service key access to `increment_credits`.
 - `POST /api/contact` — persist contact form submissions.
@@ -85,9 +83,7 @@
 ## Environment Variables
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
-- `OPENAI_API_KEY`
-- `GEMINI_API_KEY` (required for reference image runs and Gemini fallback)
-- Optional: `IMAGE_GENERATION_PROVIDER` to set default provider (`openai` | `gemini`)
+- `GEMINI_API_KEY` (required for all image generation)
 
 ## UI & UX Notes
 - `app/layout.tsx` wraps the app with `AuthProvider`, `ThemeProvider`, navbar/footer, Sonner toaster, and Vercel Speed Insights.

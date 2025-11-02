@@ -25,16 +25,10 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 Create a `.env.local` file with the following variables before using the image generation endpoints:
 
 ```bash
-OPENAI_API_KEY=your_openai_api_key
-# Optional: switch back to Gemini
-# IMAGE_GENERATION_PROVIDER=gemini
-# Optional but required if you rely on Gemini fallbacks (e.g. reference images)
-# GEMINI_API_KEY=your_gemini_api_key
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
-By default `/api/generate-image` uses OpenAI’s `gpt-image-1` model. If reference images are supplied, the request automatically falls back to Gemini (make sure `GEMINI_API_KEY` is configured) because OpenAI does not yet support those inputs.
-
-You can override the provider per request by sending `{"provider":"gemini"}` or `{"provider":"openai"}` in the body, and OpenAI-specific `size`/`quality` options are also supported.
+The `/api/generate-image` endpoint uses Google's Gemini 2.5 Flash exclusively for all portrait generation. This model supports multi-image reference processing (up to 4 images) for accurate facial feature extraction and photorealistic results.
 
 ## Learn More
 

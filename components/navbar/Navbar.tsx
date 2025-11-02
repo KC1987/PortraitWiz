@@ -176,8 +176,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          {/*<div className="hidden items-center gap-8 md:flex">*/}
-            <div className="flex items-center gap-6 md:block max-sm:hidden">
+            <div className="flex items-center gap-2 md:gap-8 max-sm:hidden">
               <NavLink href="/">Home</NavLink>
               <NavLink href="/pricing">Pricing</NavLink>
               <NavLink href="/contact">Contact</NavLink>
@@ -185,7 +184,7 @@ export default function Navbar() {
 
             {isLoggedIn ? (
               // User logged in
-              <div className="flex items-center gap-3 pl-6 border-l border-border">
+              <div className="flex items-center gap-3">
                 <ThemeToggle />
                 <Badge
                   variant="secondary"
@@ -236,7 +235,7 @@ export default function Navbar() {
               </div>
             ) : (
               // User logged out
-              <div className="flex items-center gap-3 pl-6 border-l border-border">
+              <div className="flex items-center gap-3">
                 <ThemeToggle />
                 <Link
                   href="/enter"

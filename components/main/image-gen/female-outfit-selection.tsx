@@ -115,24 +115,6 @@ export default function FemaleOutfitSelection({ outfit, setOutfit }: FemaleOutfi
   return (
     <TooltipProvider delayDuration={300}>
       <div>
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2">
-            <span className="hidden h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary sm:flex">
-              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-            </span>
-            <h3 className="text-sm font-semibold text-foreground sm:text-base">
-              Female Outfit Style
-            </h3>
-          </div>
-          {selectedOutfit && (
-            <span className="text-xs font-medium text-muted-foreground sm:text-[13px]">
-              {selectedOutfit.category}
-              <span className="ml-1 hidden text-muted-foreground/80 sm:inline">
-                · {selectedIndex + 1}/{femaleOutfits.length}
-              </span>
-            </span>
-          )}
-        </div>
         <div className="relative">
           <div
             className={cn(

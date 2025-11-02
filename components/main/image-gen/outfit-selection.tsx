@@ -115,17 +115,6 @@ export default function OutfitSelection({ outfit, setOutfit }: OutfitSelectionPr
   return (
     <TooltipProvider delayDuration={300}>
       <div>
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <h3 className="text-sm font-semibold text-foreground sm:text-base">Outfit Style</h3>
-          {selectedOutfit && (
-            <span className="text-xs font-medium text-muted-foreground sm:text-[13px]">
-              {selectedOutfit.category}
-              <span className="ml-1 hidden text-muted-foreground/80 sm:inline">
-                · {selectedIndex + 1}/{outfits.length}
-              </span>
-            </span>
-          )}
-        </div>
         <div className="relative">
           <div
             className={cn(

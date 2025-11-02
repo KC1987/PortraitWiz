@@ -50,16 +50,16 @@ export const aboutWhy = {
 export const aboutTechnology = {
   title: "How Our AI Portrait Technology Works",
   introduction:
-    "PortraitWiz uses a sophisticated dual-provider system to ensure the highest quality AI-generated professional portraits. Every generation is routed for the best possible result.",
+    "PortraitWiz uses Google's cutting-edge Gemini 2.5 Flash image generation model to create the highest quality AI-generated professional portraits. Every generation delivers studio-quality results.",
   steps: [
     {
-      heading: "1. Intelligent Provider Selection",
+      heading: "1. Advanced AI Image Generation",
       description:
-        "Smart routing determines whether OpenAI or Gemini will deliver the strongest portrait outcome.",
+        "Powered exclusively by Google Gemini 2.5 Flash for superior portrait quality and multi-image analysis.",
       bullets: [
-        "Default generation powered by OpenAI’s gpt-image-1 for speed and consistency",
-        "Automatic Gemini 2.5 Flash fallback when processing multiple reference images",
-        "Adaptive logic tunes prompts and settings based on use case",
+        "State-of-the-art Gemini 2.5 Flash image generation for photorealistic results",
+        "Multi-image reference processing - analyze up to 4 photos simultaneously",
+        "Advanced facial feature extraction and accurate portrait rendering",
       ],
     },
     {
@@ -192,7 +192,7 @@ export const aboutJourney = {
         "Scaled to 50,000+ users across 75+ countries",
         "Maintained 99.9% uptime with zero-downtime deployments",
         "Secured enterprise contracts for teams of 100-500 employees",
-        "Implemented dual-provider redundancy for 100% generation success rates",
+        "Integrated Google Gemini 2.5 Flash for superior portrait quality",
       ],
     },
     {
@@ -303,9 +303,9 @@ export const aboutArchitecture = {
     {
       name: "AI Generation",
       details: [
-        "OpenAI gpt-image-1 as the default generation provider",
-        "Google Gemini 2.5 Flash for reference-heavy generations",
-        "Automatic provider selection with failover safeguards",
+        "Google Gemini 2.5 Flash image generation for all portraits",
+        "Multi-image reference processing with advanced facial feature extraction",
+        "Photorealistic results optimized for professional headshots",
         "Sub-60 second generation benchmarks under normal load",
       ],
     },
@@ -327,7 +327,7 @@ export const aboutFaq = {
     {
       question: "How does AI headshot generation work?",
       answer:
-        "PortraitWiz uses advanced AI models—OpenAI gpt-image-1 and Google Gemini 2.5 Flash—combined with professionally crafted prompts. Upload one to four reference photos, choose backgrounds and outfits, and receive a studio-quality headshot in under 60 seconds.",
+        "PortraitWiz uses Google's advanced Gemini 2.5 Flash image generation model combined with professionally crafted prompts. Upload one to four reference photos, choose backgrounds and outfits, and receive a studio-quality headshot in under 60 seconds. Our AI analyzes all your reference images simultaneously for accurate facial feature extraction.",
     },
     {
       question: "Are my photos safe and private?",
