@@ -11,7 +11,7 @@ interface DashboardLayoutProps {
 
 const navItems = [
   { href: "/dashboard/profile", label: "Profile", icon: User },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard/scenes", label: "Settings", icon: Settings },
 ]
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {

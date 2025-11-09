@@ -119,7 +119,7 @@ const AUTH_LINKS: Array<{ href: string; label: string; icon: LucideIcon }> = [
     icon: LayoutDashboard,
   },
   {
-    href: "/dashboard/settings",
+    href: "/dashboard/scenes",
     label: "Settings",
     icon: Settings,
   },

@@ -69,7 +69,7 @@ export const aboutTechnology = {
       bullets: [
         "Curated lighting presets that replicate key, fill, and rim lighting setups",
         "Professional wardrobe options designed for multiple industries",
-        "Background settings tailored for LinkedIn, company websites, and press kits",
+        "Background scenes tailored for LinkedIn, company websites, and press kits",
         "Camera angle optimization for flattering, natural-looking portraits",
       ],
     },
@@ -122,7 +122,7 @@ export const aboutFeatures = {
       heading: "Intuitive User Experience",
       bullets: [
         "Drag-and-drop reference uploads (up to 4 images)",
-        "Live preview of settings, outfits, and backgrounds",
+        "Live preview of scenes, maleOutfits, and backgrounds",
         "One-click downloads in web-ready formats",
         "Re-generation using previous outputs as references",
         "Transparent credit balance updates in real time",
@@ -327,7 +327,7 @@ export const aboutFaq = {
     {
       question: "How does AI headshot generation work?",
       answer:
-        "PortraitWiz uses Google's advanced Gemini 2.5 Flash image generation model combined with professionally crafted prompts. Upload one to four reference photos, choose backgrounds and outfits, and receive a studio-quality headshot in under 60 seconds. Our AI analyzes all your reference images simultaneously for accurate facial feature extraction.",
+        "PortraitWiz uses Google's advanced Gemini 2.5 Flash image generation model combined with professionally crafted prompts. Upload one to four reference photos, choose backgrounds and maleOutfits, and receive a studio-quality headshot in under 60 seconds. Our AI analyzes all your reference images simultaneously for accurate facial feature extraction.",
     },
     {
       question: "Are my photos safe and private?",
@@ -347,7 +347,7 @@ export const aboutFaq = {
     {
       question: "What if I’m not satisfied with a generated image?",
       answer:
-        "Each render costs one credit, and you can regenerate with different prompts, outfits, or settings until you find the perfect image. Our 4.9/5 satisfaction rating reflects our commitment to helping you achieve the right look.",
+        "Each render costs one credit, and you can regenerate with different prompts, maleOutfits, or scenes until you find the perfect image. Our 4.9/5 satisfaction rating reflects our commitment to helping you achieve the right look.",
     },
     {
       question: "Do you offer refunds?",
@@ -383,7 +383,7 @@ export const aboutAction = {
     "Join 50,000+ professionals who trust PortraitWiz for studio-quality AI headshots. No photoshoot, no scheduling, no expensive photographer—just professional results in under a minute.",
   steps: [
     "Upload one to four reference photos (optional but recommended)",
-    "Customize your background, outfit, and style settings",
+    "Customize your background, outfit, and style scenes",
     "Download your professional AI headshot instantly",
   ],
   primaryCta: { label: "Launch the Generator", href: "/dashboard" },

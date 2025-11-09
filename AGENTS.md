@@ -17,7 +17,7 @@
 ## Repository Layout Highlights
 - `app/` route groups: landing (`page.tsx`), pricing, contact, auth, dashboard, API routes (`app/api/**`), legal pages, and Stripe success screen.
 - `components/`: shared UI (`components/ui/*`), dashboard widgets, navbar/footer, and the main `ImageGen` experience.
-- `lib/`: configuration data (`settings.ts`, `outfits.ts`, `female_outfits.ts`, `pricing-data.ts`), error mappers, atoms, and utilities.
+- `lib/`: configuration data (`scenes.ts`, `maleOutfits.ts`, `femaleOutfits.ts`, `pricing-data.ts`), error mappers, atoms, and utilities.
 - `providers/`: client wrappers for Supabase auth (`AuthProvider`) and theme switching.
 - `utils/supabase/`: client/server/middleware helpers plus `migrations.md` describing required tables, RPC functions, and RLS policies.
 - `public/`: shared SVG/illustration assets; `portrait-prompts.json` documents prompt recipes.
@@ -47,7 +47,7 @@
 ## Image Generation Pipeline
 1. Users interact with `components/main/image-gen/image-gen.tsx`:
    - Drag-and-drop up to four ≤5 MB reference images (converted to base64 strips),
-   - Choose a background `setting` (`lib/settings.ts`) and gender-specific outfit prompt (`lib/outfits.ts`, `lib/female_outfits.ts`),
+   - Choose a background `setting` (`lib/scenes.ts`) and gender-specific outfit prompt (`lib/maleOutfits.ts`, `lib/femaleOutfits.ts`),
    - Add freeform instructions limited to 500 characters,
    - Reuse generated images as new references or download the PNG.
 2. The component checks auth/credits, opens the "insufficient credits" dialog if needed, and POSTs to `/api/generate-image`.
@@ -87,7 +87,7 @@
 
 ## UI & UX Notes
 - `app/layout.tsx` wraps the app with `AuthProvider`, `ThemeProvider`, navbar/footer, Sonner toaster, and Vercel Speed Insights.
-- Navbar shows credits in a badge and exposes a dropdown with profile/settings links; signing out clears `authAtom`.
+- Navbar shows credits in a badge and exposes a dropdown with profile/scenes links; signing out clears `authAtom`.
 - Dashboard currently offers Profile and Settings tabs:
   - `ProfileTab` pulls data from `authAtom` (username, email, credits).
   - `SettingsTab` lets users update `profile.username` via Supabase client (currently does not refresh the global atom after a successful update; consider syncing state for immediate UI feedback).

@@ -15,7 +15,7 @@ export const homepageMetadata = {
 }
 
 export const heroContent = {
-  heading: "AI Professional Headshots in Minutes",
+  heading: "Professional Portraits in Minutes",
   subheading:
     "Transform your photos into studio-quality headshots. No photographer needed.",
   primaryCta: { label: "Start Generating", href: "#generator" },
@@ -142,7 +142,7 @@ export const faqContent = {
     {
       question: "What if I'm not satisfied?",
       answer:
-        "Try generating again with different settings, or contact support for assistance.",
+        "Try generating again with different scenes, or contact support for assistance.",
     },
   ],
 }

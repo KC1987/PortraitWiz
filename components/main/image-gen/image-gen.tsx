@@ -11,12 +11,15 @@ import { authAtom } from "@/lib/atoms"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SettingSelection from "@/components/main/image-gen/setting-selection"
-import OutfitSelection from "@/components/main/image-gen/outfit-selection"
-import FemaleOutfitSelection from "@/components/main/image-gen/female-outfit-selection"
 import InsufficientCreditsDialog from "@/components/InsufficientCreditsDialog";
 import SignInRequiredDialog from "@/components/main/image-gen/sign-in-required-dialog"
+import SceneSelector from "@/components/main/image-gen/scene-selector";
+import IndustrySelector from "@/components/main/image-gen/industry-selector";
+import MaleOutfitSelector from "@/components/main/image-gen/male-outfit-selector";
+import FemaleOutfitSelector from "@/components/main/image-gen/female-outfit-selector";
+import {scenes} from "@/lib/scenes";
+import {maleOutfits} from "@/lib/maleOutfits";
+import {femaleOutfits} from "@/lib/femaleOutfits";
 
 const MAX_REFERENCE_IMAGES = 4
 const MAX_IMAGE_BYTES = 1024 * 1024 // 1MB limit for payload
@@ -63,13 +66,15 @@ export default function ImageGen() {
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [insufficientCreditsDialogOpen, setInsufficientCreditsDialogOpen] = useState<boolean>(false)
   const [signInDialogOpen, setSignInDialogOpen] = useState<boolean>(false)
+  const [industry, setIndustry] = useState("all");
+  const [selectedScene, setSelectedScene] = useState("formal");
 
-  const [setting, setSetting] = useState("Create an ultra-photorealistic professional executive portrait with absolute realism and natural authenticity. LIGHTING: Professional three-point studio setup - key light at 45 degrees (soft, diffused, natural skin rendering), subtle fill light (gentle shadow softening, preserving dimensional form), edge/hair light (natural separation, authentic highlight). SUBJECT: Exact facial features, genuine skin texture with natural pores and subtle imperfections, real hair with individual strand detail, authentic eye reflections and catchlights. Expression: naturally confident with genuine micro-expressions, real eye contact, subtle professional smile with authentic muscle movement. Posture: naturally squared shoulders, organic spine alignment, subtly confident head position. PHOTOGRAPHIC REALISM: Real camera behavior - authentic lens characteristics (85mm equivalent), natural depth of field with realistic bokeh, genuine color science and skin tone accuracy, real-world lighting falloff and ambient occlusion. Authentic fabric texture and clothing wrinkles. Natural environmental interaction - realistic shadows, accurate light bounce, genuine atmospheric perspective. NO artificial smoothing, NO digital painting artifacts, NO uncanny valley effects, NO synthetic perfection. TECHNICAL: 1000x1000px, photographic color grading matching real studio conditions, authentic grain structure, natural contrast ratios, genuine photographic quality indistinguishable from professional camera capture.");
+  const [scene, setScene] = useState(null);
 
-  const [outfit, setOutfit] = useState("Subject wearing impeccably tailored professional business attire - perfectly fitted charcoal or navy suit with crisp white dress shirt, silk tie with subtle pattern, polished leather dress shoes. Photorealistic fabric rendering with visible texture weave in suit material, natural wrinkles at joints, authentic drape and fit. Ensure proportionally accurate tailoring with proper shoulder fit, appropriate sleeve length showing quarter-inch of shirt cuff, and natural trouser break.");
-  const [femaleOutfit, setFemaleOutfit] = useState("Professional headshot framed from shoulders up. Subject wearing impeccably tailored blazer in charcoal, navy, or black over crisp blouse with structured collar or elegant neckline. Natural fabric texture showing authentic weave in suit material, realistic lapel structure, genuine shoulder fit with proper tailoring, visible blouse detail at neckline. Frame includes upper chest to top of head with professional headroom.");
-  const [outfitGender, setOutfitGender] = useState<"male" | "female">("male");
+  // const [maleOutfit, setMaleOutfit] = useState(null);
+  const [selectedOutfit, setSelectedOutfit] = useState("default");
   const [instructions, setInstructions] = useState("");
+
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
@@ -77,6 +82,14 @@ export default function ImageGen() {
   const maxPromptLength = 500
   const isNearPromptLimit = instructions.length >= maxPromptLength * 0.9
 
+
+  const basePrompt = `Professional headshot portrait photograph of a real human being, framed from shoulders up showing upper chest to top of head with appropriate headroom.
+    REALISM & QUALITY:
+    Photorealistic professional portrait of an actual person with authentic natural skin texture showing visible pores and fine details. Sharp professional focus with crystal clear high resolution quality. Realistic human proportions and facial anatomy. Genuine fabric textures with natural material properties and realistic draping.
+    LIGHTING & TECHNICAL:
+    Professional photography lighting creating even illumination with natural dimensional shadows. Accurate natural skin tones and consistent professional color grading. Clean pristine appearance without digital artifacts or defects.
+    STRICTLY FORBIDDEN:
+    No watermarks, logos, text overlays, timestamps, signatures, borders, frames, or decorative elements. No artificial smoothing, beauty filters, or plastic mannequin appearance. No cartoon, anime, illustration, drawing, or painting styles. No blur, pixelation, distortion, or compression artifacts.`;
 
 
   // File to base64
@@ -281,8 +294,12 @@ export default function ImageGen() {
     }, 100)
 
     try {
-      // Use the appropriate outfit based on gender selection
-      const selectedOutfit = outfitGender === "male" ? outfit : femaleOutfit;
+      const sceneDescription = scenes.find(scene => scene.slug === selectedScene)?.prompt;
+
+      const combinedOutfits = maleOutfits.concat(femaleOutfits);
+      const outfitDescription = combinedOutfits.find( outfit => outfit.slug === selectedOutfit)?.prompt;
+
+      // console.log("Scene: ", sceneDescription, "Outfit: ", outfitDescription);
 
       const response = await fetch("/api/generate-image", {
         method: "POST",
@@ -291,7 +308,7 @@ export default function ImageGen() {
         },
         body: JSON.stringify({
           // prompt: setting.concat(" ", instructions),
-          prompt: `${selectedOutfit} ${setting} Special instructions (the following instruction (if any) overrides any previous instructions: ${instructions || 'no special instructions'}`,
+          prompt: `${basePrompt} Scene: ${sceneDescription} Outfit: ${outfitDescription} Special instructions (the following instruction (if any) overrides any previous instructions: ${instructions || 'no special instructions'}`,
           imageBase64Array:
             uploadedImages.length > 0
               ? uploadedImages.map(({ base64, mimeType }) => ({
@@ -361,7 +378,7 @@ export default function ImageGen() {
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-semibold text-foreground sm:text-xl">Create Image</h2>
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Drag & Drop Zone */}
             <div>
               {/*<label className="text-sm font-medium mb-2 block">*/}
@@ -378,8 +395,8 @@ export default function ImageGen() {
                 tabIndex={auth?.user ? 0 : undefined}
                 aria-label="Upload reference images"
                 className={cn(
-                  "relative flex w-full rounded-xl border border-dashed border-border/50 bg-background/80 text-center transition-colors touch-manipulation",
-                  auth?.user && "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2",
+                  "relative flex w-full rounded-md",
+                  auth?.user && "cursor-pointer bg-[#b47005]",
                   uploadedImages.length > 0
                     ? "flex-col items-stretch gap-3 p-4 text-left md:p-5"
                     : "flex-col items-center justify-center gap-3 p-6 md:p-8",
@@ -439,7 +456,7 @@ export default function ImageGen() {
                         <p className="text-sm font-medium text-foreground md:text-base">
                           Choose reference images from your gallery or capture new ones
                         </p>
-                        <p className="text-xs text-muted-foreground md:text-sm">
+                        <p className="text-xs md:text-sm">
                           PNG, JPG, or WEBP · up to {MAX_REFERENCE_IMAGES} images · 10MB max each
                         </p>
                       </div>
@@ -547,28 +564,39 @@ export default function ImageGen() {
               </div>
             </div>
 
-            {/*Setting selection*/}
-            <SettingSelection setting={setting}  setSetting={setSetting} />
+            {/*Scene Selector*/}
+            <IndustrySelector industry={industry} setIndustry={setIndustry} setSelectedScene={setSelectedScene} setSelectedOutfit={setSelectedOutfit} />
+            {/*{ industry && industry }*/}
 
-            {/* Outfit Gender Toggle */}
-            <div>
-              <label className="text-sm md:text-base font-medium mb-2 block">
-                Outfit Style
-              </label>
-              <Tabs value={outfitGender} onValueChange={(value) => setOutfitGender(value as "male" | "female")} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 h-10 md:h-11">
-                  <TabsTrigger value="male" className="text-sm md:text-base">Male </TabsTrigger>
-                  <TabsTrigger value="female" className="text-sm md:text-base">Female</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+            <SceneSelector industry={industry} setScene={setScene} selectedScene={selectedScene} setSelectedScene={setSelectedScene} />
 
-            {/*Outfit Selection - Conditional*/}
-            {outfitGender === "male" ? (
-              <OutfitSelection outfit={outfit} setOutfit={setOutfit} />
-            ) : (
-              <FemaleOutfitSelection outfit={femaleOutfit} setOutfit={setFemaleOutfit} />
-            )}
+            <MaleOutfitSelector industry={industry} selectedOutfit={selectedOutfit} setSelectedOutfit={setSelectedOutfit} />
+
+            <FemaleOutfitSelector industry={industry} selectedOutfit={selectedOutfit} setSelectedOutfit={setSelectedOutfit} />
+
+
+            {/*/!*Setting selection*!/*/}
+            {/*<SettingSelection setting={setting}  setSetting={setSetting} />*/}
+
+            {/*/!* Outfit Gender Toggle *!/*/}
+            {/*<div>*/}
+            {/*  <label className="text-sm md:text-base font-medium mb-2 block">*/}
+            {/*    Outfit Style*/}
+            {/*  </label>*/}
+            {/*  <Tabs value={outfitGender} onValueChange={(value) => setOutfitGender(value as "male" | "female")} className="w-full">*/}
+            {/*    <TabsList className="grid w-full grid-cols-2 h-10 md:h-11">*/}
+            {/*      <TabsTrigger value="male" className="text-sm md:text-base">Male </TabsTrigger>*/}
+            {/*      <TabsTrigger value="female" className="text-sm md:text-base">Female</TabsTrigger>*/}
+            {/*    </TabsList>*/}
+            {/*  </Tabs>*/}
+            {/*</div>*/}
+
+            {/*/!*Outfit Selection - Conditional*!/*/}
+            {/*{outfitGender === "male" ? (*/}
+            {/*  <OutfitSelection outfit={outfit} setOutfit={setOutfit} />*/}
+            {/*) : (*/}
+            {/*  <FemaleOutfitSelection outfit={femaleOutfit} setOutfit={setFemaleOutfit} />*/}
+            {/*)}*/}
 
             {/* Instructions Input */}
             <div>

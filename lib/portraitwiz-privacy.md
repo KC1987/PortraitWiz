@@ -118,7 +118,7 @@ We collect different types of personal data depending on how you interact with o
 - Number of portraits generated
 - Credits consumed and remaining balance
 - Generation timestamps
-- Portrait generation settings and preferences
+- Portrait generation scenes and preferences
 - Feature usage statistics
 - Subscription status and renewal dates
 - Account activity logs
@@ -131,7 +131,7 @@ We collect different types of personal data depending on how you interact with o
 
 **What we collect:**
 - AI-generated portrait images created for you
-- Metadata about generation (date, settings, model version)
+- Metadata about generation (date, scenes, model version)
 - Storage preferences you set
 
 **How we collect it:** Created by our AI system based on your uploaded photos.
@@ -173,7 +173,7 @@ We collect different types of personal data depending on how you interact with o
 **Essential Cookies:**
 - Session authentication cookies (keep you logged in)
 - Security cookies (prevent fraud and protect your account)
-- Preference cookies (remember your settings)
+- Preference cookies (remember your scenes)
 
 **Analytics Cookies (if you consent):**
 - Usage statistics and performance monitoring
@@ -184,7 +184,7 @@ We collect different types of personal data depending on how you interact with o
 - Stripe cookies for payment processing
 - Google OAuth cookies for authentication
 
-**Your control:** You can control cookies through your browser settings. However, blocking essential cookies may prevent the Service from functioning properly.
+**Your control:** You can control cookies through your browser scenes. However, blocking essential cookies may prevent the Service from functioning properly.
 
 **Legal basis:** Essential cookies are based on legitimate interests in providing the Service. Analytics cookies require your consent.
 
@@ -194,7 +194,7 @@ We use your personal data only for specified, explicit, and legitimate purposes.
 
 ### 4.1 To Provide the Service (Performance of Contract)
 
-- **Create and manage your account:** Authentication, login, account settings
+- **Create and manage your account:** Authentication, login, account scenes
 - **Process portrait generation:** Analyze your uploaded photos using AI to create portraits
 - **Deliver generated portraits:** Store and provide access to your generated images
 - **Manage subscriptions:** Process payments, allocate credits, handle renewals
@@ -289,7 +289,7 @@ When you close your account or your subscription ends:
 **Deleted within 30 days:**
 - Account credentials and authentication data
 - Any remaining generated portraits not previously downloaded
-- Personal preferences and settings
+- Personal preferences and scenes
 - Unused credits
 
 **Retained for legal/accounting periods:**
@@ -632,7 +632,7 @@ As a data subject under GDPR, you have extensive rights regarding your personal 
 - Correction of processing records
 
 **How to exercise:**
-- Update information directly in your account settings (most common)
+- Update information directly in your account scenes (most common)
 - Email [privacy email] for data you cannot update yourself
 - We will make corrections within 1 month
 
@@ -669,7 +669,7 @@ As a data subject under GDPR, you have extensive rights regarding your personal 
 - Data needed for legal defense
 
 **How to exercise:**
-- Click "Delete Account" in account settings for complete deletion
+- Click "Delete Account" in account scenes for complete deletion
 - Email [privacy email] for selective deletion
 - We will complete deletion within 1 month
 
@@ -710,7 +710,7 @@ As a data subject under GDPR, you have extensive rights regarding your personal 
 If technically feasible, we can transmit your data directly to another service provider at your request.
 
 **How to exercise:**
-- Use "Export Data" feature in account settings
+- Use "Export Data" feature in account scenes
 - Email [privacy email] for direct transmission to another provider
 - We will provide export within 1 month
 
@@ -768,11 +768,11 @@ If technically feasible, we can transmit your data directly to another service p
 
 **Marketing Communications:**
 - Click "Unsubscribe" in any marketing email
-- Update preferences in account settings
+- Update preferences in account scenes
 
 **Cookies:**
-- Adjust cookie preferences in settings
-- Use browser settings to block cookies
+- Adjust cookie preferences in scenes
+- Use browser scenes to block cookies
 
 ### 10.9 Right to Lodge a Complaint
 
@@ -795,7 +795,7 @@ You may also lodge a complaint with the supervisory authority of your EU country
 
 **Self-Service (fastest):**
 - Log into your account
-- Visit "Privacy & Data" settings
+- Visit "Privacy & Data" scenes
 - Use available tools: export data, delete account, update information
 
 **Email Request:**
@@ -896,7 +896,7 @@ Cookies are small text files stored on your device when you visit websites. They
 **Cookies:**
 - `session_token` - Authentication (expires: session)
 - `csrf_token` - Security (expires: session)
-- `preferences` - User settings (expires: 1 year)
+- `preferences` - User scenes (expires: 1 year)
 
 #### Performance and Analytics Cookies
 
@@ -920,7 +920,7 @@ Cookies are small text files stored on your device when you visit websites. They
 **Purpose:** Remember choices you make to provide enhanced features
 **Examples:**
 - Language preferences
-- Display settings
+- Display scenes
 - Feature preferences
 
 **Legal basis:** Legitimate interests (may also require consent depending on implementation)

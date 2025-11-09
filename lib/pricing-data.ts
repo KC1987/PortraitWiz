@@ -6,6 +6,8 @@ export interface PricingPackage {
   features: string[];
   popular?: boolean;
   badge?: string;
+  contactOnly?: boolean; // If true, show contact link instead of checkout button
+  contactEmail?: string; // Email for contact-only packages
 }
 
 export const pricingPackages: PricingPackage[] = [
@@ -52,15 +54,21 @@ export const pricingPackages: PricingPackage[] = [
       "Priority support",
     ],
   },
-  // {
-  //   id: "package-test",
-  //   name: "Test",
-  //   credits: 100,
-  //   price: 70,
-  //   features: [
-  //     "TEST PACKAGE"
-  //   ],
-  // },
+  {
+    id: "package-enterprise",
+    name: "Enterprise",
+    credits: 0, // Will display as "Custom"
+    price: 0, // Will display as "Custom Pricing"
+    contactOnly: true,
+    contactEmail: "contact@portraitwiz.com",
+    features: [
+      "Custom credit allocation",
+      "Dedicated support",
+      "Volume discounts",
+      "Invoice billing",
+      "Priority processing",
+    ],
+  },
 ];
 
 /**

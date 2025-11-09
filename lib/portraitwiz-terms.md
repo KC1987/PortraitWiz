@@ -752,7 +752,7 @@ We maintain a policy of terminating accounts of users who repeatedly infringe in
 ### 14.1 Termination by You
 
 You may terminate your account and subscription at any time by:
-- Canceling your subscription through account settings
+- Canceling your subscription through account scenes
 - Emailing [support email] requesting account closure
 
 **Effect of Your Termination:**
@@ -994,7 +994,7 @@ These communications are part of your relationship with us and you cannot opt ou
 
 You may opt out of promotional marketing communications by:
 - Clicking unsubscribe in marketing emails
-- Adjusting preferences in account settings
+- Adjusting preferences in account scenes
 - Emailing [support email] with opt-out request
 
 Opt-out does not affect transactional or legal communications.

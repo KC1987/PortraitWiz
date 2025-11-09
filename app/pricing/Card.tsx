@@ -68,13 +68,13 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
         </CardTitle>
         <div className={cn("mt-3", variant === "compact" && "mt-2")}>
           <div className={cn("text-3xl font-bold text-foreground", variant === "compact" && "text-2xl")}>
-            {formatPrice(pkg.price)}
+            {pkg.contactOnly ? "Custom Pricing" : formatPrice(pkg.price)}
           </div>
         </div>
         <CardDescription
           className={cn("text-sm font-medium mt-2", variant === "compact" && "text-xs mt-1")}
         >
-          {pkg.credits} credits
+          {pkg.contactOnly ? "Custom" : `${pkg.credits} credits`}
         </CardDescription>
       </CardHeader>
 
@@ -102,22 +102,35 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
       </CardContent>
 
       <CardFooter className={cn("flex flex-col gap-2 pt-0", variant === "compact" && "gap-1.5")}>
-        <Button
-          onClick={handlePurchaseCredits}
-          className={cn("w-full", variant === "compact" && "h-9 text-sm")}
-          size={variant === "compact" ? "sm" : "default"}
-          variant={pkg.popular ? "default" : "outline"}
-          disabled={isLoading}
-        >
-          {isLoading ? "Processing..." : "Get Started"}
-        </Button>
+        {pkg.contactOnly ? (
+          <Button
+            asChild
+            className={cn("w-full", variant === "compact" && "h-9 text-sm")}
+            size={variant === "compact" ? "sm" : "default"}
+            variant="outline"
+          >
+            <a href={`mailto:${pkg.contactEmail || "contact@portraitwiz.com"}`}>
+              Get in Touch
+            </a>
+          </Button>
+        ) : (
+          <Button
+            onClick={handlePurchaseCredits}
+            className={cn("w-full", variant === "compact" && "h-9 text-sm")}
+            size={variant === "compact" ? "sm" : "default"}
+            variant={pkg.popular ? "default" : "outline"}
+            disabled={isLoading}
+          >
+            {isLoading ? "Processing..." : "Get Started"}
+          </Button>
+        )}
         <p
           className={cn(
             "text-[10px] text-center text-muted-foreground",
             variant === "compact" && "leading-tight"
           )}
         >
-          100% Money-Back Guarantee
+          {pkg.contactOnly ? "Custom solutions for your business" : "100% Money-Back Guarantee"}
         </p>
       </CardFooter>
       </Card>

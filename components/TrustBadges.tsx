@@ -48,7 +48,7 @@ export default function TrustBadges({ size = "default", className }: TrustBadges
         <div
           key={badge.src}
           className={cn(
-            "flex items-center justify-center rounded-xl bg-background/70 shadow-sm backdrop-blur",
+            "flex items-center justify-center",
             badgeSizing
           )}
         >

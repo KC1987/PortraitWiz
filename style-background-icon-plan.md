@@ -1,7 +1,7 @@
 # Style & Background Icon Design Plan
 
 ## Objectives
-- Give users a quick, delightful read on outfit styles and background settings without relying on raster previews.
+- Give users a quick, delightful read on outfit styles and background scenes without relying on raster previews.
 - Keep the iconography inclusive, non-gendered, and crisp at 28-36 px so tokens feel compact in the carousel.
 - Ensure each icon family communicates hierarchy (category -> variant) so the controls feel cohesive inside the existing card UI while reducing perceived blank space.
 
@@ -45,7 +45,7 @@
 - Keep gradients in CSS (`background: radial-gradient(...)`) so theme switching can adjust hues dynamically.
 - Export glyphs as inline SVG React components for full theming (stroke and fill via `currentColor` & CSS variables).
 - Provide focus ring alignment by wrapping icon + label in `flex-col` container; collapse top margin to 2 px and set `gap-1` so icons sit closer to captions and eliminate excess blank bands inside the cards.
-- Update data models (`lib/outfits.ts`, `lib/female_outfits.ts`, `lib/settings.ts`) with `icon` identifiers instead of `thumbnail` paths to drive glyph selection.
+- Update data models (`lib/maleOutfits.ts`, `lib/femaleOutfits.ts`, `lib/scenes.ts`) with `icon` identifiers instead of `thumbnail` paths to drive glyph selection.
 - Document icon usage and tokens in Storybook/MDX so designers and engineers can test states before wiring into generation flow.
 
 ## Implementation Checklist

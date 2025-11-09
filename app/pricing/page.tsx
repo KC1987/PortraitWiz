@@ -64,8 +64,8 @@ export default function PricingPage() {
         </section>
 
         <section className="border-b border-primary/10 bg-background">
-          <div className="container mx-auto max-w-5xl px-4 py-16 md:py-20">
-            <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3 lg:gap-8">
+          <div className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
+            <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
               {pricingPackages.map((pkg) => (
                 <div key={pkg.id} id={pkg.id} className="flex justify-center">
                   <PricingCard package={pkg} />

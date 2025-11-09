@@ -60,7 +60,7 @@ export const pricingFAQs = [
   {
     question: "What if the portrait doesn’t match my expectations?",
     answer:
-      "Regenerate with different outfits or backgrounds at no extra charge. For persistent issues, our team will review credits within seven days.",
+      "Regenerate with different maleOutfits or backgrounds at no extra charge. For persistent issues, our team will review credits within seven days.",
   },
 ]
 

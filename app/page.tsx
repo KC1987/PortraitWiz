@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import ImageGen from "@/components/main/image-gen/image-gen"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -16,9 +15,10 @@ import {
   socialProofContent,
   useCasesContent,
 } from "@/lib/copy/homepage"
+
 import { getSiteUrl } from "@/lib/seo"
+
 import BeforeAfterCarousel from "@/components/main/BeforeAfterCarousel";
-import Testimonials from "@/components/main/Testimonials";
 
 const siteUrl = getSiteUrl()
 
@@ -63,7 +63,7 @@ export default function Home() {
           <div className="container mx-auto px-4 py-12 md:py-16">
             <div className="flex justify-center items-center mb-10 md:mb-12">
               <h1 className="text-2xl md:text-3xl font-bold text-center">
-                Generate professional looking portraits in 30 seconds
+                Generate studio grade portraits instantly
               </h1>
             </div>
 

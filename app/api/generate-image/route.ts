@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { generateImage } from "../calls/image-gen";
 import { createClient } from "@/utils/supabase/server";
 import { mapAuthError, mapCreditsError } from "@/lib/error-messages";
+import { decode } from 'base64-arraybuffer';
+import { v4 as uuid } from "uuid";
 
 interface GeminiError extends Error {
   suggestion?: string;
@@ -105,13 +107,39 @@ export async function POST(req: Request) {
     });
 
 
-    // Deduct credits, return image and new credits amount
+    // Deduct credits, store, return image and new credits amount
     if (image_data) {
+      // Deduct credits
       const { data: credits_data, error: credits_error } = await supabase.rpc("deduct_credits", { user_id: user.id, amount: "1" });
 
       if (credits_error) {
         console.error(credits_error);
       }
+
+      // Clean base64 string (remove data URL prefix if present)
+      const base64Clean = image_data.imageBase64.replace(/^data:image\/\w+;base64,/, '');
+
+      // Generate meaningful filename with timestamp + uuid
+      const filename = `generated_${Date.now()}_${uuid()}.png`;
+      const filePath = `${user.id}/${filename}`;
+
+      const { data: storage_data, error: storage_error } = await supabase.storage
+        .from("user-images")
+        .upload(filePath, decode(base64Clean), {
+          contentType: 'image/png',
+          cacheControl: '3600',
+          upsert: false // Prevent accidental overwrites
+        });
+
+      if (storage_error) {
+        console.error('Storage upload failed:', storage_error);
+        return Response.json(
+          { error: 'Failed to store image', details: storage_error.message },
+          { status: 500 }
+        );
+      }
+
+      storage_data && console.log("Storage response: ", storage_data);
 
       return NextResponse.json({ image_data, credits_data });
     }
