@@ -17,13 +17,13 @@ export default function SceneSelectorCard({ scene, setScene, setSelectedScene, s
         setSelectedScene(scene.slug);
       } }
     >
-      <div className="overflow-hidden">
+      <div className="relative overflow-hidden w-[100px] h-[150px] bg-muted/30">
         <Image
           src={scene.thumbnail}
           alt={scene.description}
-          className="aspect-[3/4] h-fit w-fit object-cover"
-          width={100}
-          height={150}
+          className="object-cover object-center"
+          fill
+          sizes="100px"
         />
       </div>
       <figcaption className="flex justify-center text-muted-foreground p-2 text-xs">

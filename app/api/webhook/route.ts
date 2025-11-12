@@ -42,13 +42,6 @@ export async function POST(req: Request) {
       // Get session details
       const {id, customer_email, metadata} = session;
 
-      // TODO: Add credits to user in your database
-      // Example:
-      // await db.users.update({
-      //   where: { email: customer_email },
-      //   data: { credits: { increment: metadata.credits } }
-      // });
-
       console.log('Payment successful:', {
         sessionId: id,
         userId: metadata?.userId,
@@ -60,6 +53,8 @@ export async function POST(req: Request) {
       // Here you would update your database
       // await allocateTokensToUser(customer_email, metadata.credits);
 
+
+      // Add credits to user account
       const supabase = await createClient();
       const { error: rpcError } = await supabase.rpc('increment_credits', {
         user_id: metadata?.userId,
@@ -69,6 +64,22 @@ export async function POST(req: Request) {
       if (rpcError) {
         console.error('Failed to increment credits:', rpcError);
       }
+
+      // Record payment in users profile
+      const { error: record_error } = await supabase.from("profiles")
+        .update({
+          transactions: [
+            {
+              sessionId: id,
+              packageId: metadata?.packageId,
+              credits: metadata?.credits,
+              timestamp: new Date().toISOString()
+            }
+          ]
+        })
+        .eq("id", metadata?.userId)
+
+      record_error && console.error(record_error);
     }
 
     return NextResponse.json({received: true});

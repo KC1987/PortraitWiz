@@ -12,6 +12,15 @@ export interface PricingPackage {
 
 export const pricingPackages: PricingPackage[] = [
   {
+    id: "package-test",
+    name: "Test",
+    credits: 100,
+    price: 70,
+    features: [
+      "Test",
+    ],
+  },
+  {
     id: "package-50",
     name: "Essential",
     credits: 50,

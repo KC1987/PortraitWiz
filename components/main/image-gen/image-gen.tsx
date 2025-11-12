@@ -266,6 +266,71 @@ export default function ImageGen() {
     }
   }
 
+  // Browser-based watermark function using Canvas API
+  async function watermarkImage(imageBase64: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      // Create main image
+      const img = new window.Image()
+      img.crossOrigin = 'anonymous'
+
+      img.onload = () => {
+        // Create canvas
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+
+        if (!ctx) {
+          reject(new Error('Failed to get canvas context'))
+          return
+        }
+
+        // Set canvas dimensions to match image
+        canvas.width = img.width
+        canvas.height = img.height
+
+        // Draw main image
+        ctx.drawImage(img, 0, 0)
+
+        // Load and draw watermark logo
+        const logo = new window.Image()
+        logo.crossOrigin = 'anonymous'
+
+        logo.onload = () => {
+          // Calculate watermark size (40% of image width - 4x larger than original 10%)
+          const logoSize = Math.floor(img.width * 0.4)
+          const logoAspectRatio = logo.width / logo.height
+          const logoWidth = logoSize
+          const logoHeight = logoSize / logoAspectRatio
+
+          // Position in middle right side
+          const padding = 20
+          const x = canvas.width - logoWidth - padding
+          const y = (canvas.height - logoHeight) / 2  // Vertically centered
+
+          // Draw watermark
+          ctx.drawImage(logo, x, y, logoWidth, logoHeight)
+
+          // Convert canvas to base64
+          const watermarkedBase64 = canvas.toDataURL('image/png').split(',')[1]
+          resolve(watermarkedBase64)
+        }
+
+        logo.onerror = () => {
+          // If logo fails to load, return original image
+          console.warn('Failed to load watermark logo, returning original image')
+          resolve(imageBase64)
+        }
+
+        logo.src = '/brand/logo-watermark.png'
+      }
+
+      img.onerror = () => {
+        reject(new Error('Failed to load image for watermarking'))
+      }
+
+      img.src = `data:image/png;base64,${imageBase64}`
+    })
+  }
+
 
 // Generate image
   const handleGenerate = async () => {
@@ -329,8 +394,21 @@ export default function ImageGen() {
       // Response from Generate API
       const { image_data, credits_data } = await response.json();
 
-      // Set generated image to received image
-      setGeneratedImage(image_data.imageBase64);
+      // Check if user has purchased a package
+      // User has purchased if transactions array has at least one transaction
+      const hasPurchasedPackage = auth?.profile?.transactions && auth.profile.transactions.length > 0;
+
+      let finalImage: string;
+      if (!hasPurchasedPackage) {
+        // Apply watermark for free users
+        finalImage = await watermarkImage(image_data.imageBase64);
+      } else {
+        // No watermark for paid users
+        finalImage = image_data.imageBase64;
+      }
+
+      // Set generated image
+      setGeneratedImage(finalImage);
 
       // Update auth provider with the new credits balance
       setAuth(prev => ({

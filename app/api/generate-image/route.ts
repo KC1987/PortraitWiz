@@ -116,6 +116,11 @@ export async function POST(req: Request) {
         console.error(credits_error);
       }
 
+      // Resize image
+
+
+
+      // Store image
       // Clean base64 string (remove data URL prefix if present)
       const base64Clean = image_data.imageBase64.replace(/^data:image\/\w+;base64,/, '');
 

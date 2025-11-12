@@ -6,7 +6,16 @@ const nextConfig: NextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'enzwafcndzopdhqcddpr.supabase.co',
+        pathname: '/storage/v1/object/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { User, Settings } from "lucide-react"
+import { User, Settings, Images } from "lucide-react"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -11,6 +11,7 @@ interface DashboardLayoutProps {
 
 const navItems = [
   { href: "/dashboard/profile", label: "Profile", icon: User },
+  { href: "/dashboard/my-images", label: "My Images", icon: Images },
   { href: "/dashboard/scenes", label: "Settings", icon: Settings },
 ]
 
