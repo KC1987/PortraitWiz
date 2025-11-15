@@ -11,6 +11,7 @@ import { authAtom } from "@/lib/atoms"
 import {
   Menu,
   User,
+  Images,
   Settings,
   LogOut,
   Coins,
@@ -18,6 +19,7 @@ import {
   Tag,
   Mail,
   LayoutDashboard,
+  BookOpen,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -101,6 +103,11 @@ const MOBILE_LINKS: Array<{ href: string; label: string; icon: LucideIcon }> = [
     icon: Home,
   },
   {
+    href: "/blog",
+    label: "Blog",
+    icon: BookOpen,
+  },
+  {
     href: "/pricing",
     label: "Pricing",
     icon: Tag,
@@ -128,7 +135,7 @@ const AUTH_LINKS: Array<{ href: string; label: string; icon: LucideIcon }> = [
 export default function Navbar() {
   const supabase = createClient()
 
-  const { profile } = useAtomValue(authAtom)
+  const { user, profile } = useAtomValue(authAtom)
   const setAuth = useSetAtom(authAtom)
 
   const handleSignOut = async () => {
@@ -178,6 +185,10 @@ export default function Navbar() {
           {/* Desktop Navigation */}
             <div className="flex items-center gap-2 md:gap-8 max-sm:hidden">
               <NavLink href="/">Home</NavLink>
+              { user && (
+                <NavLink href="/dashboard/my-images">My Images</NavLink>
+              )}
+              <NavLink href="/blog">Blog</NavLink>
               <NavLink href="/pricing">Pricing</NavLink>
               <NavLink href="/contact">Contact</NavLink>
             </div>
@@ -214,6 +225,12 @@ export default function Navbar() {
                       <Link href="/dashboard/profile" className="flex items-center gap-2 cursor-pointer">
                         <User className="w-4 h-4" />
                         Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard/my-images" className="flex items-center gap-2 cursor-pointer">
+                        <Images className="w-4 h-4" />
+                        My Images
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>

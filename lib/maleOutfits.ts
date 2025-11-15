@@ -73,7 +73,7 @@ export const maleOutfits = [
     categories: ["tech", "med", "hospitality", "real-estate", "sales-marketing", "all"],
     description: "Button-down shirt, no jacket",
     thumbnail: "/male-outfits/smart-casual.jpg",
-    prompt: "Subject wearing quality button-down shirt in solid color or subtle pattern with open collar, top button undone, sleeves rolled or unrolled. Natural cotton texture with authentic weave, realistic collar and shoulder structure.",
+    prompt: "Subject wearing blue quality button-down shirt in solid color or subtle pattern with open collar, top button undone, sleeves rolled or unrolled. Natural cotton texture with authentic weave, realistic collar and shoulder structure.",
   },
   {
     slug: "sweater_over_shirt",
@@ -115,7 +115,7 @@ export const maleOutfits = [
     categories: ["tech", "sales-marketing", "all"],
     description: "Clean monochromatic look",
     thumbnail: "/male-outfits/minimalist.jpg",
-    prompt: "Subject wearing monochromatic fitted shirt or turtleneck in neutral tone with minimal accessories. Subtle fabric texture, authentic material properties, contemporary slim fit with minimalist aesthetic.",
+    prompt: "Male Subject wearing monochromatic fitted shirt or turtleneck in neutral tone. Subtle fabric texture, authentic material properties, contemporary slim fit with minimalist aesthetic.",
   },
   {
     slug: "startup_casual",

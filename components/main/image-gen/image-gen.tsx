@@ -449,7 +449,7 @@ export default function ImageGen() {
   }
 
   return (
-    <section className="w-full max-w-5xl mx-auto overflow-x-hidden px-3 sm:px-5 lg:px-6">
+    <section className="w-full max-w-6xl mx-auto overflow-x-hidden p-6 sm:px-5 lg:px-6 rounded-md bg-stone-900">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-8">
         {/* Input Section */}
         <div className="min-w-0">

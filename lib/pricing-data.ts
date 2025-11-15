@@ -26,8 +26,8 @@ export const pricingPackages: PricingPackage[] = [
     credits: 50,
     price: 1999,
     features: [
-      "50 portrait credits",
-      "Image editing",
+      "50 professional portrait credits",
+      "Image editing included",
       "Instant delivery",
       "Premium backgrounds",
       "HD resolution",
@@ -41,8 +41,8 @@ export const pricingPackages: PricingPackage[] = [
     popular: true,
     badge: "Best Value",
     features: [
-      "150 portrait credits",
-      "Image editing",
+      "150 professional portrait credits",
+      "Image editing included",
       "Instant delivery",
       "Premium backgrounds",
       "HD resolution",
@@ -55,8 +55,8 @@ export const pricingPackages: PricingPackage[] = [
     credits: 250,
     price: 6999,
     features: [
-      "250 portrait credits",
-      "Image editing",
+      "250 professional portrait credits",
+      "Image editing included",
       "Instant delivery",
       "Premium backgrounds",
       "HD resolution",
