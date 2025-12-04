@@ -34,7 +34,7 @@ export async function generateMetadata({
   const categoryUrl = `${siteUrl}/blog/category/${category}`
 
   return {
-    title: `${formattedCategory} | PortraitWiz Blog`,
+    title: `${formattedCategory} | Supershoot Blog`,
     description: `Browse all posts in the ${formattedCategory} category`,
     openGraph: {
       title: `${formattedCategory} Posts`,

@@ -74,7 +74,7 @@ export default function EnterPage() {
   const heroHeading = hasUsername
     ? `Welcome back, ${profile?.username}!`
     : isAuthenticated
-      ? "Claim your PortraitWiz handle"
+      ? "Claim your Supershoot handle"
       : "Step back into your AI portrait studio"
   const heroSubheading = hasUsername
     ? "Head straight to your dashboard or keep exploring new looks."
@@ -538,7 +538,7 @@ export default function EnterPage() {
                 </form>
 
                 <p className="text-center text-sm text-muted-foreground">
-                  New to PortraitWiz?{" "}
+                  New to Supershoot?{" "}
                   <Link
                     href="/register"
                     className="font-medium text-primary hover:text-primary/80"

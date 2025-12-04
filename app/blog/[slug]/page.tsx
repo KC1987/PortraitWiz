@@ -36,7 +36,7 @@ export async function generateMetadata({
   const postUrl = `${siteUrl}/blog/${slug}`
 
   return {
-    title: `${post.title} | PortraitWiz Blog`,
+    title: `${post.title} | Supershoot Blog`,
     description: post.description,
     authors: [{ name: post.author }],
     openGraph: {
@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     },
     publisher: {
       "@type": "Organization",
-      name: "PortraitWiz",
+      name: "Supershoot",
       logo: {
         "@type": "ImageObject",
         url: `${siteUrl}/logo.png`,

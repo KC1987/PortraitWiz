@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project Snapshot
-- PortraitWiz is a Next.js 15 / React 19 application that generates AI-powered professional portraits.
+- Supershoot is a Next.js 15 / React 19 application that generates AI-powered professional portraits.
 - Users authenticate with Supabase, purchase credits through Stripe, and spend credits to run image generations.
 - Image generation uses Google's Gemini 2.5 Flash exclusively, supporting up to 4 reference images for accurate portrait rendering.
 - The UI is built with Tailwind CSS, shadcn/ui components, Lucide icons, and Jotai for lightweight global state.
@@ -36,11 +36,11 @@
 
 ## Credits & Payment Lifecycle
 1. Pricing UI pulls packages from `lib/pricing-data.ts` and renders via `app/pricing/Card.tsx`.
-2. Buying credits calls `/api/checkout` (`app/api/checkout/route.ts`):
+2. Buying credits calls `/api/checkout` (`app/api/checkout/route1.ts`):
    - verifies Supabase session,
    - maps `packageId` to price/credit metadata,
    - creates a Stripe Checkout Session with the user id, package id, and credit amount in metadata.
-3. Stripe webhook (`app/api/webhook/route.ts`) validates signatures, extracts metadata, and invokes `increment_credits` RPC on Supabase.
+3. Stripe webhook (`app/api/webhook/route1.ts`) validates signatures, extracts metadata, and invokes `increment_credits` RPC on Supabase.
 4. After checkout, users land on `/success`, which reads the `credits` query string and presents quick actions.
 5. In the UI, `InsufficientCreditsDialog` surfaces pricing options when a generation is attempted without credits.
 
@@ -51,7 +51,7 @@
    - Add freeform instructions limited to 500 characters,
    - Reuse generated images as new references or download the PNG.
 2. The component checks auth/credits, opens the "insufficient credits" dialog if needed, and POSTs to `/api/generate-image`.
-3. `app/api/generate-image/route.ts`:
+3. `app/api/generate-image/route1.ts`:
    - validates payload and reference images (max 4 images, 1MB each),
    - fetches the authenticated user and credits via Supabase server client,
    - fails with friendly messages from `lib/error-messages.ts` for auth or credit issues,
@@ -64,7 +64,7 @@
 
 ## Contact & Support
 - The contact page (`app/contact/page.tsx`) uses react-hook-form with Zod validation and posts to `/api/contact`.
-- `/api/contact/route.ts` re-validates input and stores submissions in the `contact_messages` table (see `utils/supabase/migrations.md` for schema and RLS guidance).
+- `/api/contact/route1.ts` re-validates input and stores submissions in the `contact_messages` table (see `utils/supabase/migrations.md` for schema and RLS guidance).
 
 ## API Surface (routes under `app/api`)
 - `POST /api/generate-image` — core Gemini-powered generation endpoint with credit deduction.

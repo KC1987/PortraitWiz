@@ -83,7 +83,7 @@ export default function ImageGen() {
   const isNearPromptLimit = instructions.length >= maxPromptLength * 0.9
 
 
-  const basePrompt = `Professional headshot portrait photograph of a real human being, framed from shoulders up showing upper chest to top of head with appropriate headroom.
+  const basePrompt = `IMPORTANT: STRICTLY PRESERVE SUBJECT'S FACIAL FEATURE DETAILS. Professional headshot portrait photograph of a real human being, framed from shoulders up showing upper chest to top of head with appropriate headroom.
     REALISM & QUALITY:
     Photorealistic professional portrait of an actual person with authentic natural skin texture showing visible pores and fine details. Sharp professional focus with crystal clear high resolution quality. Realistic human proportions and facial anatomy. Genuine fabric textures with natural material properties and realistic draping.
     LIGHTING & TECHNICAL:
@@ -430,7 +430,7 @@ export default function ImageGen() {
 
     const link = document.createElement("a")
     link.href = `data:image/png;base64,${generatedImage}`
-    link.download = `portraitwiz-${Date.now()}.png`
+    link.download = `supershoot-${Date.now()}.png`
     link.click()
   }
 

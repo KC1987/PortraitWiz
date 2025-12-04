@@ -34,13 +34,13 @@ export const metadata: Metadata = {
     url: siteUrl,
     title: homepageMetadata.ogTitle,
     description: homepageMetadata.ogDescription,
-    siteName: "PortraitWiz",
+    siteName: "Supershoot",
     images: [
       {
         url: `${siteUrl}/bg.jpg`,
         width: 1200,
         height: 630,
-        alt: "Professional AI headshot example created by PortraitWiz",
+        alt: "Professional AI headshot example created by Supershoot",
       },
     ],
   },

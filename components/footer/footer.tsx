@@ -10,9 +10,9 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2" aria-label="PortraitWiz home">
+          <Link href="/" className="flex items-center gap-2" aria-label="Supershoot home">
             <Logo className="h-7 w-auto" variant="onDark" />
-            <span className="text-sm font-semibold text-foreground">PortraitWiz</span>
+            <span className="text-sm font-semibold text-foreground">Supershoot</span>
           </Link>
 
           {/* Navigation Links */}
@@ -69,7 +69,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-sm text-muted-foreground">
-            © {currentYear} PortraitWiz. All rights reserved.
+            © {currentYear} Supershoot. All rights reserved.
           </div>
         </div>
       </div>

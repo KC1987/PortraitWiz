@@ -1,5 +1,5 @@
 export const homepageMetadata = {
-  title: "PortraitWiz | AI Professional Headshots in Minutes",
+  title: "Supershoot | AI Professional Headshots in Minutes",
   description:
     "Transform your photos into professional headshots with AI. Studio-quality results in under 60 seconds.",
   keywords: [
@@ -9,7 +9,7 @@ export const homepageMetadata = {
     "corporate portrait AI",
     "studio quality profile photo",
   ],
-  ogTitle: "PortraitWiz — AI Professional Headshots in Minutes",
+  ogTitle: "Supershoot — AI Professional Headshots in Minutes",
   ogDescription:
     "Transform your photos into studio-quality headshots with AI. Upload up to 4 images and get professional results instantly.",
 }
@@ -33,7 +33,7 @@ export const socialProofContent = {
   logos: [],
   testimonial: {
     quote:
-      "PortraitWiz gave our team professional headshots in under an hour. The quality looks like a real photo studio.",
+      "Supershoot gave our team professional headshots in under an hour. The quality looks like a real photo studio.",
     name: "Morgan S.",
     title: "HR Leader",
   },
@@ -151,16 +151,16 @@ export const schemaOrgContent = {
   product: {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: "PortraitWiz",
+    name: "Supershoot",
     description:
-      "PortraitWiz is an AI headshot generator that transforms reference photos into professional portraits sized for LinkedIn and corporate branding.",
-    brand: { "@type": "Brand", name: "PortraitWiz" },
+      "Supershoot is an AI headshot generator that transforms reference photos into professional portraits sized for LinkedIn and corporate branding.",
+    brand: { "@type": "Brand", name: "Supershoot" },
     offers: {
       "@type": "Offer",
       price: "19",
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
-      url: "https://www.portraitwiz.com/pricing",
+      url: "https://www.supershoot.co/pricing",
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -187,7 +187,7 @@ export const schemaOrgContent = {
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "PortraitWiz processes images securely and discards references immediately after the portrait is generated.",
+            "Supershoot processes images securely and discards references immediately after the portrait is generated.",
         },
       },
       {

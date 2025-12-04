@@ -17,7 +17,7 @@ export default function BlogPage() {
           </div>
           <p className="text-center text-lg text-muted-foreground max-w-2xl mx-auto">
             Tips, tutorials, and best practices for creating stunning AI
-            portraits with PortraitWiz
+            portraits with Supershoot
           </p>
         </div>
       </section>

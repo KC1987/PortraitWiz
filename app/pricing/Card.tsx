@@ -109,7 +109,7 @@ export default function PricingCard({ package: pkg, variant = "default" }: Prici
             size={variant === "compact" ? "sm" : "default"}
             variant="outline"
           >
-            <a href={`mailto:${pkg.contactEmail || "contact@portraitwiz.com"}`}>
+            <a href={`mailto:${pkg.contactEmail || "contact@supershoot.co"}`}>
               Get in Touch
             </a>
           </Button>

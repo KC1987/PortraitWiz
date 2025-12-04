@@ -22,10 +22,10 @@ export default function TermsPage() {
               1. Introduction and Acceptance
             </h2>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              Welcome to PortraitWiz, an AI-powered portrait generation service operated by PortraitWiz, a company registered in Latvia (&quot;PortraitWiz,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
+              Welcome to Supershoot, an AI-powered portrait generation service operated by Supershoot, a company registered in Latvia (&quot;Supershoot,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              These Terms and Conditions (&quot;Terms&quot;) constitute a legally binding agreement between you and PortraitWiz governing your access to and use of our website, mobile applications, and services (collectively, the &quot;Service&quot;). The Service uses artificial intelligence technology to transform your uploaded photographs into professional portrait images.
+              These Terms and Conditions (&quot;Terms&quot;) constitute a legally binding agreement between you and Supershoot governing your access to and use of our website, mobile applications, and services (collectively, the &quot;Service&quot;). The Service uses artificial intelligence technology to transform your uploaded photographs into professional portrait images.
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               <strong>BY ACCESSING OR USING THE SERVICE, YOU AGREE TO BE BOUND BY THESE TERMS.</strong> If you do not agree to these Terms, you must not access or use the Service.
@@ -46,10 +46,10 @@ export default function TermsPage() {
           {/* Service Description */}
           <section>
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-4">
-              2. About PortraitWiz
+              2. About Supershoot
             </h2>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              PortraitWiz is a credit-based service that uses artificial intelligence (specifically, Google&apos;s Gemini 2.5 Flash Image Preview API) to generate professional portrait images from photographs you upload. The Service analyzes your reference images and creates new portrait variations in various styles, backgrounds, and poses.
+              Supershoot is a credit-based service that uses artificial intelligence (specifically, Google&apos;s Gemini 2.5 Flash Image Preview API) to generate professional portrait images from photographs you upload. The Service analyzes your reference images and creates new portrait variations in various styles, backgrounds, and poses.
             </p>
 
             <p className="leading-7 [&:not(:first-child)]:mt-6">
@@ -70,7 +70,7 @@ export default function TermsPage() {
               3. Eligibility
             </h2>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              To use PortraitWiz, you must:
+              To use Supershoot, you must:
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
               <li>Be at least 18 years of age</li>
@@ -130,7 +130,7 @@ export default function TermsPage() {
               5.1 Pricing Tiers
             </h3>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              PortraitWiz offers three credit packages:
+              Supershoot offers three credit packages:
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
               <li><strong>Starter Plan:</strong> 50 credits</li>
@@ -174,7 +174,7 @@ export default function TermsPage() {
               <strong>To exercise your withdrawal right:</strong>
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
-              <li>Contact us at support@portraitwiz.com within 14 days of purchase</li>
+              <li>Contact us at support@supershoot.co within 14 days of purchase</li>
               <li>State clearly that you wish to withdraw from the contract</li>
               <li>Include your account email and order reference</li>
             </ul>
@@ -248,7 +248,7 @@ export default function TermsPage() {
               <li>Your facial images will be analyzed by Google Gemini AI</li>
               <li>Biometric facial features will be extracted temporarily for portrait generation</li>
               <li>Images will be stored for 24-48 hours then automatically deleted</li>
-              <li>You can withdraw this consent at any time by contacting support@portraitwiz.com</li>
+              <li>You can withdraw this consent at any time by contacting support@supershoot.co</li>
               <li>You have rights to access, delete, and receive a copy of your data</li>
             </ul>
 
@@ -283,7 +283,7 @@ export default function TermsPage() {
               In compliance with Article 50 of the EU Artificial Intelligence Act:
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              <strong>All portrait images generated by PortraitWiz are artificially generated using AI technology.</strong> Outputs are marked in machine-readable format with embedded metadata including generator name, date/time of generation, and AI model information.
+              <strong>All portrait images generated by Supershoot are artificially generated using AI technology.</strong> Outputs are marked in machine-readable format with embedded metadata including generator name, date/time of generation, and AI model information.
             </p>
 
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mt-8 mb-3">
@@ -376,7 +376,7 @@ export default function TermsPage() {
               15.1 Informal Resolution
             </h3>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              Before initiating formal proceedings, we encourage you to contact us at support@portraitwiz.com to resolve disputes informally. Many issues can be resolved through direct communication.
+              Before initiating formal proceedings, we encourage you to contact us at support@supershoot.co to resolve disputes informally. Many issues can be resolved through direct communication.
             </p>
 
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mt-8 mb-3">
@@ -426,9 +426,9 @@ export default function TermsPage() {
               <strong>Contact Methods:</strong>
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
-              <li><strong>Customer Support:</strong> support@portraitwiz.com</li>
-              <li><strong>Data Protection:</strong> support@portraitwiz.com</li>
-              <li><strong>Legal Inquiries:</strong> support@portraitwiz.com</li>
+              <li><strong>Customer Support:</strong> support@supershoot.co</li>
+              <li><strong>Data Protection:</strong> support@supershoot.co</li>
+              <li><strong>Legal Inquiries:</strong> support@supershoot.co</li>
             </ul>
 
             <p className="leading-7 [&:not(:first-child)]:mt-6">
@@ -474,7 +474,7 @@ export default function TermsPage() {
               <strong>Version:</strong> 1.0
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6 text-sm text-muted-foreground">
-              These Terms and Conditions constitute a legally binding agreement. By using PortraitWiz, you confirm your acceptance of these Terms.
+              These Terms and Conditions constitute a legally binding agreement. By using Supershoot, you confirm your acceptance of these Terms.
             </p>
           </section>
         </div>

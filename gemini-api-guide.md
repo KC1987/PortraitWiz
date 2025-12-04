@@ -138,7 +138,7 @@ A. Server-side / API Route (Node / Next.js)
 
 You should prefer making Gemini API calls from your server (Next.js API routes or server components), keeping the API key secret.
 
-Example (Next.js API route: /pages/api/generate-image.ts or app/api/generate-image/route.ts):
+Example (Next.js API route: /pages/api/generate-image.ts or app/api/generate-image/route1.ts):
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -343,7 +343,7 @@ Timeouts & performance: image generation may take more time than text generation
 
 Here is a full minimal example combining API route + client component.
 
-app/api/generate-image/route.ts
+app/api/generate-image/route1.ts
 import { NextRequest, NextResponse } from 'next/server'
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY

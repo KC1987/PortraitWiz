@@ -18,7 +18,7 @@ export default function Logo({
   return (
     <Image
       src="/pw-logo-color.png"
-      alt="PortraitWiz logo"
+      alt="Supershoot logo"
       width={1184}
       height={864}
       quality={100}

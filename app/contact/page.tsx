@@ -6,7 +6,7 @@ import ContactForm from "./contact-form"
 import { Card, CardContent } from "@/components/ui/card"
 import { contactHero, contactMetadata, buildContactSchema } from "@/lib/copy/contact"
 
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.portraitwiz.com").replace(
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.supershoot.co").replace(
   /\/$/,
   "",
 )
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/contact`,
     title: contactMetadata.ogTitle,
     description: contactMetadata.ogDescription,
-    siteName: "PortraitWiz",
+    siteName: "Supershoot",
   },
   twitter: {
     card: "summary_large_image",
@@ -70,10 +70,10 @@ export default function ContactPage() {
             <p className="text-sm text-muted-foreground md:text-base">
               Prefer email? Reach us at{" "}
               <a
-                href="mailto:support@portraitwiz.com"
+                href="mailto:support@supershoot.co"
                 className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
               >
-                support@portraitwiz.com
+                support@supershoot.co
               </a>{" "}
               and we&apos;ll respond within one business day.
             </p>

@@ -1,12 +1,12 @@
-# PortraitWiz Terms and Conditions
+# Supershoot Terms and Conditions
 
 **Last Updated: October 12, 2025**
 
 ## 1. Introduction and Acceptance
 
-Welcome to PortraitWiz, an AI-powered portrait generation service operated by [Your Company Name], a company registered in Latvia ("PortraitWiz," "we," "us," or "our").
+Welcome to Supershoot, an AI-powered portrait generation service operated by [Your Company Name], a company registered in Latvia ("Supershoot," "we," "us," or "our").
 
-These Terms and Conditions ("Terms") constitute a legally binding agreement between you and PortraitWiz governing your access to and use of our website, mobile applications, and services (collectively, the "Service"). The Service uses artificial intelligence technology to transform your uploaded photographs into professional portrait images.
+These Terms and Conditions ("Terms") constitute a legally binding agreement between you and Supershoot governing your access to and use of our website, mobile applications, and services (collectively, the "Service"). The Service uses artificial intelligence technology to transform your uploaded photographs into professional portrait images.
 
 **BY ACCESSING OR USING THE SERVICE, YOU AGREE TO BE BOUND BY THESE TERMS.** If you do not agree to these Terms, you must not access or use the Service.
 
@@ -17,9 +17,9 @@ These Terms and Conditions ("Terms") constitute a legally binding agreement betw
 - You have a 14-day withdrawal right subject to certain exceptions
 - AI-generated content is marked as artificially generated in compliance with EU AI Act
 
-## 2. About PortraitWiz
+## 2. About Supershoot
 
-PortraitWiz is a subscription-based service that uses artificial intelligence (specifically, Google's Gemini 2.5 Flash Image Preview API) to generate professional portrait images from photographs you upload. The Service analyzes your reference images and creates new portrait variations in various styles, backgrounds, and poses.
+Supershoot is a subscription-based service that uses artificial intelligence (specifically, Google's Gemini 2.5 Flash Image Preview API) to generate professional portrait images from photographs you upload. The Service analyzes your reference images and creates new portrait variations in various styles, backgrounds, and poses.
 
 **Key Service Features:**
 - AI-powered portrait generation from uploaded photos
@@ -37,7 +37,7 @@ PortraitWiz is a subscription-based service that uses artificial intelligence (s
 
 ## 3. Eligibility
 
-To use PortraitWiz, you must:
+To use Supershoot, you must:
 - Be at least 18 years of age
 - Have the legal capacity to enter into binding contracts under applicable law
 - Not be prohibited from using the Service under any applicable law or regulation
@@ -79,7 +79,7 @@ We reserve the right to suspend or terminate accounts that:
 
 ### 5.1 Subscription Tiers
 
-PortraitWiz offers three subscription plans, each providing monthly credits for portrait generation:
+Supershoot offers three subscription plans, each providing monthly credits for portrait generation:
 
 **Starter Plan:**
 - 10 credits per month
@@ -177,7 +177,7 @@ If you are a consumer in the European Union, you have the right to withdraw from
 
 Before accessing the Service for the first time, you must provide explicit consent by checking the following:
 
-☐ **"I expressly request that access to PortraitWiz begins immediately and I acknowledge that I thereby lose my right of withdrawal once I begin using the Service."**
+☐ **"I expressly request that access to Supershoot begins immediately and I acknowledge that I thereby lose my right of withdrawal once I begin using the Service."**
 
 This is required under Article 16(m) of the Consumer Rights Directive. If you provide this consent and begin using the Service, the 14-day withdrawal right no longer applies.
 
@@ -247,7 +247,7 @@ You retain all ownership rights in photographs you upload to the Service. By upl
 
 ### 7.4 Service Materials Ownership
 
-The Service, including all software, algorithms, user interface, graphics, design, text, databases, and other materials (excluding your content and generated portraits) are owned by PortraitWiz and our licensors. All intellectual property rights in these materials are reserved.
+The Service, including all software, algorithms, user interface, graphics, design, text, databases, and other materials (excluding your content and generated portraits) are owned by Supershoot and our licensors. All intellectual property rights in these materials are reserved.
 
 ## 8. User Responsibilities and Prohibited Uses
 
@@ -257,7 +257,7 @@ The Service, including all software, algorithms, user interface, graphics, desig
 
 Before using the Service, you must provide explicit consent to biometric data processing:
 
-☐ **"I explicitly consent to PortraitWiz processing my facial images and biometric features using artificial intelligence to generate portrait artwork. I understand that:**
+☐ **"I explicitly consent to Supershoot processing my facial images and biometric features using artificial intelligence to generate portrait artwork. I understand that:**
 - **My facial images will be analyzed by Google Gemini AI**
 - **Biometric facial features will be extracted temporarily for portrait generation**
 - **Images will be stored for 24-48 hours then automatically deleted**
@@ -355,8 +355,8 @@ Violations of Section 8 will result in:
 
 In compliance with Article 50 of the EU Artificial Intelligence Act:
 
-**All portrait images generated by PortraitWiz are artificially generated using AI technology.** Outputs are marked in machine-readable format (C2PA standard) with embedded metadata including:
-- Generator name (PortraitWiz)
+**All portrait images generated by Supershoot are artificially generated using AI technology.** Outputs are marked in machine-readable format (C2PA standard) with embedded metadata including:
+- Generator name (Supershoot)
 - Date and time of generation
 - AI model information (Google Gemini 2.5 Flash)
 - Cryptographic signature for authenticity verification
@@ -905,7 +905,7 @@ We comply with:
 
 ### 17.1 Entire Agreement
 
-These Terms, together with our Privacy Policy and any other documents expressly incorporated by reference, constitute the entire agreement between you and PortraitWiz regarding the Service and supersede all prior agreements and understandings.
+These Terms, together with our Privacy Policy and any other documents expressly incorporated by reference, constitute the entire agreement between you and Supershoot regarding the Service and supersede all prior agreements and understandings.
 
 ### 17.2 Amendments to Terms
 
@@ -943,7 +943,7 @@ We may assign these Terms and all rights granted hereunder, including with respe
 
 ### 17.6 No Third-Party Beneficiaries
 
-These Terms do not and are not intended to confer any rights or remedies upon any person other than you and PortraitWiz.
+These Terms do not and are not intended to confer any rights or remedies upon any person other than you and Supershoot.
 
 Exception: Data subjects have third-party beneficiary rights under Standard Contractual Clauses incorporated in Data Processing Agreements with our processors.
 
@@ -1041,10 +1041,10 @@ By clicking "I Accept" or by accessing and using the Service, you acknowledge th
 8. You have received these Terms in a clear, comprehensible manner
 
 **For Digital Content Access:**
-☐ I expressly request immediate access to PortraitWiz and acknowledge that I thereby lose my right of withdrawal once I begin using the Service.
+☐ I expressly request immediate access to Supershoot and acknowledge that I thereby lose my right of withdrawal once I begin using the Service.
 
 **For Biometric Data Processing:**
-☐ I explicitly consent to PortraitWiz processing my facial images and biometric features using artificial intelligence for portrait generation, as described in Section 8.1.
+☐ I explicitly consent to Supershoot processing my facial images and biometric features using artificial intelligence for portrait generation, as described in Section 8.1.
 
 ---
 

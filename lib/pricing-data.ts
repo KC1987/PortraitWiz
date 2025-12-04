@@ -69,7 +69,7 @@ export const pricingPackages: PricingPackage[] = [
     credits: 0, // Will display as "Custom"
     price: 0, // Will display as "Custom Pricing"
     contactOnly: true,
-    contactEmail: "contact@portraitwiz.com",
+    contactEmail: "contact@supershoot.co",
     features: [
       "Custom credit allocation",
       "Dedicated support",

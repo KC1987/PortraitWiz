@@ -27,20 +27,20 @@ const geistMono = Geist_Mono({
 
 const siteUrl = getSiteUrl()
 const defaultDescription =
-  "PortraitWiz turns reference photos into studio-quality AI headshots for LinkedIn, sales decks, and corporate branding in under a minute."
+  "Supershoot turns reference photos into studio-quality AI headshots for LinkedIn, sales decks, and corporate branding in under a minute."
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "PortraitWiz | AI Professional Headshots in Minutes",
-    template: "%s | PortraitWiz",
+    default: "Supershoot | AI Professional Headshots in Minutes",
+    template: "%s | Supershoot",
   },
   description: defaultDescription,
   keywords: [
     "AI headshot generator",
     "professional portraits",
     "LinkedIn photo",
-    "PortraitWiz",
+    "Supershoot",
     "AI photography",
   ],
   category: "technology",
@@ -48,21 +48,21 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: "PortraitWiz | AI Professional Headshots in Minutes",
+    title: "Supershoot | AI Professional Headshots in Minutes",
     description: defaultDescription,
-    siteName: "PortraitWiz",
+    siteName: "Supershoot",
     images: [
       {
         url: `${siteUrl}/bg.jpg`,
         width: 1200,
         height: 630,
-        alt: "PortraitWiz AI-generated professional headshot preview",
+        alt: "Supershoot AI-generated professional headshot preview",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PortraitWiz | AI Professional Headshots in Minutes",
+    title: "Supershoot | AI Professional Headshots in Minutes",
     description: defaultDescription,
     images: [`${siteUrl}/bg.jpg`],
   },

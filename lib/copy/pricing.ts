@@ -1,17 +1,17 @@
 import { pricingPackages } from "@/lib/pricing-data"
 
 export const pricingMetadata = {
-  title: "PortraitWiz Pricing | Flexible AI Headshot Credits",
+  title: "Supershoot Pricing | Flexible AI Headshot Credits",
   description:
-    "Choose the PortraitWiz credit pack that fits your team. Buy AI headshot credits in bulk, access studio-quality portraits instantly, and never worry about subscription fees.",
+    "Choose the Supershoot credit pack that fits your team. Buy AI headshot credits in bulk, access studio-quality portraits instantly, and never worry about subscription fees.",
   keywords: [
     "AI headshot pricing",
-    "PortraitWiz credits",
+    "Supershoot credits",
     "buy AI portraits",
     "professional headshot cost",
     "AI photography pricing",
   ],
-  ogTitle: "PortraitWiz Pricing — Flexible AI Headshot Credits",
+  ogTitle: "Supershoot Pricing — Flexible AI Headshot Credits",
   ogDescription:
     "Purchase AI headshot credits that never expire. Perfect for individuals, teams, and enterprises that need polished portraits on demand.",
 }
@@ -19,7 +19,7 @@ export const pricingMetadata = {
 export const pricingHero = {
   heading: "Choose the Credit Pack Built for Your Workflow",
   subheading:
-    "PortraitWiz credits never expire, so you can generate professional AI headshots whenever hiring, fundraising, or rebranding demands it.",
+    "Supershoot credits never expire, so you can generate professional AI headshots whenever hiring, fundraising, or rebranding demands it.",
   lead: "Every credit delivers a studio-quality portrait sized for LinkedIn, sales decks, and investor updates.",
 }
 
@@ -37,7 +37,7 @@ export const pricingBenefits = [
   {
     title: "High-Volume Support",
     description:
-      "Need hundreds of portraits? PortraitWiz scales with bulk credit packs, webhook integrations, and concierge support for people teams.",
+      "Need hundreds of portraits? Supershoot scales with bulk credit packs, webhook integrations, and concierge support for people teams.",
   },
 ]
 
@@ -77,10 +77,10 @@ export function buildPricingSchema(baseUrl: string) {
   return JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Product",
-    name: "PortraitWiz Credits",
+    name: "Supershoot Credits",
     description:
-      "PortraitWiz offers flexible AI headshot credit packs that create studio-quality portraits from your reference photos.",
-    brand: { "@type": "Brand", name: "PortraitWiz" },
+      "Supershoot offers flexible AI headshot credit packs that create studio-quality portraits from your reference photos.",
+    brand: { "@type": "Brand", name: "Supershoot" },
     offers: pricingPackages.map((pkg) => ({
       "@type": "Offer",
       sku: pkg.id,

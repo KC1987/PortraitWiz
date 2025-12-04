@@ -1,4 +1,4 @@
-const defaultSiteUrl = "https://portraitwiz.com"
+const defaultSiteUrl = "https://supershoot.co"
 
 export function getSiteUrl() {
   return (process.env.NEXT_PUBLIC_SITE_URL ?? defaultSiteUrl).replace(/\/$/, "")

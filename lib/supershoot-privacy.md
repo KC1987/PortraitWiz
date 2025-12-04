@@ -1,10 +1,10 @@
-# PortraitWiz Privacy Policy
+# Supershoot Privacy Policy
 
 **Last Updated: July 12, 2025**
 
 ## 1. Introduction
 
-Welcome to PortraitWiz. We are committed to protecting your privacy and personal data in accordance with the EU General Data Protection Regulation (GDPR) and applicable data protection laws.
+Welcome to Supershoot. We are committed to protecting your privacy and personal data in accordance with the EU General Data Protection Regulation (GDPR) and applicable data protection laws.
 
 This Privacy Policy explains how we collect, use, store, share, and protect your personal information when you use our AI-powered portrait generation service. It also describes your rights regarding your personal data and how to exercise them.
 
@@ -379,7 +379,7 @@ We may disclose your data when required by law or necessary to protect rights:
 **To Protect Rights and Safety:**
 - To enforce our Terms and Conditions
 - To prevent fraud, security threats, or illegal activity
-- To protect the safety and rights of PortraitWiz, users, or the public
+- To protect the safety and rights of Supershoot, users, or the public
 - To respond to emergencies involving danger of death or serious physical injury
 
 **In Business Transactions:**
@@ -826,7 +826,7 @@ To protect your privacy, we must verify your identity before fulfilling requests
 
 **Minimum Age: 18 years old**
 
-PortraitWiz is not intended for and may not be used by individuals under 18 years of age. We do not knowingly collect personal data from anyone under 18.
+Supershoot is not intended for and may not be used by individuals under 18 years of age. We do not knowingly collect personal data from anyone under 18.
 
 **Why 18 when GDPR allows 13-16?**
 - Biometric data processing requires mature consent
@@ -1289,7 +1289,7 @@ Latvia
 
 **Version:** 1.0
 
-By using PortraitWiz, you acknowledge that:
+By using Supershoot, you acknowledge that:
 - You have read and understood this Privacy Policy
 - You consent to the collection, use, and processing of your personal data as described
 - You understand your rights under GDPR and how to exercise them
@@ -1301,13 +1301,13 @@ By using PortraitWiz, you acknowledge that:
 
 Before using the Service, you must provide separate explicit consent for:
 
-☐ **Biometric Data Processing:** "I explicitly consent to PortraitWiz processing my facial images and biometric data using artificial intelligence to generate portrait artwork, as described in this Privacy Policy and the Terms and Conditions."
+☐ **Biometric Data Processing:** "I explicitly consent to Supershoot processing my facial images and biometric data using artificial intelligence to generate portrait artwork, as described in this Privacy Policy and the Terms and Conditions."
 
-☐ **Marketing Communications (Optional):** "I consent to receiving marketing communications from PortraitWiz. I understand I can unsubscribe at any time."
+☐ **Marketing Communications (Optional):** "I consent to receiving marketing communications from Supershoot. I understand I can unsubscribe at any time."
 
 ---
 
-**Thank you for trusting PortraitWiz with your personal data. We are committed to protecting your privacy and giving you control over your information.**
+**Thank you for trusting Supershoot with your personal data. We are committed to protecting your privacy and giving you control over your information.**
 
 For any questions about this Privacy Policy, please contact [privacy email].
 

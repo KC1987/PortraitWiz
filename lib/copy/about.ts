@@ -1,7 +1,7 @@
 export const aboutMetadata = {
-  title: "About PortraitWiz | AI Professional Headshot Generator",
+  title: "About Supershoot | AI Professional Headshot Generator",
   description:
-    "Learn how PortraitWiz helps 50K+ professionals create studio-quality AI headshots in under 60 seconds. Privacy-first, enterprise-ready portrait generation.",
+    "Learn how Supershoot helps 50K+ professionals create studio-quality AI headshots in under 60 seconds. Privacy-first, enterprise-ready portrait generation.",
   keywords: [
     "AI headshot generator",
     "professional portrait AI",
@@ -13,15 +13,15 @@ export const aboutMetadata = {
     "AI portrait generator for teams",
     "privacy-first AI photos",
   ],
-  ogTitle: "About PortraitWiz — AI Professional Headshots for Modern Teams",
+  ogTitle: "About Supershoot — AI Professional Headshots for Modern Teams",
   ogDescription:
-    "Discover why 50,000+ professionals trust PortraitWiz for studio-quality AI headshots, privacy-first workflows, and enterprise-ready performance.",
+    "Discover why 50,000+ professionals trust Supershoot for studio-quality AI headshots, privacy-first workflows, and enterprise-ready performance.",
 }
 
 export const aboutHero = {
   heading: "Professional AI Headshots for Modern Teams",
   description:
-    "PortraitWiz is the leading AI headshot generator trusted by over 50,000 professionals worldwide. Our platform combines advanced artificial intelligence with photography expertise to deliver studio-quality professional portraits in under 60 seconds—no photoshoot required.",
+    "Supershoot is the leading AI headshot generator trusted by over 50,000 professionals worldwide. Our platform combines advanced artificial intelligence with photography expertise to deliver studio-quality professional portraits in under 60 seconds—no photoshoot required.",
   stats: [
     { value: "50,000+", label: "Professionals served globally" },
     { value: "60 seconds", label: "Average generation time" },
@@ -33,7 +33,7 @@ export const aboutHero = {
 }
 
 export const aboutWhy = {
-  title: "Why Choose PortraitWiz for AI Professional Headshots?",
+  title: "Why Choose Supershoot for AI Professional Headshots?",
   subheading: "The Professional Photography Gap",
   introduction:
     "In today’s remote-first workplace, maintaining a consistent professional brand is challenging. Traditional portrait photography requires time, budget, and coordination that distributed teams rarely have.",
@@ -44,13 +44,13 @@ export const aboutWhy = {
     { title: "Inconsistent results", description: "Different photographers produce uneven brand aesthetics" },
   ],
   solution:
-    "PortraitWiz solves these challenges by delivering photographer-quality AI headshots on demand, making professional imagery accessible to everyone—from solopreneurs to Fortune 500 teams.",
+    "Supershoot solves these challenges by delivering photographer-quality AI headshots on demand, making professional imagery accessible to everyone—from solopreneurs to Fortune 500 teams.",
 }
 
 export const aboutTechnology = {
   title: "How Our AI Portrait Technology Works",
   introduction:
-    "PortraitWiz uses Google's cutting-edge Gemini 2.5 Flash image generation model to create the highest quality AI-generated professional portraits. Every generation delivers studio-quality results.",
+    "Supershoot uses Google's cutting-edge Gemini 2.5 Flash image generation model to create the highest quality AI-generated professional portraits. Every generation delivers studio-quality results.",
   steps: [
     {
       heading: "1. Advanced AI Image Generation",
@@ -88,7 +88,7 @@ export const aboutTechnology = {
 }
 
 export const aboutFeatures = {
-  title: "Features That Set PortraitWiz Apart",
+  title: "Features That Set Supershoot Apart",
   sections: [
     {
       heading: "Privacy-First AI Headshot Generation",
@@ -147,7 +147,7 @@ export const aboutValues = {
     {
       name: "Ship Responsibly",
       description:
-        "Bias testing, content guardrails, and inclusive design ensure PortraitWiz serves diverse professionals ethically.",
+        "Bias testing, content guardrails, and inclusive design ensure Supershoot serves diverse professionals ethically.",
     },
     {
       name: "Design for Momentum",
@@ -158,13 +158,13 @@ export const aboutValues = {
 }
 
 export const aboutJourney = {
-  title: "The PortraitWiz Journey",
+  title: "The Supershoot Journey",
   periods: [
     {
       year: "2022",
       heading: "Founding & Research Phase",
       description:
-        "PortraitWiz began as a weekend project exploring AI-powered lighting presets for professional headshots.",
+        "Supershoot began as a weekend project exploring AI-powered lighting presets for professional headshots.",
       milestones: [
         "Developed foundational AI lighting algorithms",
         "Tested with 50 beta users across the tech industry",
@@ -187,7 +187,7 @@ export const aboutJourney = {
       year: "2024",
       heading: "Enterprise-Ready Platform",
       description:
-        "PortraitWiz matured into a production-grade AI portrait platform for organizations of every size.",
+        "Supershoot matured into a production-grade AI portrait platform for organizations of every size.",
       milestones: [
         "Scaled to 50,000+ users across 75+ countries",
         "Maintained 99.9% uptime with zero-downtime deployments",
@@ -199,7 +199,7 @@ export const aboutJourney = {
       year: "2025 & Beyond",
       heading: "AI Headshot Innovation",
       description:
-        "Our roadmap expands PortraitWiz into new modalities, integrations, and enterprise tooling.",
+        "Our roadmap expands Supershoot into new modalities, integrations, and enterprise tooling.",
       milestones: [
         "Q1 2025: Video portrait generation (beta)",
         "Q2 2025: SSO and enterprise admin portal",
@@ -213,7 +213,7 @@ export const aboutJourney = {
 export const aboutIndustries = {
   title: "Industries We Serve",
   introduction:
-    "PortraitWiz equips professionals across industries with consistent, brand-aligned AI headshots tailored to their workflows.",
+    "Supershoot equips professionals across industries with consistent, brand-aligned AI headshots tailored to their workflows.",
   segments: [
     {
       name: "Remote Technology Companies",
@@ -268,7 +268,7 @@ export const aboutIndustries = {
     {
       name: "HR & Recruiting Teams",
       description:
-        "Talent teams use PortraitWiz to onboard hires and maintain cohesive employer branding.",
+        "Talent teams use Supershoot to onboard hires and maintain cohesive employer branding.",
       needs: [
         "Consistent employee directory photos",
         "Onboarding portraits ready on day one",
@@ -327,7 +327,7 @@ export const aboutFaq = {
     {
       question: "How does AI headshot generation work?",
       answer:
-        "PortraitWiz uses Google's advanced Gemini 2.5 Flash image generation model combined with professionally crafted prompts. Upload one to four reference photos, choose backgrounds and maleOutfits, and receive a studio-quality headshot in under 60 seconds. Our AI analyzes all your reference images simultaneously for accurate facial feature extraction.",
+        "Supershoot uses Google's advanced Gemini 2.5 Flash image generation model combined with professionally crafted prompts. Upload one to four reference photos, choose backgrounds and maleOutfits, and receive a studio-quality headshot in under 60 seconds. Our AI analyzes all your reference images simultaneously for accurate facial feature extraction.",
     },
     {
       question: "Are my photos safe and private?",
@@ -337,10 +337,10 @@ export const aboutFaq = {
     {
       question: "How much do AI headshots cost?",
       answer:
-        "PortraitWiz runs on a credit-based system with no subscriptions. Credit packages start at $9 for 10 credits, and enterprise teams can secure bulk discounts. Visit the pricing page for complete details.",
+        "Supershoot runs on a credit-based system with no subscriptions. Credit packages start at $9 for 10 credits, and enterprise teams can secure bulk discounts. Visit the pricing page for complete details.",
     },
     {
-      question: "Can I use PortraitWiz for my entire team?",
+      question: "Can I use Supershoot for my entire team?",
       answer:
         "Absolutely. We support teams from small startups to enterprises with 500+ employees. Bulk credit purchases, centralized billing, and upcoming SSO support make onboarding distributed teams simple. Contact sales for an enterprise walkthrough.",
     },
@@ -357,7 +357,7 @@ export const aboutFaq = {
     {
       question: "Can I use generated headshots commercially?",
       answer:
-        "Yes. You own the commercial rights to every headshot generated via PortraitWiz. Use them across marketing materials, websites, social media, and publications without additional licensing fees.",
+        "Yes. You own the commercial rights to every headshot generated via Supershoot. Use them across marketing materials, websites, social media, and publications without additional licensing fees.",
     },
     {
       question: "How long does generation take?",
@@ -367,20 +367,20 @@ export const aboutFaq = {
     {
       question: "What image formats are supported?",
       answer:
-        "PortraitWiz outputs high-quality PNG files optimized for web and print. File sizes typically range from 1-3 MB, ideal for LinkedIn, company sites, press kits, and professional profiles.",
+        "Supershoot outputs high-quality PNG files optimized for web and print. File sizes typically range from 1-3 MB, ideal for LinkedIn, company sites, press kits, and professional profiles.",
     },
     {
       question: "Do you offer API access?",
       answer:
-        "API access is available for enterprise customers today and enters wider availability in Q3 2025. Contact sales to discuss integrating PortraitWiz into your workflow automation.",
+        "API access is available for enterprise customers today and enters wider availability in Q3 2025. Contact sales to discuss integrating Supershoot into your workflow automation.",
     },
   ],
 }
 
 export const aboutAction = {
-  title: "See PortraitWiz in Action",
+  title: "See Supershoot in Action",
   description:
-    "Join 50,000+ professionals who trust PortraitWiz for studio-quality AI headshots. No photoshoot, no scheduling, no expensive photographer—just professional results in under a minute.",
+    "Join 50,000+ professionals who trust Supershoot for studio-quality AI headshots. No photoshoot, no scheduling, no expensive photographer—just professional results in under a minute.",
   steps: [
     "Upload one to four reference photos (optional but recommended)",
     "Customize your background, outfit, and style scenes",
@@ -396,19 +396,19 @@ export const aboutSocialProof = {
   testimonials: [
     {
       quote:
-        "PortraitWiz saved our distributed team weeks of scheduling and thousands of dollars. The quality rivals traditional photography.",
+        "Supershoot saved our distributed team weeks of scheduling and thousands of dollars. The quality rivals traditional photography.",
       name: "Sarah Chen",
       title: "VP of People Operations, TechCorp",
     },
     {
       quote:
-        "As a solopreneur, I need to update my headshot frequently. PortraitWiz makes it effortless and affordable.",
+        "As a solopreneur, I need to update my headshot frequently. Supershoot makes it effortless and affordable.",
       name: "Marcus Rodriguez",
       title: "Independent Consultant",
     },
     {
       quote:
-        "Our recruiting team uses PortraitWiz to create consistent, professional imagery for new hires. It's essential to our onboarding.",
+        "Our recruiting team uses Supershoot to create consistent, professional imagery for new hires. It's essential to our onboarding.",
       name: "Jessica Patel",
       title: "Talent Director, GrowthLabs",
     },
@@ -440,13 +440,13 @@ export function buildAboutSchema(baseUrl: string) {
   const aboutPage = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    name: "About PortraitWiz",
+    name: "About Supershoot",
     url: `${normalizedBase}/about`,
     description:
-      "PortraitWiz is an AI-powered professional headshot generator trusted by 50,000+ professionals worldwide.",
+      "Supershoot is an AI-powered professional headshot generator trusted by 50,000+ professionals worldwide.",
     isPartOf: {
       "@type": "WebSite",
-      name: "PortraitWiz",
+      name: "Supershoot",
       url: normalizedBase,
     },
   }
@@ -454,14 +454,14 @@ export function buildAboutSchema(baseUrl: string) {
   const organization = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "PortraitWiz",
+    name: "Supershoot",
     url: normalizedBase,
     description: "AI-powered professional headshot generator trusted by 50,000+ professionals.",
     foundingDate: "2022",
     logo: `${normalizedBase}/logo.png`,
     sameAs: [
-      "https://twitter.com/portraitwiz",
-      "https://www.linkedin.com/company/portraitwiz",
+      "https://twitter.com/supershoot",
+      "https://www.linkedin.com/company/supershoot",
     ],
     aggregateRating: {
       "@type": "AggregateRating",
@@ -473,7 +473,7 @@ export function buildAboutSchema(baseUrl: string) {
       {
         "@type": "ContactPoint",
         contactType: "customer support",
-        email: "support@portraitwiz.com",
+        email: "support@supershoot.co",
         areaServed: "Worldwide",
         availableLanguage: ["English"],
       },
@@ -493,7 +493,7 @@ export function buildAboutSchema(baseUrl: string) {
       {
         "@type": "ListItem",
         position: 2,
-        name: "About PortraitWiz",
+        name: "About Supershoot",
         item: `${normalizedBase}/about`,
       },
     ],

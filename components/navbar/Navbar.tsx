@@ -176,10 +176,10 @@ export default function Navbar() {
           <Link
             href="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
-            aria-label="PortraitWiz home"
+            aria-label="Supershoot home"
           >
             <Logo priority />
-            <span className="text-lg font-semibold text-foreground">PortraitWiz</span>
+            <span className="text-lg font-semibold text-foreground">Supershoot</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -281,7 +281,7 @@ export default function Navbar() {
                   <SheetHeader className="px-6 pb-2">
                     <SheetTitle className="flex items-center gap-2 text-xl">
                       <Logo className="h-6 w-auto" />
-                      <span className="font-semibold text-foreground">PortraitWiz</span>
+                      <span className="font-semibold text-foreground">Supershoot</span>
                     </SheetTitle>
                   </SheetHeader>
 

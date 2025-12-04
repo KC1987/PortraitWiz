@@ -1,23 +1,23 @@
 export const contactMetadata = {
-  title: "Contact PortraitWiz Support | Talk to Our Team",
+  title: "Contact Supershoot Support | Talk to Our Team",
   description:
-    "Reach the PortraitWiz team for sales, support, or partnership questions. Send us a message and receive expert guidance on AI headshot solutions.",
+    "Reach the Supershoot team for sales, support, or partnership questions. Send us a message and receive expert guidance on AI headshot solutions.",
   keywords: [
-    "contact PortraitWiz",
-    "PortraitWiz support",
+    "contact Supershoot",
+    "Supershoot support",
     "AI headshot help",
-    "PortraitWiz sales",
-    "PortraitWiz partnerships",
+    "Supershoot sales",
+    "Supershoot partnerships",
   ],
-  ogTitle: "Contact PortraitWiz — We’re Ready to Help",
+  ogTitle: "Contact Supershoot — We’re Ready to Help",
   ogDescription:
-    "Need help with AI headshot credits, onboarding, or enterprise requests? Reach the PortraitWiz team directly.",
+    "Need help with AI headshot credits, onboarding, or enterprise requests? Reach the Supershoot team directly.",
 }
 
 export const contactHero = {
   heading: "Let’s Create Professional Portraits Together",
   subheading:
-    "Have a question about credits, onboarding, or partnerships? Share your details and a PortraitWiz specialist will respond within one business day.",
+    "Have a question about credits, onboarding, or partnerships? Share your details and a Supershoot specialist will respond within one business day.",
 }
 
 export const contactHighlights = [
@@ -33,13 +33,13 @@ export const contactHighlights = [
   },
   {
     title: "Security & Privacy",
-    description: "Learn how PortraitWiz protects reference images with encryption and strict retention policies.",
+    description: "Learn how Supershoot protects reference images with encryption and strict retention policies.",
     icon: "🔐",
   },
 ]
 
 export const contactDetails = {
-  email: "support@portraitwiz.com",
+  email: "support@supershoot.co",
   phone: "+1 (415) 555-0199",
   addressLine1: "88 Market Street, Suite 1200",
   addressLine2: "San Francisco, CA 94105",
@@ -51,19 +51,19 @@ export function buildContactSchema(baseUrl: string) {
   return JSON.stringify({
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contact PortraitWiz",
+    name: "Contact Supershoot",
     description:
-      "Connect with the PortraitWiz team for AI headshot support, enterprise pricing, and partnership inquiries.",
+      "Connect with the Supershoot team for AI headshot support, enterprise pricing, and partnership inquiries.",
     url: `${normalizedBase}/contact`,
     mainEntity: {
       "@type": "Organization",
-      name: "PortraitWiz",
+      name: "Supershoot",
       url: normalizedBase,
       contactPoint: [
         {
           "@type": "ContactPoint",
           contactType: "customer support",
-          email: "support@portraitwiz.com",
+          email: "support@supershoot.co",
           telephone: "+1-415-555-0199",
           areaServed: "US",
           availableLanguage: ["English"],
@@ -71,7 +71,7 @@ export function buildContactSchema(baseUrl: string) {
         {
           "@type": "ContactPoint",
           contactType: "sales",
-          email: "sales@portraitwiz.com",
+          email: "sales@supershoot.co",
           telephone: "+1-415-555-0199",
           areaServed: ["US", "Canada", "Europe"],
           availableLanguage: ["English"],

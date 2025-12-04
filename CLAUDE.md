@@ -4,11 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PortraitWiz is a Next.js 15 AI portrait generation app using Google's Gemini 2.5 Flash image generation model exclusively. It features a credit-based payment system with Stripe for payments and Supabase for authentication and database. The app uses Turbopack for fast development and builds.
+Supershoot is a Next.js 15 AI portrait generation app using multiple AI image generation engines. It features a credit-based payment system with Stripe for payments and Supabase for authentication and database. The app uses Turbopack for fast development and builds.
 
-## Image Generation Engine
+## Image Generation Engines
 
-The app uses **Google Gemini 2.5 Flash** as the sole image generation provider. This model excels at multi-image reference processing and photorealistic portrait generation.
+The app supports multiple image generation providers:
+
+### Google Gemini 2.5 Flash
+- **Route**: `/api/generate-image`
+- **Model**: `gemini-2.5-flash-image`
+- Excels at multi-image reference processing and photorealistic portrait generation
+- Supports up to 4 reference images per generation
+- Fast generation times
+
+### PhotoMaker-V2 (TencentARC)
+- **Route**: `/api/generate-image-photomaker`
+- **Provider**: Runware API
+- Enhanced facial identity preservation from reference photos
+- Superior face fidelity, especially for single-image input and Asian features
+- Supports up to 4 reference images (more images = better results)
+- Requires trigger word "rwre" in prompts (auto-prepended by helper)
+- Cost: ~$0.0006 per image via Runware
+- Includes style presets (Photographic, Cinematic, Digital Art, etc.)
 
 ## Development Commands
 
@@ -28,6 +45,7 @@ npm run lint     # Run ESLint
 - **Jotai**: Lightweight state management
 - **Supabase (@supabase/ssr)**: Auth and database with SSR support
 - **Stripe**: Payment processing
+- **@runware/sdk-js**: PhotoMaker-V2 integration via Runware
 - **shadcn/ui**: UI component library built on Radix UI
 - **Tailwind CSS v4**: Styling with PostCSS
 - **Zod**: Schema validation
@@ -63,14 +81,14 @@ const supabase = await createClient();
 1. **Client** (`components/button-checkout.tsx`): User clicks checkout button
    - Sends `{ packageId, userId, email }` to `/api/checkout`
    - Note: The checkout button component receives `amount` and `credits` as props but only uses them for display
-2. **Checkout API** (`app/api/checkout/route.ts`):
+2. **Checkout API** (`app/api/checkout/route1.ts`):
    - Maps `packageId` to package details (`package-50`, `package-125`, `package-300`)
    - Creates Stripe checkout session with metadata: `{ userId, packageId, credits }`
    - Returns Stripe checkout URL
 3. **User completes payment** on Stripe-hosted checkout page
    - Success redirects to `/success?session_id={CHECKOUT_SESSION_ID}`
    - Cancel redirects to home page
-4. **Webhook** (`app/api/webhook/route.ts`):
+4. **Webhook** (`app/api/webhook/route1.ts`):
    - Receives `checkout.session.completed` event
    - Extracts `userId` and `credits` from session metadata
    - Calls Supabase RPC `increment_credits` to atomically add credits to user account
@@ -81,9 +99,11 @@ const supabase = await createClient();
 
 **Deduct (Generation):** Credits are decremented server-side in the `/api/generate-image` route using the `deduct_credits` Postgres function, which atomically deducts and returns the new balance.
 
-### Gemini Image Generation
+### Image Generation APIs
 
 The app uses reusable helper functions for API calls, located in `app/api/calls/`:
+
+#### Gemini Image Generation
 
 **generateImage** (`app/api/calls/image-gen.ts`):
 - Encapsulates all Gemini API logic for image generation
@@ -104,20 +124,44 @@ const result = await generateImage({
 });
 ```
 
+#### PhotoMaker-V2 Image Generation
+
+**generatePhotoMakerImage** (`app/api/calls/photomaker-gen.ts`):
+- Encapsulates PhotoMaker-V2 API logic via Runware SDK
+- Supports **multi-image input** via `imageBase64Array` (up to 4 reference images, 4 recommended)
+- Auto-prepends trigger word "rwre" to prompts if not present
+- Converts base64 images to data URIs for Runware
+- WebSocket-based API connection (connects/disconnects per request)
+- Configurable style, strength, and inference steps
+- Returns `{ imageBase64 }` or throws errors with `suggestion` and `isRetryable` metadata
+- Used by `/api/generate-image-photomaker` route
+
+Pattern:
+```ts
+import { generatePhotoMakerImage } from "../calls/photomaker-gen";
+
+const result = await generatePhotoMakerImage({
+  prompt: "professional headshot of a woman, studio lighting",  // "rwre" auto-prepended
+  imageBase64Array: [image1, image2, image3, image4]  // optional, 1-4 images
+});
+```
+
 **Multi-Image Support:**
 - Users can upload up to 4 reference images of themselves
-- Gemini analyzes all images collectively to extract accurate facial features
+- AI analyzes all images collectively to extract accurate facial features
 - Single API call processes all images together (not multiple calls)
 - Improves portrait quality through multi-angle analysis
+- PhotoMaker-V2 especially benefits from multiple images for enhanced ID fidelity
 
-**Image Generation Flow:**
-1. `/api/generate-image` receives `{ prompt, imageBase64Array? }` from client
+**Image Generation Flow (Both Engines):**
+1. API route receives `{ prompt, imageBase64Array? }` from client
 2. Validates user authentication via Supabase server client
 3. Checks user has sufficient credits (≥1)
-4. Calls `generateImage()` helper with prompt and optional image array
+4. Calls appropriate generator helper with prompt and optional image array
 5. On success: deducts 1 credit via `deduct_credits` RPC
-6. Returns generated image data and new credit balance
-7. On failure: returns user-friendly error with suggestion
+6. Stores image in Supabase storage (`user-images` bucket)
+7. Returns generated image data and new credit balance
+8. On failure: returns user-friendly error with suggestion
 
 ## Database
 
@@ -165,7 +209,8 @@ Required environment variables:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
-- `GEMINI_API_KEY`
+- `GEMINI_API_KEY` - For Gemini image generation
+- `RUNWARE_API_KEY` - For PhotoMaker-V2 image generation via Runware
 
 ## API Routes
 
@@ -181,11 +226,21 @@ Required environment variables:
   - Handles `checkout.session.completed` event
   - Calls `increment_credits` RPC to add credits to user account
 
-- **POST /api/generate-image**: Generate AI portrait image
+- **POST /api/generate-image**: Generate AI portrait image using Gemini
   - Input: `{ prompt, imageBase64Array? }` (array of up to 4 base64 images)
   - Requires authentication
   - Validates max 4 images server-side
   - Checks credits ≥1 before generation
+  - Returns user-friendly errors with suggestions via `lib/error-messages.ts`
+  - Returns: `{ image_data: { imageBase64 }, credits_data }`
+
+- **POST /api/generate-image-photomaker**: Generate AI portrait image using PhotoMaker-V2
+  - Input: `{ prompt, imageBase64Array? }` (array of up to 4 base64 images)
+  - Requires authentication
+  - Validates max 4 images server-side (1MB each)
+  - Checks credits ≥1 before generation
+  - Auto-prepends "rwre" trigger word to prompts
+  - Stores generated images in Supabase storage
   - Returns user-friendly errors with suggestions via `lib/error-messages.ts`
   - Returns: `{ image_data: { imageBase64 }, credits_data }`
 
@@ -194,14 +249,19 @@ Required environment variables:
 The app implements comprehensive user-friendly error handling for AI generation failures:
 
 **Error Mapping System** (`lib/error-messages.ts`):
-- Maps technical Gemini API errors to user-friendly messages
+- `mapGeminiError()`: Maps Gemini API errors to user-friendly messages
+- `mapRunwareError()`: Maps Runware/PhotoMaker API errors to user-friendly messages
+- `mapAuthError()`: Maps authentication errors
+- `mapCreditsError()`: Maps insufficient credits errors
 - Provides actionable suggestions for users
 - Includes `isRetryable` flag for appropriate UI handling
-- Categories: rate limits, content policy, network issues, invalid input, server errors
+- Categories: rate limits, content policy, network issues, invalid input, server errors, WebSocket connection failures
 
 **Integration:**
 - `app/api/calls/image-gen.ts`: Catches Gemini errors and attaches user-friendly metadata
-- `app/api/generate-image/route.ts`: Returns structured error responses with suggestions
+- `app/api/calls/photomaker-gen.ts`: Catches Runware errors and attaches user-friendly metadata
+- `app/api/generate-image/route1.ts`: Returns structured error responses with suggestions
+- `app/api/generate-image-photomaker/route1.ts`: Returns structured error responses with suggestions
 - UI components: Display errors with AlertCircle icon, message, and suggestion
 
 ## Middleware & Route Protection
@@ -233,7 +293,7 @@ The app implements comprehensive user-friendly error handling for AI generation 
 ## React Hooks Guidelines
 
 - Hooks can **only** be used in React components
-- API routes (`app/api/**/route.ts`) **cannot** use hooks
+- API routes (`app/api/**/route1.ts`) **cannot** use hooks
 - For shared logic between components and API routes, create utility functions that can be called from both contexts
 - Hooks must be called at the top level of components (not inside callbacks/conditions)
 - Use shadcn/ui components where possible

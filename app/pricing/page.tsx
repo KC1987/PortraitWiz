@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/pricing`,
     title: pricingMetadata.ogTitle,
     description: pricingMetadata.ogDescription,
-    siteName: "PortraitWiz",
+    siteName: "Supershoot",
   },
   twitter: {
     card: "summary_large_image",
@@ -106,7 +106,7 @@ export default function PricingPage() {
                 Frequently Asked Questions
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Answers to the top questions about PortraitWiz credits, billing, and usage.
+                Answers to the top questions about Supershoot credits, billing, and usage.
               </p>
             </div>
             <dl className="mt-10 space-y-6">

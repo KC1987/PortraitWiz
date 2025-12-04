@@ -111,7 +111,7 @@ export default function RegisterPage() {
         <Card className="w-full max-w-md border-primary/10 bg-background/95 shadow-xl backdrop-blur">
           <CardHeader className="space-y-2 text-center">
             <CardTitle className="text-3xl font-semibold">Create your account</CardTitle>
-            <CardDescription>Sign up with email to unlock your PortraitWiz dashboard.</CardDescription>
+            <CardDescription>Sign up with email to unlock your Supershoot dashboard.</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>

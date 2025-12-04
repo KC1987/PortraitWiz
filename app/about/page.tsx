@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/about`,
     title: aboutMetadata.ogTitle,
     description: aboutMetadata.ogDescription,
-    siteName: "PortraitWiz",
+    siteName: "Supershoot",
   },
   twitter: {
     card: "summary_large_image",
@@ -59,7 +59,7 @@ export default function AboutPage() {
               </h1>
               <p className="mt-4 text-lg text-muted-foreground md:text-xl">
                 <Link href="/" className="font-semibold text-primary hover:text-primary/80">
-                  PortraitWiz
+                  Supershoot
                 </Link>{" "}
                 is the leading{" "}
                 <Link href="/" className="font-semibold text-primary hover:text-primary/80">
@@ -172,7 +172,7 @@ export default function AboutPage() {
               <Link href="/terms" className="font-medium text-primary hover:text-primary/80">
                 terms of service
               </Link>{" "}
-              to understand how PortraitWiz protects professional imagery.
+              to understand how Supershoot protects professional imagery.
             </p>
           </div>
         </section>
@@ -303,7 +303,7 @@ export default function AboutPage() {
                       {segment.reasons ? (
                         <div>
                           <p className="text-sm font-semibold text-foreground md:text-base">
-                            Why teams choose PortraitWiz
+                            Why teams choose Supershoot
                           </p>
                           <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-muted-foreground md:text-base">
                             {segment.reasons.map((reason) => (

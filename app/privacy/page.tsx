@@ -22,7 +22,7 @@ export default function PrivacyPage() {
               1. Introduction
             </h2>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              Welcome to PortraitWiz. We are committed to protecting your privacy and personal data in accordance with the EU General Data Protection Regulation (GDPR) and applicable data protection laws.
+              Welcome to Supershoot. We are committed to protecting your privacy and personal data in accordance with the EU General Data Protection Regulation (GDPR) and applicable data protection laws.
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               This Privacy Policy explains how we collect, use, store, share, and protect your personal information when you use our AI-powered portrait generation service. It also describes your rights regarding your personal data and how to exercise them.
@@ -361,7 +361,7 @@ export default function PrivacyPage() {
               <strong>Minimum Age: 18 years old</strong>
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-              PortraitWiz is not intended for and may not be used by individuals under 18 years of age. We do not knowingly collect personal data from anyone under 18.
+              Supershoot is not intended for and may not be used by individuals under 18 years of age. We do not knowingly collect personal data from anyone under 18.
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               If you are a parent or guardian and believe your child under 18 has provided us with personal data, please contact us immediately and we will delete the account and all associated data promptly.
@@ -434,9 +434,9 @@ export default function PrivacyPage() {
               For privacy questions, data subject rights requests, or security concerns, please contact us:
             </p>
             <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
-              <li><strong>General Privacy Inquiries:</strong> support@portraitwiz.com</li>
-              <li><strong>Data Subject Rights:</strong> support@portraitwiz.com</li>
-              <li><strong>Security Concerns:</strong> support@portraitwiz.com</li>
+              <li><strong>General Privacy Inquiries:</strong> support@supershoot.co</li>
+              <li><strong>Data Subject Rights:</strong> support@supershoot.co</li>
+              <li><strong>Security Concerns:</strong> support@supershoot.co</li>
             </ul>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               <strong>Response time:</strong> Within 1 month for data subject rights requests, within 5 business days for general inquiries.
@@ -450,10 +450,10 @@ export default function PrivacyPage() {
               <strong>Version:</strong> 1.0
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6 text-sm text-muted-foreground">
-              By using PortraitWiz, you acknowledge that you have read and understood this Privacy Policy and consent to the collection, use, and processing of your personal data as described.
+              By using Supershoot, you acknowledge that you have read and understood this Privacy Policy and consent to the collection, use, and processing of your personal data as described.
             </p>
             <p className="leading-7 [&:not(:first-child)]:mt-6 text-sm text-muted-foreground">
-              Thank you for trusting PortraitWiz with your personal data. We are committed to protecting your privacy and giving you control over your information.
+              Thank you for trusting Supershoot with your personal data. We are committed to protecting your privacy and giving you control over your information.
             </p>
           </section>
         </div>

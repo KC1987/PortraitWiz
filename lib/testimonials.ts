@@ -3,7 +3,7 @@ export const testimonials = [
     name: "Anna M.",
     title: "Marketing Manager, Riga",
     quote:
-      "I needed new LinkedIn photos but didn’t have time for a shoot. PortraitWiz gave me perfect, natural-looking portraits in minutes. My profile looks instantly more professional.",
+      "I needed new LinkedIn photos but didn’t have time for a shoot. Supershoot gave me perfect, natural-looking portraits in minutes. My profile looks instantly more professional.",
     avatar: "/testimonials/anna.png",
   },
   {
@@ -17,7 +17,7 @@ export const testimonials = [
     name: "Elina V.",
     title: "Small Business Owner",
     quote:
-      "I used PortraitWiz for my website ‘About’ page. Clients keep asking which photographer I used. The credits system makes it super easy to get more images anytime.",
+      "I used Supershoot for my website ‘About’ page. Clients keep asking which photographer I used. The credits system makes it super easy to get more images anytime.",
     avatar: "/testimonials/elina.png",
   },
   {
@@ -38,7 +38,7 @@ export const testimonials = [
     name: "Martin P.",
     title: "Startup Founder",
     quote:
-      "Our whole team used PortraitWiz for press kit photos. The consistency across all images was impressive. Makes our brand look unified and sharp.",
+      "Our whole team used Supershoot for press kit photos. The consistency across all images was impressive. Makes our brand look unified and sharp.",
     avatar: "/testimonials/martin.png",
   },
 ];
