@@ -8,9 +8,9 @@ const img_url = "https://enzwafcndzopdhqcddpr.supabase.co/storage/v1/object/sign
 export async function POST(req: Request) {
 
   // Dynamically build webhook URL based on the current request
-  const url = new URL(req.url);
-  const baseUrl = `${url.protocol}//${url.host}`;
-  const webhook_url = `${baseUrl}/api/webhooks/lora-training`;
+  // const url = new URL(req.url);
+  // const baseUrl = `${url.protocol}//${url.host}`;
+  const webhook_url = "https://portraitwiz.com/api/webhooks/lora-training";
 
 
   try {
