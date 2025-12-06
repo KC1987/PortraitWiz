@@ -110,8 +110,7 @@ The app uses reusable helper functions for API calls, located in `app/api/calls/
 - Supports **multi-image input** via `imageBase64Array` (up to 4 reference images)
 - Gemini analyzes all reference images together in a single API call for better portrait accuracy
 - Always uses `image/png` mime type
-- Integrates with user-friendly error mapping (`lib/error-messages.ts`)
-- Returns `{ imageBase64 }` or throws errors with `suggestion` and `isRetryable` metadata
+- Returns `{ imageBase64 }` or throws standard errors
 - Used by `/api/generate-image` route
 
 Pattern:
@@ -231,7 +230,6 @@ Required environment variables:
   - Requires authentication
   - Validates max 4 images server-side
   - Checks credits ≥1 before generation
-  - Returns user-friendly errors with suggestions via `lib/error-messages.ts`
   - Returns: `{ image_data: { imageBase64 }, credits_data }`
 
 - **POST /api/generate-image-photomaker**: Generate AI portrait image using PhotoMaker-V2
@@ -241,28 +239,15 @@ Required environment variables:
   - Checks credits ≥1 before generation
   - Auto-prepends "rwre" trigger word to prompts
   - Stores generated images in Supabase storage
-  - Returns user-friendly errors with suggestions via `lib/error-messages.ts`
   - Returns: `{ image_data: { imageBase64 }, credits_data }`
 
 ## Error Handling
 
-The app implements comprehensive user-friendly error handling for AI generation failures:
-
-**Error Mapping System** (`lib/error-messages.ts`):
-- `mapGeminiError()`: Maps Gemini API errors to user-friendly messages
-- `mapRunwareError()`: Maps Runware/PhotoMaker API errors to user-friendly messages
-- `mapAuthError()`: Maps authentication errors
-- `mapCreditsError()`: Maps insufficient credits errors
-- Provides actionable suggestions for users
-- Includes `isRetryable` flag for appropriate UI handling
-- Categories: rate limits, content policy, network issues, invalid input, server errors, WebSocket connection failures
-
-**Integration:**
-- `app/api/calls/image-gen.ts`: Catches Gemini errors and attaches user-friendly metadata
-- `app/api/calls/photomaker-gen.ts`: Catches Runware errors and attaches user-friendly metadata
-- `app/api/generate-image/route1.ts`: Returns structured error responses with suggestions
-- `app/api/generate-image-photomaker/route1.ts`: Returns structured error responses with suggestions
-- UI components: Display errors with AlertCircle icon, message, and suggestion
+The app uses simple error messages for all API endpoints:
+- Authentication errors return `{ error: "Authentication required" }`
+- Insufficient credits return `{ error: "Insufficient credits" }`
+- API failures return basic error messages from the respective services
+- All errors include appropriate HTTP status codes
 
 ## Middleware & Route Protection
 

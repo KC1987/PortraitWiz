@@ -1,5 +1,4 @@
 import { Runware } from "@runware/sdk-js";
-import { mapRunwareError } from "@/lib/error-messages";
 
 const RUNWARE_API_KEY = process.env.RUNWARE_API_KEY;
 
@@ -17,18 +16,12 @@ interface GeneratePhotoMakerResponse {
   imageBase64: string;
 }
 
-interface RunwareError extends Error {
-  suggestion?: string;
-  isRetryable?: boolean;
-}
-
 /**
  * Generates a portrait image using PhotoMaker-V2 via Runware API
  *
  * @param prompt - The generation prompt (trigger word "rwre" will be auto-prepended if missing)
  * @param imageBase64Array - Optional array of 1-4 reference images (base64)
  * @returns Promise with base64 encoded image data
- * @throws RunwareError with user-friendly message and suggestions
  */
 export async function generatePhotoMakerImage({
   prompt,
@@ -149,11 +142,7 @@ export async function generatePhotoMakerImage({
 
     // Extract image data
     if (!finalResult || !Array.isArray(finalResult) || finalResult.length === 0) {
-      const friendlyError = mapRunwareError("No image returned from PhotoMaker");
-      const error: RunwareError = new Error(friendlyError.message);
-      error.suggestion = friendlyError.suggestion;
-      error.isRetryable = friendlyError.isRetryable;
-      throw error;
+      throw new Error("No image returned from PhotoMaker");
     }
 
     const imageData = finalResult[0];
@@ -190,11 +179,7 @@ export async function generatePhotoMakerImage({
     const errorMessage = err instanceof Error ? err.message : String(err);
     console.error('[PhotoMaker Helper] Error message:', errorMessage);
 
-    const friendlyError = mapRunwareError(errorMessage);
-    const error: RunwareError = new Error(friendlyError.message);
-    error.suggestion = friendlyError.suggestion;
-    error.isRetryable = friendlyError.isRetryable;
-    throw error;
+    throw new Error(`PhotoMaker error: ${errorMessage}`);
   } finally {
     // Always disconnect from WebSocket, even on error
     try {

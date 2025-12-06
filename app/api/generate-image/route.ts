@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server";
 import { generateImage } from "../calls/image-gen";
 import { createClient } from "@/utils/supabase/server";
-import { mapAuthError, mapCreditsError } from "@/lib/error-messages";
 import { decode } from 'base64-arraybuffer';
 import { v4 as uuid } from "uuid";
 
-interface GeminiError extends Error {
-  suggestion?: string;
-  isRetryable?: boolean;
-}
 
 type ReferenceImagePayload = {
   data: string;
@@ -63,13 +58,8 @@ export async function POST(req: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      const friendlyError = mapAuthError();
       return NextResponse.json(
-        {
-          error: friendlyError.message,
-          suggestion: friendlyError.suggestion,
-          isRetryable: friendlyError.isRetryable
-        },
+        { error: "Authentication required" },
         { status: 401 }
       );
     }
@@ -86,13 +76,8 @@ export async function POST(req: Request) {
     }
 
     if (profile.credits < 1) {
-      const friendlyError = mapCreditsError();
       return NextResponse.json(
-        {
-          error: friendlyError.message,
-          suggestion: friendlyError.suggestion,
-          isRetryable: friendlyError.isRetryable
-        },
+        { error: "Insufficient credits" },
         { status: 402 }
       );
     }
@@ -152,17 +137,9 @@ export async function POST(req: Request) {
 
     // Error
   } catch (err: unknown) {
-    const geminiError = err as GeminiError;
-    const message = err instanceof Error ? err.message : "Something went wrong while creating your portrait.";
-    const suggestion = geminiError?.suggestion || "Please try again in a moment.";
-    const isRetryable = geminiError?.isRetryable ?? true;
-
+    const message = err instanceof Error ? err.message : "Something went wrong";
     return NextResponse.json(
-      {
-        error: message,
-        suggestion,
-        isRetryable
-      },
+      { error: message },
       { status: 500 }
     );
   }

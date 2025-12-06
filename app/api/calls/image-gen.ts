@@ -1,4 +1,4 @@
-import { mapGeminiError } from "@/lib/error-messages";
+
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = "gemini-2.5-flash-image";
@@ -24,11 +24,6 @@ interface GeminiPart {
     mimeType: string;
     data: string;
   };
-}
-
-interface GeminiError extends Error {
-  suggestion?: string;
-  isRetryable?: boolean;
 }
 
 export async function generateImage({
@@ -67,11 +62,7 @@ export async function generateImage({
 
   if (!resp.ok) {
     const errorText = await resp.text();
-    const friendlyError = mapGeminiError(errorText);
-    const error: GeminiError = new Error(friendlyError.message);
-    error.suggestion = friendlyError.suggestion;
-    error.isRetryable = friendlyError.isRetryable;
-    throw error;
+    throw new Error(`Gemini API error: ${errorText}`);
   }
 
   const data = await resp.json();
@@ -81,11 +72,7 @@ export async function generateImage({
   const inline = responseParts.find((p) => p.inlineData);
 
   if (!inline || !inline.inlineData) {
-    const friendlyError = mapGeminiError("No image returned from Gemini");
-    const error: GeminiError = new Error(friendlyError.message);
-    error.suggestion = friendlyError.suggestion;
-    error.isRetryable = friendlyError.isRetryable;
-    throw error;
+    throw new Error("No image returned from Gemini");
   }
 
   return {

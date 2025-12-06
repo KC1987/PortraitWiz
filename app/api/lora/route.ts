@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   // Dynamically build webhook URL based on the current request
   // const url = new URL(req.url);
   // const baseUrl = `${url.protocol}//${url.host}`;
-  const webhook_url = "https://portraitwiz.com/api/webhooks/lora-training";
+  const webhook_url = "https://probe-reductions-filling-entity.trycloudflare.com/api/webhooks/lora-training";
 
 
   try {
@@ -29,12 +29,13 @@ export async function POST(req: Request) {
 
     // Step 1: Create the model
     const endpoint = "https://api.replicate.com/v1/models";
+
     const reqBody = {
       owner: "portraitwiz",
       name: name,
       description: "Custom trained model",
       visibility: "private",
-      hardware: "gpu-h100",
+      hardware: "gpu-t4",
     };
 
     const response = await fetch(endpoint, {
@@ -86,8 +87,10 @@ export async function POST(req: Request) {
     });
 
   } catch (error) {
+    console.error("[LoRA API] Error:", error);
+    console.error("[LoRA API] Error details:", error instanceof Error ? error.stack : error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Error" },
+      { error: error instanceof Error ? error.message : "Unknown error occurred" },
       { status: 500 }
     );
   }

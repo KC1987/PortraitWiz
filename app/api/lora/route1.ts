@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 // import { trainLora } from "../calls/lora-training";
-// import { mapAuthError } from "@/lib/error-messages";
 
 export async function POST(req: Request) {
   try {
